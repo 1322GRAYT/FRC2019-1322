@@ -20,10 +20,14 @@ public class RobotMap {
    * 
    * 
    */
-  public static final int FLDrive = 0;
-	public static final int FRDrive = 0;
-	public static final int RLDrive = 0;
-	public static final int RRDrive = 0;
+  public static final int FL1Drive = 0;
+	public static final int FR1Drive = 0;
+	public static final int RL1Drive = 0;
+  public static final int RR1Drive = 0;
+  public static final int FL2Drive = 0;
+	public static final int FR2Drive = 0;
+	public static final int RL2Drive = 0;
+	public static final int RR2Drive = 0;
 
   // If you are using multiple modules, make sure to define both the port
   // number and the module. For example you with a rangefinder:
