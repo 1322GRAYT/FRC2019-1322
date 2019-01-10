@@ -2,7 +2,7 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-
+import frc.robot.commands.*;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.robot.RobotMap;
 
@@ -53,8 +53,8 @@ public class Drives extends Subsystem {
    * Get raw Velocities
    * @return In Ticks per 10ms
    */
-  public int[] rawVelocities(){
-    var Velocities = new int[4];
+  public double[] rawVelocities(){
+    var Velocities = new double[4];
     
     Velocities[0] = FL1.getSelectedSensorVelocity();
     Velocities[1] = FR1.getSelectedSensorVelocity();
@@ -69,8 +69,8 @@ public class Drives extends Subsystem {
    * Get Raw Positions
    * @return In Ticks
    */
-  public int[] rawPosition(){
-    var Positions = new int[4];
+  public double[] rawPosition(){
+    var Positions = new double[4];
 
     Positions[0] = FL1.getSelectedSensorPosition();
     Positions[1] = FR1.getSelectedSensorPosition();
@@ -148,5 +148,6 @@ private static double[] normalize(double wheelSpeeds[]) {
   public void initDefaultCommand() {
     // Set the default command for a subsystem here.
     // setDefaultCommand(new MySpecialCommand());
+    setDefaultCommand(new TeleopDrives());
   }
 }
