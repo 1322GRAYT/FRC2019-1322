@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import frc.robot.commands.*;
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.robot.RobotMap;
 
@@ -11,31 +12,33 @@ enum DrivePosition {FrontLeft, FrontRight, RearLeft, RearRight}
 public class Drives extends Subsystem {
   TalonSRX FL1, FR1, RL1, RR1; // Setter SRXs
   TalonSRX FL2, FR2, RL2, RR2; // Follower SRXs
+
+  TalonSRX[] EncoderedDrives = {new TalonSRX(RobotMap.EncoderDriveAddresses[0]),
+    new TalonSRX(RobotMap.EncoderDriveAddresses[1]),
+    new TalonSRX(RobotMap.EncoderDriveAddresses[2]),
+    new TalonSRX(RobotMap.EncoderDriveAddresses[3])};
+
+  TalonSRX[] FolowerDrives = {new TalonSRX(RobotMap.FolowerDriveAddresses[0]),
+    new TalonSRX(RobotMap.FolowerDriveAddresses[1]),
+    new TalonSRX(RobotMap.FolowerDriveAddresses[2]),
+    new TalonSRX(RobotMap.FolowerDriveAddresses[3])};
   
 
   public Drives(){
-      FL1 = new TalonSRX(RobotMap.FL1Drive);
-      FR1 = new TalonSRX(RobotMap.FR1Drive);
-      RL1 = new TalonSRX(RobotMap.RL1Drive);
-      RR1 = new TalonSRX(RobotMap.RR1Drive);
+    setFollowers();
+  }
 
-      FL2 = new TalonSRX(RobotMap.FL2Drive);
-      FR2 = new TalonSRX(RobotMap.FR2Drive);
-      RL2 = new TalonSRX(RobotMap.RL2Drive);
-      RR2 = new TalonSRX(RobotMap.RR2Drive);
-
-      FL2.set(ControlMode.Follower, FL1.getDeviceID());
-      FR2.set(ControlMode.Follower, FR1.getDeviceID());
-      RL2.set(ControlMode.Follower, RL1.getDeviceID());
-      RR2.set(ControlMode.Follower, RR1.getDeviceID());
+  private void setFollowers() {
+    for(var i = 0; i < EncoderedDrives.length; i++){
+      FolowerDrives[i].set(ControlMode.Follower, EncoderedDrives[i].getDeviceID());
+    }
   }
 
   /************
    * Unit Conversions
    * 
-   * inToTicks converts linear inches to encoder ticks
-   *    For use to read encoder counts to 
-   * ticksToIn converts encoder ticks to linear inches
+   * inToTicks converts linear inches to encoder ticks For use to read encoder
+   * counts to ticksToIn converts encoder ticks to linear inches
    */
   private final int countsPerCycle = 200 * 4; // 200 ticks at 4x encoder (4x Encoder counts Up and Down)
   private final double diaOfWheel = 4; // in inches
@@ -54,12 +57,10 @@ public class Drives extends Subsystem {
    * @return In Ticks per 10ms
    */
   public double[] rawVelocities(){
-    var Velocities = new double[4];
-    
-    Velocities[0] = FL1.getSelectedSensorVelocity();
-    Velocities[1] = FR1.getSelectedSensorVelocity();
-    Velocities[2] = RL1.getSelectedSensorVelocity();
-    Velocities[3] = FL1.getSelectedSensorVelocity();
+    var Velocities = new double[EncoderedDrives.length];
+    for (int i = 0; i < EncoderedDrives.length; i++) {
+      Velocities[i] = EncoderedDrives[i].getSelectedSensorVelocity();
+    }
 
     return Velocities;
   }
@@ -70,13 +71,11 @@ public class Drives extends Subsystem {
    * @return In Ticks
    */
   public double[] rawPosition(){
-    var Positions = new double[4];
-
-    Positions[0] = FL1.getSelectedSensorPosition();
-    Positions[1] = FR1.getSelectedSensorPosition();
-    Positions[2] = RL1.getSelectedSensorPosition();
-    Positions[3] = RR1.getSelectedSensorPosition();
-
+    var Positions = new double[EncoderedDrives.length];
+    for (int i = 0; i < EncoderedDrives.length; i++) {
+      Positions[i] = EncoderedDrives[i].getSelectedSensorPosition();
+    }
+    
     return Positions;
   }
 
@@ -91,10 +90,9 @@ public class Drives extends Subsystem {
     double wheelSpeeds[] = {y + x + r, y - x - r, y - x + r, y + x - r};
     wheelSpeeds = normalize(scale(wheelSpeeds, 1.0));
 
-    FL1.set(ControlMode.PercentOutput, wheelSpeeds[0]);
-    FR1.set(ControlMode.PercentOutput, wheelSpeeds[1]);
-    RL1.set(ControlMode.PercentOutput, wheelSpeeds[2]);
-    RR1.set(ControlMode.PercentOutput, wheelSpeeds[3]);
+    for (int i = 0; i < EncoderedDrives.length; i++) {
+      EncoderedDrives[i].set(ControlMode.PercentOutput, wheelSpeeds[i]);
+    }
   }
 
   private static double[] scale(double wheelSpeeds[], double scaleFactor) {
@@ -131,17 +129,15 @@ private static double[] normalize(double wheelSpeeds[]) {
 
    public void MMControl(int Distance){
 
-    FL1.set(ControlMode.MotionMagic, Distance);
-    FR1.set(ControlMode.MotionMagic, Distance);
-    RL1.set(ControlMode.MotionMagic, Distance);
-    RR1.set(ControlMode.MotionMagic, Distance);
+    for (TalonSRX i : EncoderedDrives) {
+      i.set(ControlMode.MotionMagic, Distance);
+    }
 
    }
    public void MMControl(double Distance) {
-    FL1.set(ControlMode.MotionMagic, inToTicks(Distance));
-    FR1.set(ControlMode.MotionMagic, inToTicks(Distance));
-    RL1.set(ControlMode.MotionMagic, inToTicks(Distance));
-    RR1.set(ControlMode.MotionMagic, inToTicks(Distance));
+    for (TalonSRX i : EncoderedDrives) {
+      i.set(ControlMode.MotionMagic, inToTicks(Distance));
+    }
    }
 
   @Override
