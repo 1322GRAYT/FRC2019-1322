@@ -4,22 +4,16 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import frc.robot.commands.*;
-import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.robot.RobotMap;
 
 enum DrivePosition {FrontLeft, FrontRight, RearLeft, RearRight}
 
 public class Drives extends Subsystem {
-  TalonSRX FL1, FR1, RL1, RR1; // Setter SRXs
-  TalonSRX FL2, FR2, RL2, RR2; // Follower SRXs
-
   TalonSRX[] EncoderedDrives = {new TalonSRX(RobotMap.EncoderDriveAddresses[0]),
     new TalonSRX(RobotMap.EncoderDriveAddresses[1]),
     new TalonSRX(RobotMap.EncoderDriveAddresses[2]),
     new TalonSRX(RobotMap.EncoderDriveAddresses[3])};
-
-  
 
   TalonSRX[] FolowerDrives = {new TalonSRX(RobotMap.FolowerDriveAddresses[0]),
     new TalonSRX(RobotMap.FolowerDriveAddresses[1]),
@@ -29,14 +23,18 @@ public class Drives extends Subsystem {
 
   public Drives(){
     setFollowers();
-    for (TalonSRX i : EncoderedDrives) {
-      i.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
-    }
+    setEncoders();
   }
 
   private void setFollowers() {
     for(var i = 0; i < EncoderedDrives.length; i++){
       FolowerDrives[i].set(ControlMode.Follower, EncoderedDrives[i].getDeviceID());
+    }
+  }
+
+  private void setEncoders(){
+    for(var i = 0; i < EncoderedDrives.length; i++){
+      EncoderedDrives[i].configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
     }
   }
 
@@ -86,8 +84,8 @@ public class Drives extends Subsystem {
   }
 
   public void resetPosition(){
-    for (TalonSRX i : EncoderedDrives) {
-      i.setSelectedSensorPosition(0);
+    for (int i = 0; i < EncoderedDrives.length; i++) {
+      EncoderedDrives[i].setSelectedSensorPosition(0);
     }
   }
 
@@ -108,9 +106,8 @@ public class Drives extends Subsystem {
   }
 
   private static double[] scale(double wheelSpeeds[], double scaleFactor) {
-    for (double x :
-            wheelSpeeds) {
-        x *= scaleFactor;
+    for (var i = 0; i < wheelSpeeds.length; i++) {
+        wheelSpeeds[i] *= scaleFactor;
     }
     return wheelSpeeds;
   }
@@ -123,9 +120,8 @@ private static double[] normalize(double wheelSpeeds[]) {
     }
 
     if (maxMagnitude > 1.0) {
-        for (double q :
-                wheelSpeeds) {
-            q /= maxMagnitude;
+        for (var i = 0; i < wheelSpeeds.length; i++) {
+            wheelSpeeds[i] /= maxMagnitude;
         }
     }
     return wheelSpeeds;
@@ -141,14 +137,14 @@ private static double[] normalize(double wheelSpeeds[]) {
 
    public void MMControl(int Distance){
 
-    for (TalonSRX i : EncoderedDrives) {
-      i.set(ControlMode.MotionMagic, Distance);
+    for (var i = 0; i < EncoderedDrives.length; i++) {
+      EncoderedDrives[i].set(ControlMode.MotionMagic, Distance);
     }
 
    }
    public void MMControl(double Distance) {
-    for (TalonSRX i : EncoderedDrives) {
-      i.set(ControlMode.MotionMagic, inToTicks(Distance));
+    for (var i = 0; i < EncoderedDrives.length; i++) {
+      EncoderedDrives[i].set(ControlMode.MotionMagic, inToTicks(Distance));
     }
    }
 
@@ -173,12 +169,15 @@ private static double[] normalize(double wheelSpeeds[]) {
     for (int i = 0; i < EncoderedDrives.length; i++) {
       EncoderedDrives[i].set(ControlMode.MotionMagic, EncoderedDrives[i].getSelectedSensorPosition() + motorDistance[i]);
     }
-    
-    if ((x != 0) && (y != 0)){
-      RelativeMotionMagic(0, y);
-    }
-
    }
+
+  public boolean[] mmIsDone(){
+    boolean[] flags = new boolean[4];
+    for (int i = 0; i < EncoderedDrives.length; i++) {
+      flags[i] = EncoderedDrives[i].getClosedLoopError() < 500;
+    }
+    return flags;
+  }
 
   @Override
   public void initDefaultCommand() {
