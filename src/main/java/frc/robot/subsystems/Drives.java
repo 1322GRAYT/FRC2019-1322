@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import frc.robot.commands.*;
 import edu.wpi.first.wpilibj.Encoder;
@@ -18,6 +19,8 @@ public class Drives extends Subsystem {
     new TalonSRX(RobotMap.EncoderDriveAddresses[2]),
     new TalonSRX(RobotMap.EncoderDriveAddresses[3])};
 
+  
+
   TalonSRX[] FolowerDrives = {new TalonSRX(RobotMap.FolowerDriveAddresses[0]),
     new TalonSRX(RobotMap.FolowerDriveAddresses[1]),
     new TalonSRX(RobotMap.FolowerDriveAddresses[2]),
@@ -26,6 +29,9 @@ public class Drives extends Subsystem {
 
   public Drives(){
     setFollowers();
+    for (TalonSRX i : EncoderedDrives) {
+      i.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
+    }
   }
 
   private void setFollowers() {
@@ -77,6 +83,12 @@ public class Drives extends Subsystem {
     }
     
     return Positions;
+  }
+
+  public void resetPosition(){
+    for (TalonSRX i : EncoderedDrives) {
+      i.setSelectedSensorPosition(0);
+    }
   }
 
   /*************************************
@@ -138,6 +150,34 @@ private static double[] normalize(double wheelSpeeds[]) {
     for (TalonSRX i : EncoderedDrives) {
       i.set(ControlMode.MotionMagic, inToTicks(Distance));
     }
+   }
+
+   private int[] relativePosition = new int[4];
+   public void setRelativePosition(){
+     for (var i = 0; i < relativePosition.length; i++) {
+       relativePosition[i] = EncoderedDrives[i].getSelectedSensorPosition();
+     }
+   }
+
+   /*******************************************
+    *  For Moving a relative to the current position
+    */
+   public void RelativeMotionMagic(int x, int y){
+    int pHolder = (x != 0 ? x : y);
+    
+    int[] motorDistance = {(int)Math.signum(x) * pHolder,
+      (int)Math.signum(-x) * pHolder,
+      (int)Math.signum(-x) * pHolder,
+      (int)Math.signum(x) * pHolder}; // Determine which direction the robot needs to go
+
+    for (int i = 0; i < EncoderedDrives.length; i++) {
+      EncoderedDrives[i].set(ControlMode.MotionMagic, EncoderedDrives[i].getSelectedSensorPosition() + motorDistance[i]);
+    }
+    
+    if ((x != 0) && (y != 0)){
+      RelativeMotionMagic(0, y);
+    }
+
    }
 
   @Override

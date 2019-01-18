@@ -19,8 +19,8 @@ public class RobotMap {
    * Drive System
    */
   
-  public static final int[] EncoderDriveAddresses = {0, 1, 2, 3};
-  public static final int[] FolowerDriveAddresses = {4, 5, 6, 7};
+  public static final int[] EncoderDriveAddresses = {0, 2, 4, 6};
+  public static final int[] FolowerDriveAddresses = {1, 3, 5, 7};
 
 
   // If you are using multiple modules, make sure to define both the port
