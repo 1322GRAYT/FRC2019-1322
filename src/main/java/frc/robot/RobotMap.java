@@ -13,6 +13,9 @@ package frc.robot;
  * the wiring easier and significantly reduces the number of magic numbers
  * floating around.
  */
+
+
+
 public class RobotMap {
 
 	/***********************************************
@@ -22,9 +25,13 @@ public class RobotMap {
   public static final int[] EncoderDriveAddresses = {0, 2, 4, 6};
   public static final int[] FollowerDriveAddresses = {1, 3, 5, 7};
 
+  /***********************************************
+   * Lift
+   */
+  public static final int[] LiftMotorAddresses = {8, 9};
 
-  /*******************************************
-   *  Air Things
+	/***********************************************
+   * Air Things
    */
 
   public static final int[] ClawSolenoids = {0, 1};
