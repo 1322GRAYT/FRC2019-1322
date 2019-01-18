@@ -17,13 +17,11 @@ public class RobotMap {
 
 	/***********************************************
    * Drive System
-   * 
-   * 
    */
-  public static final int FLDrive = 0;
-	public static final int FRDrive = 0;
-	public static final int RLDrive = 0;
-	public static final int RRDrive = 0;
+  
+  public static final int[] EncoderDriveAddresses = {0, 2, 4, 6};
+  public static final int[] FolowerDriveAddresses = {1, 3, 5, 7};
+
 
   // If you are using multiple modules, make sure to define both the port
   // number and the module. For example you with a rangefinder:
