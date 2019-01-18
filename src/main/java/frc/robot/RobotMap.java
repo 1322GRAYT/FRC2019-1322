@@ -20,7 +20,15 @@ public class RobotMap {
    */
   
   public static final int[] EncoderDriveAddresses = {0, 2, 4, 6};
-  public static final int[] FolowerDriveAddresses = {1, 3, 5, 7};
+  public static final int[] FollowerDriveAddresses = {1, 3, 5, 7};
+
+
+  /*******************************************
+   *  Air Things
+   */
+
+  public static final int[] ClawSolenoids = {0, 1};
+  public static final int[] EjectSolenoids = {2, 3};
 
 
   // If you are using multiple modules, make sure to define both the port
