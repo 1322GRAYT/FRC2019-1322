@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.Claw;
 import frc.robot.subsystems.Drives;
+import frc.robot.subsystems.LEDController;
 import frc.robot.subsystems.Lift;
 
 /**
@@ -25,9 +26,10 @@ import frc.robot.subsystems.Lift;
  */
 public class Robot extends TimedRobot {
   public static OI m_oi;
-  public final static Drives DRIVES = new Drives();
-  public final static Claw   CLAW   = new Claw();
-  public final static Lift   LIFT   = new Lift();
+  public final static Drives          DRIVES = new Drives();
+  public final static Claw            CLAW   = new Claw();
+  public final static Lift            LIFT   = new Lift();
+  public final static LEDController   LEDS   = new LEDController();
 
   Command m_autonomousCommand;
   SendableChooser<Command> m_chooser = new SendableChooser<>();

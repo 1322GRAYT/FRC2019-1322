@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import frc.robot.commands.BM_ControlClaw;
 import frc.robot.commands.BM_ControlEject;
+import frc.robot.commands.BM_ControlLeds;
 import frc.robot.models.CustomXbox;
 
 /**
