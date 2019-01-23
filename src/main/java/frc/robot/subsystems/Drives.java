@@ -12,15 +12,21 @@ enum DrivePosition {
 }
 
 public class Drives extends Subsystem {
-  TalonSRX[] EncoderedDrives = { new TalonSRX(RobotMap.EncoderDriveAddresses[0]),
-      new TalonSRX(RobotMap.EncoderDriveAddresses[1]), new TalonSRX(RobotMap.EncoderDriveAddresses[2]),
-      new TalonSRX(RobotMap.EncoderDriveAddresses[3]) };
 
-  TalonSRX[] FolowerDrives = { new TalonSRX(RobotMap.FolowerDriveAddresses[0]),
-      new TalonSRX(RobotMap.FolowerDriveAddresses[1]), new TalonSRX(RobotMap.FolowerDriveAddresses[2]),
-      new TalonSRX(RobotMap.FolowerDriveAddresses[3]) };
 
-  public Drives() {
+  TalonSRX[] EncoderedDrives = {new TalonSRX(RobotMap.EncoderDriveAddresses[0]),
+    new TalonSRX(RobotMap.EncoderDriveAddresses[1]),
+    new TalonSRX(RobotMap.EncoderDriveAddresses[2]),
+    new TalonSRX(RobotMap.EncoderDriveAddresses[3])};
+
+
+  TalonSRX[] FolowerDrives = {new TalonSRX(RobotMap.FolowerDriveAddresses[0]),
+    new TalonSRX(RobotMap.FolowerDriveAddresses[1]),
+    new TalonSRX(RobotMap.FolowerDriveAddresses[2]),
+    new TalonSRX(RobotMap.FolowerDriveAddresses[3])};
+  
+
+  public Drives(){
     setFollowers();
     setEncoders();
   }
