@@ -32,18 +32,23 @@ public class LEDController extends Subsystem {
  public int ledYellow = 121;
  public int ledRainbow = 117;
  public int ledRainbowCycle = 99;
- public int ledChase = 104;
+ public int ledVisualize = 115;
  public int ledOff = 111;
- public int ledT = 116;
- public int ledP = 112;
- public int ledS = 115;
+ private int ledChase = 104;
+ private int ledCheckerboard = 116;
+ private int ledBreath = 112;
 
  public LEDController() {
    ledArduino = new I2C(I2C.Port.kOnboard, 0x08);
  }
 
- public void setLEDs(int data){
-    ledArduino.write(0x08, data);
+ public void setLEDs(int color){
+    ledArduino.write(0x08, color);
+ }
+
+ public void setMode(int color, int mode){
+    ledArduino.write(0x08, mode);
+    ledArduino.write(0x08, color);
  }
 
   @Override
