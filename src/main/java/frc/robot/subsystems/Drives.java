@@ -10,10 +10,13 @@ import frc.robot.RobotMap;
 enum DrivePosition {FrontLeft, FrontRight, RearLeft, RearRight}
 
 public class Drives extends Subsystem {
+
   TalonSRX[] EncoderedDrives = {new TalonSRX(RobotMap.EncoderDriveAddresses[0]),
     new TalonSRX(RobotMap.EncoderDriveAddresses[1]),
     new TalonSRX(RobotMap.EncoderDriveAddresses[2]),
-    new TalonSRX(RobotMap.EncoderDriveAddresses[3])};
+    new TalonSRX(RobotMap.EncoderDriveAddresses[3])
+  };
+
 
   TalonSRX[] FolowerDrives = {new TalonSRX(RobotMap.FolowerDriveAddresses[0]),
     new TalonSRX(RobotMap.FolowerDriveAddresses[1]),
