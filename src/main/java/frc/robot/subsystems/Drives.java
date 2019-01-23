@@ -23,6 +23,16 @@ public class Drives extends Subsystem {
   public Drives() {
     setFollowers();
     setEncoders();
+    talonSettings();
+  }
+
+  /********************************************
+   * Drive Settings
+   */
+
+  private void talonSettings(){
+    EncoderedDrives[0].configMotionCruiseVelocity(3000);
+    EncoderedDrives[0].configMotionAcceleration(1500);
   }
 
   private void setFollowers() {
