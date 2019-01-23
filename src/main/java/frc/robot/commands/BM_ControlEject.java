@@ -1,5 +1,5 @@
 /*----------------------------------------------------------------------------*/
-/* Copyright (c) 2017-2018 FIRST. All Rights Reserved.                        */
+/* Copyright (c) 2018 FIRST. All Rights Reserved.                             */
 /* Open Source Software - may be modified and shared by FRC teams. The code   */
 /* must be accompanied by the FIRST BSD license file in the root directory of */
 /* the project.                                                               */
@@ -7,53 +7,46 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
 
-public class TeleopDrives extends Command{
+public class BM_ControlEject extends Command {
+  private boolean out;
 
-  public TeleopDrives(){
-    requires(Robot.DRIVES);
+  /**
+   * 
+   * @param out Pushes out the claw if true
+   */
+  public BM_ControlEject(boolean out) {
+    requires(Robot.CLAW);
+    this.out = out;
   }
 
-    // Called just before this Command runs the first time
+  // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-    SmartDashboard.putNumberArray("Velocity", Robot.DRIVES.rawVelocities());
+    Robot.CLAW.controlEject(out);
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    Robot.DRIVES.DriveInVoltage(Robot.m_oi.DriverStick.getY(Hand.kLeft),
-      Robot.m_oi.DriverStick.getX(Hand.kLeft), 
-      Robot.m_oi.DriverStick.getX(Hand.kRight));
-    
-      SmartDashboard.putNumberArray("Velocity", Robot.DRIVES.rawVelocities());
-      SmartDashboard.putNumberArray("Velocity", Robot.DRIVES.rawPosition());
-
-
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return false;
+    return true;
   }
 
   // Called once after isFinished returns true
   @Override
   protected void end() {
-    Robot.DRIVES.DriveInVoltage(0, 0, 0);
   }
 
   // Called when another command which requires one or more of the same
   // subsystems is scheduled to run
   @Override
   protected void interrupted() {
-    end();
   }
-
 }

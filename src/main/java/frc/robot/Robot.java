@@ -23,8 +23,11 @@ import frc.robot.subsystems.*;
  */
 public class Robot extends TimedRobot {
   public static OI m_oi;
-  public final static Drives DRIVES = new Drives();
-  public final static Lift LIFT = new Lift();
+
+  public final static Drives          DRIVES = new Drives();
+  public final static Claw            CLAW   = new Claw();
+  public final static Lift            LIFT   = new Lift();
+  public final static LEDController   LEDS   = new LEDController();
 
   Command m_autonomousCommand;
   SendableChooser<Command> m_chooser = new SendableChooser<>();
@@ -36,9 +39,7 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     m_oi = new OI();
-    // m_chooser.setDefaultOption("Default Auto", new ExampleCommand());
-    // chooser.addOption("My Auto", new MyAutoCommand());
-    SmartDashboard.putData("Auto mode", m_chooser);
+
   }
 
   /**
@@ -127,5 +128,12 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void testPeriodic() {
+  }
+
+  public static double deadzonify(double number) {
+      if(Math.abs(number) > .07) {
+        return number;
+      }
+      return 0;
   }
 }
