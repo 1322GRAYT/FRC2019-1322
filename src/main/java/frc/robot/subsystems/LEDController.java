@@ -29,6 +29,7 @@ public class LEDController extends Subsystem {
  public int ledRed = 114;
  public int ledGreen = 103;
  public int ledBlue = 98;
+ public int ledYellow = 121;
  public int ledRainbow = 117;
  public int ledRainbowCycle = 99;
  public int ledChase = 104;

@@ -12,6 +12,8 @@
 //   NEO_GRB     Pixels are wired for GRB bitstream (most NeoPixel products)
 //   NEO_RGB     Pixels are wired for RGB bitstream (v1 FLORA pixels, not v2)
 
+// NOTE: On Our LEDS, the Color Code has the Green and Blue swapped. EX: strip.Color(red, blue, green)
+
 /* The I2C color codes are as follows:
 'r' = Set to red, 'g' = Set to green, 'b' = Set to blue, 'u' = Rainbow, 'c' = Rainbow cycle,
 'h' = Chase, 'o' = Off
@@ -31,6 +33,11 @@ int c;
 char currentColor = 'n';
 char IData = 'o';
 int VData = 2;
+uint32_t colorRed = strip.Color(255, 0, 0);
+uint32_t colorGreen = strip.Color(0, 0, 255);
+uint32_t colorBlue = strip.Color(0, 255, 0);
+uint32_t colorYellow = strip.Color(255, 0, 200);
+uint32_t colorOff = strip.Color(0, 0, 0);
 
 void setup() {
   Serial.begin(9600);
@@ -39,69 +46,78 @@ void setup() {
   strip.begin();
   strip.setBrightness(30); //adjust brightness here
   strip.show(); // Initialize all pixels to 'off'
-  colorWipe(strip.Color(255,0,0),0);
+  colorWipe(colorYellow,2);
   delay(50);
   colorWipe(strip.Color(0,0,0),0);
   delay(50);
-  colorWipe(strip.Color(255,0,0),0);
+  colorWipe(colorYellow,2);
   delay(50);
   colorWipe(strip.Color(0,0,0),0);
 }
 
 void loop() {
   switch(IData){
-    case 'r': //Set color to red
-      colorWipe(strip.Color(255, 0, 0), 2); // Red
+    case 'r': // i2c code (decimal format of string): 114
+      colorWipe(colorRed, 2); // Red
       break;
-    case 'g':
-      colorWipe(strip.Color(0, 255, 0), 2); // Green
+    case 'b': // i2c code (decimal format of string): 98
+      colorWipe(colorBlue, 2); // Blue
       break;
-    case 'b':
-      colorWipe(strip.Color(0, 0, 255), 2); // Blue
+    case 'g': // i2c code (decimal format of string): 103
+      colorWipe(colorGreen, 2); // Green
       break;
-    case 'u':
-      rainbow(20);
+    case 'y': // i2c code (decimal format of string): 
+      colorWipe(colorYellow, 2); // Yellow
       break;
-    case 'c':
-      rainbowCycle(20);
+    case 'u': // i2c code (decimal format of string): 117
+      rainbow(20); // Rainbow
       break;
-    case 'h':
+    case 'c': // i2c code (decimal format of string): 99
+      rainbowCycle(20);// Rainbow Cycle
+      break;
+    case 'h': // i2c code (decimal format of string): 104
       if(currentColor == 'r'){
-        chase(strip.Color(255,0,0)); //Chase red
+        chase(colorRed); //Chase red
       }
       else if(currentColor == 'g'){
-        chase(strip.Color(0,255,0)); //Chase green
+        chase(colorGreen); //Chase green
       }
       else if(currentColor == 'b'){
-        chase(strip.Color(0,0,255)); //Chase blue
+        chase(colorBlue); //Chase blue
+      }
+      else if(currentColor == 'y'){
+        chase(colorYellow); //Chase yellow
       }
       break;
-    case 't':
+    case 't': // i2c code (decimal format of string): 116
       if(currentColor == 'r'){
-        checkerboard(strip.Color(255,0,0)); //checkerboard red
+        checkerboard(colorRed); //checkerboard red
       }
       else if(currentColor == 'g'){
-        checkerboard(strip.Color(0,255,0)); //checkerboard green
+        checkerboard(colorGreen); //checkerboard green
       }
       else if(currentColor == 'b'){
-        checkerboard(strip.Color(0,0,255)); //checkerboard blue
+        checkerboard(colorBlue); //checkerboard blue
+      }
+      else if(currentColor == 'y'){
+        checkerboard(colorYellow); //checkerboard yellow
       }
       break;
-    case 'o':
-      colorWipe(strip.Color(0,0,0), 0); //Off
+    case 'o': // i2c code (decimal format of string): 111
+      colorWipe(colorOff, 0); //Off
       break;
-    case 'p':
+    case 'p': // i2c code (decimal format of string): 112
       if(currentColor == 'r'){
-        breathe('r'); //checkerboard red
+        breathe('r'); //breath red
       }
       else if(currentColor == 'g'){
-        breathe('g'); //checkerboard green
+        breathe('g'); //breath green
       }
       else if(currentColor == 'b'){
-        breathe('b'); //checkerboard blue
+        breathe('b'); //breath blue
       }
       break;
-    case 's':
+    case 's': // i2c code (decimal format of string): 115
       visualize2();
       break;
 }
@@ -230,7 +246,7 @@ void breathe(char c){
       colorWipe(strip.Color(0,0,x),0);
       delay(2);
     }
-  }
+  } //TODO: Add Yellow Breath
 }
 
 void visualize(uint16_t c){
