@@ -3,6 +3,8 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.TalonSRXPIDSetConfiguration;
+
 import frc.robot.commands.*;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.robot.RobotMap;
@@ -20,15 +22,27 @@ public class Drives extends Subsystem {
     new TalonSRX(RobotMap.EncoderDriveAddresses[3])};
 
 
-  TalonSRX[] FolowerDrives = {new TalonSRX(RobotMap.FolowerDriveAddresses[0]),
-    new TalonSRX(RobotMap.FolowerDriveAddresses[1]),
-    new TalonSRX(RobotMap.FolowerDriveAddresses[2]),
-    new TalonSRX(RobotMap.FolowerDriveAddresses[3])};
+  TalonSRX[] FolowerDrives = {new TalonSRX(RobotMap.FollowerDriveAddresses[0]),
+    new TalonSRX(RobotMap.FollowerDriveAddresses[1]),
+    new TalonSRX(RobotMap.FollowerDriveAddresses[2]),
+    new TalonSRX(RobotMap.FollowerDriveAddresses[3])};
   
 
   public Drives(){
     setFollowers();
     setEncoders();
+    talonSettings();
+  }
+
+  /********************************************
+   * Drive Settings
+   */
+
+  private void talonSettings(){
+    TalonSRXPIDSetConfiguration p1 = new TalonSRXPIDSetConfiguration();
+    EncoderedDrives[0].configMotionCruiseVelocity(3000);
+    EncoderedDrives[0].configMotionAcceleration(1500);
+    EncoderedDrives[0].config_kF(0, 0.191);
   }
 
   private void setFollowers() {
