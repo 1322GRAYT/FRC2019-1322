@@ -16,7 +16,6 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.command.Subsystem;
-import frc.robot.commands.BM_ControlLeds;
 
 /**
  * Add your docs here.
@@ -25,7 +24,7 @@ public class LEDController extends Subsystem {
   
  private I2C ledArduino;
 
- // Define Public LED Colors:
+ // LED Colors:
  public int ledRed = 114;
  public int ledGreen = 103;
  public int ledBlue = 98;
@@ -34,9 +33,10 @@ public class LEDController extends Subsystem {
  public int ledRainbowCycle = 99;
  public int ledVisualize = 115;
  public int ledOff = 111;
- private int ledChase = 104;
- private int ledCheckerboard = 116;
- private int ledBreath = 112;
+ //LED Modes
+ public int ledModeChase = 104;
+ public int ledModeCheckerboard = 116;
+ public int ledModeBreath = 112;
 
  public LEDController() {
    ledArduino = new I2C(I2C.Port.kOnboard, 0x08);

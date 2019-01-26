@@ -19,12 +19,12 @@ public class TranslateToPos extends Command {
     public TranslateToPos(int x, int y) {
         X = x;
         Y = y;
+        requires(Robot.DRIVES);
     }
 
     // Called just before this Command runs the first time
     @Override
     protected void initialize() {
-        requires(Robot.DRIVES);
         Robot.DRIVES.RelativeMotionMagic(X, Y);
 
     }
@@ -32,6 +32,7 @@ public class TranslateToPos extends Command {
     // Called repeatedly when this Command is scheduled to run
     @Override
     protected void execute() {
+        Robot.DRIVES.RelativeMotionMagic(X, Y);
     }
 
     // Make this return true when this Command no longer needs to run execute()

@@ -7,13 +7,8 @@
 
 package frc.robot;
 
-import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.buttons.Button;
-import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import frc.robot.commands.BM_ControlClaw;
 import frc.robot.commands.BM_ControlEject;
-import frc.robot.commands.BM_ControlLeds;
 import frc.robot.commands.TranslateToPos;
 import frc.robot.models.CustomXbox;
 
@@ -44,13 +39,14 @@ public class OI {
 
   public OI() {
     //When "A" button is pressed, eject Hatch Panel, When Released, Retract pnuematics
-    DriverStick.aButton.whenPressed (new BM_ControlEject(true));
-    DriverStick.aButton.whenReleased(new BM_ControlEject(false));
+    AuxStick.aButton.whenPressed (new BM_ControlEject(false));
+    AuxStick.aButton.whenReleased(new BM_ControlEject(true));
     //When Right Bumper is pressed, push claw out, when Left bumper is pressed, pull claw in
-    DriverStick.rightBumper.whenPressed(new BM_ControlClaw(true));
-    DriverStick.leftBumper.whenPressed(new BM_ControlClaw(false));
-    // Eric was here 
-    DriverStick.aButton.whenPressed(new TranslateToPos(0, 10000)); 
+    AuxStick.rightBumper.whenPressed(new BM_ControlClaw(true));
+    AuxStick.leftBumper.whenPressed(new BM_ControlClaw(false));
+
+    DriverStick.aButton.whenPressed(new TranslateToPos(0, 10000));
+
   }
 
 }
