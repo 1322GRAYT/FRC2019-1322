@@ -100,7 +100,13 @@ public class Drives extends Subsystem {
     for (int i = 0; i < EncoderedDrives.length; i++) {
       Positions[i] = EncoderedDrives[i].getSelectedSensorPosition();
     }
-
+    return Positions;
+  }
+  public int[] rawiPosition() {
+    var Positions = new int[EncoderedDrives.length];
+    for (int i = 0; i < EncoderedDrives.length; i++) {
+      Positions[i] = EncoderedDrives[i].getSelectedSensorPosition();
+    }
     return Positions;
   }
 
@@ -170,7 +176,6 @@ public class Drives extends Subsystem {
   }
 
   private int[] relativePosition = new int[4];
-
   public void setRelativePosition() {
     for (var i = 0; i < relativePosition.length; i++) {
       relativePosition[i] = EncoderedDrives[i].getSelectedSensorPosition();
@@ -184,8 +189,7 @@ public class Drives extends Subsystem {
     int pHolder = (x != 0 ? x : y);
 
     int[] motorDistance = { (int) Math.signum(x) * pHolder, (int) Math.signum(-x) * pHolder,
-        (int) Math.signum(-x) * pHolder, (int) Math.signum(x) * pHolder }; // Determine which direction the robot needs
-                                                                           // to go
+        (int) Math.signum(-x) * pHolder, (int) Math.signum(x) * pHolder }; // Determine which direction the robot needs to go
 
     for (int i = 0; i < EncoderedDrives.length; i++) {
       EncoderedDrives[i].set(ControlMode.MotionMagic,

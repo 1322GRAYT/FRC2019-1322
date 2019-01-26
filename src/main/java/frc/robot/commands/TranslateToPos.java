@@ -13,19 +13,20 @@ import frc.robot.Robot;
 
 public class TranslateToPos extends Command {
 
-    int X = 0, Y = 0;
     int[] motorDistance = new int[4];
+    int pHolder = 0;
 
     public TranslateToPos(int x, int y) {
-        X = x;
-        Y = y;
+        pHolder = (x != 0 ? x : y);
         requires(Robot.DRIVES);
+        final int[] motorD = { (int) Math.signum(x) * pHolder, (int) Math.signum(-x) * pHolder,
+            (int) Math.signum(-x) * pHolder, (int) Math.signum(x) * pHolder }; // Determine which direction the robot needs to go
+        motorDistance = motorD;
     }
 
     // Called just before this Command runs the first time
     @Override
     protected void initialize() {
-        Robot.DRIVES.RelativeMotionMagic(X, Y);
 
     }
 
@@ -55,5 +56,10 @@ public class TranslateToPos extends Command {
     protected void interrupted() {
         end();
     }
+
+private int[] relativePosition = new int[4];
+  public void setRelativePosition() {
+      relativePosition = Robot.DRIVES.rawiPosition();
+  }
 
 }
