@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.buttons.JoystickButton;
 import frc.robot.commands.BM_ControlClaw;
 import frc.robot.commands.BM_ControlEject;
 import frc.robot.commands.BM_ControlLeds;
+import frc.robot.commands.TranslateToPos;
 import frc.robot.models.CustomXbox;
 
 /**
@@ -48,6 +49,8 @@ public class OI {
     //When Right Bumper is pressed, push claw out, when Left bumper is pressed, pull claw in
     DriverStick.rightBumper.whenPressed(new BM_ControlClaw(true));
     DriverStick.leftBumper.whenPressed(new BM_ControlClaw(false));
+    // Eric was here 
+    DriverStick.aButton.whenPressed(new TranslateToPos(0, 10000)); 
   }
 
 }
