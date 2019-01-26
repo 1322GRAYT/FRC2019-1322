@@ -22,6 +22,7 @@ public class RobotMap {
    * Drive System
    */
   
+  // CAN Talons
   public static final int[] EncoderDriveAddresses = {0, 2, 4, 6};
   public static final int[] FollowerDriveAddresses = {1, 3, 5, 7};
 
@@ -37,9 +38,31 @@ public class RobotMap {
   public static final int[] ClawSolenoids = {0, 1};
   public static final int[] EjectSolenoids = {2, 3};
 
+  /***********************************************
+   * Arm Lift for Prototype Bot
+   */
 
-  // If you are using multiple modules, make sure to define both the port
-  // number and the module. For example you with a rangefinder:
-  // public static int rangefinderPort = 1;
-  // public static int rangefinderModule = 1;
+  // CAN Talons
+  public static final int LIFT_1    = 8;
+	public static final int LIFT_2    = 9;
+	public static final int CLAW_L    = 10;
+  public static final int CLAW_R    = 11;
+  
+  // Solenoids
+  public static final int LIFT_SHIFT_O = 1;
+	public static final int LIFT_SHIFT_C = 2;
+	public static final int CLAW_CLOSE_O = 3;
+	public static final int CLAW_CLOSE_C = 4;
+	public static final int CLAW_LIFT_O  = 5;
+	public static final int CLAW_LIFT_C  = 6;
+  public static final int LIFT_JAM  = 7;
+  
+  // Digital Input
+  public static final int BLOCK_DETECTOR = 0;
+	public static final int LOW_LIFT = 2;
+	public static final int MID_LIFT = 3;
+	public static final int HIGH_LIFT = 4;
+
+
+  
 }

@@ -12,10 +12,7 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.subsystems.Claw;
-import frc.robot.subsystems.Drives;
-import frc.robot.subsystems.LEDController;
-import frc.robot.subsystems.Lift;
+import frc.robot.subsystems.*;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -26,6 +23,7 @@ import frc.robot.subsystems.Lift;
  */
 public class Robot extends TimedRobot {
   public static OI m_oi;
+
   public final static Drives          DRIVES = new Drives();
   public final static Claw            CLAW   = new Claw();
   public final static Lift            LIFT   = new Lift();
@@ -41,8 +39,7 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     m_oi = new OI();
-    // chooser.addOption("My Auto", new MyAutoCommand());
-    SmartDashboard.putData("Auto mode", m_chooser);
+
   }
 
   /**
