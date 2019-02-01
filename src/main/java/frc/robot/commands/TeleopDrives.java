@@ -12,13 +12,13 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
 
-public class TeleopDrives extends Command{
+public class TeleopDrives extends Command {
 
-  public TeleopDrives(){
+  public TeleopDrives() {
     requires(Robot.DRIVES);
   }
 
-    // Called just before this Command runs the first time
+  // Called just before this Command runs the first time
   @Override
   protected void initialize() {
     SmartDashboard.putNumberArray("Velocity", Robot.DRIVES.rawVelocities());
@@ -27,13 +27,12 @@ public class TeleopDrives extends Command{
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    Robot.DRIVES.DriveInVoltage(Robot.m_oi.DriverStick.getY(Hand.kLeft),
-      Robot.m_oi.DriverStick.getX(Hand.kLeft), 
-      Robot.m_oi.DriverStick.getX(Hand.kRight));
+    Robot.DRIVES.DriveInVoltage(Robot.m_oi.DriverStick.getY(Hand.kLeft), Robot.m_oi.DriverStick.getX(Hand.kLeft),
+        Robot.m_oi.DriverStick.getX(Hand.kRight));
     
-      SmartDashboard.putNumberArray("Velocity", Robot.DRIVES.rawVelocities());
-      SmartDashboard.putNumberArray("Velocity", Robot.DRIVES.rawPosition());
-
+    SmartDashboard.putNumber("Joystick", Robot.m_oi.DriverStick.getY(Hand.kLeft));
+    SmartDashboard.putNumber("Velocity", Robot.DRIVES.rawVelocities()[0]);
+    SmartDashboard.putNumber("Position", Robot.DRIVES.rawPosition()[0]);
 
   }
 
