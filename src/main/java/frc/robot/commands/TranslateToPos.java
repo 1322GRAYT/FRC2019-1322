@@ -15,11 +15,19 @@ public class TranslateToPos extends Command {
 
     int[] motorDistance = new int[4];
     int pHolder = 0;
-    int EError = 0; // For Error
-    final static int TOLERANCE = 250;
+    int EError = TOLERANCE + 1; // For Error
+    int x = 0, y = 0; // Placeholders
+    final static int TOLERANCE = 500;
 
     public TranslateToPos(int x, int y) {
         requires(Robot.DRIVES);
+        this.x = x;
+        this.y = y;
+    }
+
+    // Called just before this Command runs the first time
+    @Override
+    protected void initialize() {
 
         /********************
          * TODO: In the near future, I will need to be able to ensure that the PID slot
@@ -27,8 +35,8 @@ public class TranslateToPos extends Command {
          * slot 1/27/19
          */
 
-        // Only moving one at once, but must decern which way to go first
-        // In this game, side to side motion first is the most important
+        // First we need to create a setpoint, we need to determine which value we are
+        // taking
         if (x != 0) {
             final int[] motorD = { (int) Math.signum(x) * x, (int) Math.signum(-x) * x, (int) Math.signum(-x) * x,
                     (int) Math.signum(x) * x };
@@ -39,44 +47,44 @@ public class TranslateToPos extends Command {
         }
 
         // We are trying not to reset the encoders, so we need to move with respect to
-        // where
-        // we are currently
+        // where we are currently
         setRelativePosition();
         for (int i = 0; i < motorDistance.length; i++) {
-            motorDistance[i] += relativePosition[i];
+            motorDistance[i] += Robot.DRIVES.rawPosition()[i];
         }
+        System.out.println(motorDistance[0]);
 
-        EError = (Robot.DRIVES.rawiPosition()[0] - pHolder);
-
-    }
-
-    // Called just before this Command runs the first time
-    @Override
-    protected void initialize() {
         System.out.println("Initializing");
         Robot.DRIVES.setSafety(false);
         Robot.DRIVES.MMControlTest(this.motorDistance[0]);
+        toSDBoard("Drive 1", calcError(0), Robot.DRIVES.rawVelocities()[0],
+                Robot.DRIVES.getClosedLoopError()[0], motorDistance[0],
+                Robot.DRIVES.rawPosition()[0]);
+        toSDBoard("Drive 2", calcError(1), Robot.DRIVES.rawVelocities()[1],
+                Robot.DRIVES.getClosedLoopError()[1], motorDistance[1],
+                Robot.DRIVES.rawPosition()[0]);
+        toSDBoard("Drive 3", calcError(2), Robot.DRIVES.rawVelocities()[2],
+                Robot.DRIVES.getClosedLoopError()[2], motorDistance[2]);
     }
 
     // Called repeatedly when this Command is scheduled to run
-    // Creating output Vals
-    double PosE = 0;
-    double Vel = 0;
-    double CLE = 0;
 
     @Override
     protected void execute() {
-        PosE = Robot.DRIVES.getClosedLoopError()[0];
-        Vel = Robot.DRIVES.rawVelocities()[0];
-        CLE = Robot.DRIVES.getClosedLoopError()[0];
-        EError = (int) (Robot.DRIVES.rawPosition()[0] - pHolder);
+        // Display Command Stats
+        toSDBoard("Drive 1", calcError(0), Robot.DRIVES.rawVelocities()[0],
+                Robot.DRIVES.getClosedLoopError()[0], motorDistance[0]);
+        toSDBoard("Drive 2", calcError(1), Robot.DRIVES.rawVelocities()[1],
+                Robot.DRIVES.getClosedLoopError()[1], motorDistance[1]);
+        toSDBoard("Drive 3", calcError(2), Robot.DRIVES.rawVelocities()[2],
+                Robot.DRIVES.getClosedLoopError()[2], motorDistance[2]);
     }
 
     // Make this return true when this Command no longer needs to run execute()
 
     @Override
     protected boolean isFinished() {
-        return Math.abs(EError) < TOLERANCE;
+        return Math.abs(calcError(0)) < TOLERANCE;
     }
 
     // Called once after isFinished returns true
@@ -101,9 +109,12 @@ public class TranslateToPos extends Command {
         relativePosition = Robot.DRIVES.rawiPosition();
     }
 
-    public void toSDBoard(double Error, double Velocity, double CLE, double SetPoint) {
-        double[] toSDB = { Error, Velocity, CLE, SetPoint };
-        SmartDashboard.putNumberArray("Translation Data", toSDB);
+    public int calcError(int motor){
+        return (int)Robot.DRIVES.rawPosition()[motor] - motorDistance[motor];
+    }
+
+    public void toSDBoard(String Name,double... toSDB) {
+        SmartDashboard.putNumberArray(Name, toSDB);
     }
 
 }

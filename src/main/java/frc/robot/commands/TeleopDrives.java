@@ -31,8 +31,8 @@ public class TeleopDrives extends Command {
         Robot.m_oi.DriverStick.getX(Hand.kRight));
     
     SmartDashboard.putNumber("Joystick", Robot.m_oi.DriverStick.getY(Hand.kLeft));
-    SmartDashboard.putNumber("Velocity", Robot.DRIVES.rawVelocities()[0]);
-    SmartDashboard.putNumber("Position", Robot.DRIVES.rawPosition()[0]);
+    SmartDashboard.putNumberArray("Velocity", Robot.DRIVES.rawVelocities());
+    SmartDashboard.putNumberArray("Position", Robot.DRIVES.rawPosition());
 
   }
 

@@ -7,6 +7,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import frc.robot.commands.*;
 import frc.robot.models.EncoderConversions;
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.robot.RobotMap;
 
@@ -48,18 +49,25 @@ public class Drives extends Subsystem {
     for (var i = 0; i < EncoderedDrives.length; i++) {
       EncoderedDrives[i].configFactoryDefault();
       EncoderedDrives[i].configMotionCruiseVelocity(3000);
-      EncoderedDrives[i].configMotionAcceleration(2000);
-      EncoderedDrives[i].config_kF(0, 0.3);
+      EncoderedDrives[i].configMotionAcceleration(3000);
+      EncoderedDrives[i].configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
+      EncoderedDrives[i].config_kF(0, 0.1);
       EncoderedDrives[i].config_kP(0, 0.25);
       EncoderedDrives[i].config_kI(0, 0.0005);
       EncoderedDrives[i].config_kD(0, 0.00);
     }
 
-    EncoderedDrives[0].setInverted(true);
-    FolowerDrives[0].setInverted(true);
+    EncoderedDrives[0].setInverted(false);
+    EncoderedDrives[0].setSensorPhase(false);
+    FolowerDrives[0].setInverted(false);
 
-    EncoderedDrives[1].setInverted(true);
-    FolowerDrives[1].setInverted(true);
+    EncoderedDrives[1].setInverted(false);
+    EncoderedDrives[1].setSensorPhase(true);
+    FolowerDrives[1].setInverted(false);
+
+    EncoderedDrives[2].setInverted(false);
+    EncoderedDrives[2].setSensorPhase(true);
+    FolowerDrives[2].setInverted(false);
 
 
   }
@@ -177,6 +185,8 @@ public class Drives extends Subsystem {
 
   public void MMControlTest(int Distance) {
     EncoderedDrives[0].set(ControlMode.MotionMagic, Distance);
+    EncoderedDrives[1].set(ControlMode.MotionMagic, Distance);
+    EncoderedDrives[2].set(ControlMode.MotionMagic, Distance);
   }
 
   public void MMControl(double Distance) {
