@@ -28,6 +28,7 @@ public class Robot extends TimedRobot {
   public final static Claw            CLAW   = new Claw();
   public final static Lift            LIFT   = new Lift();
   public final static LEDController   LEDS   = new LEDController();
+  public final static PtypeLift       PTLIFT = new PtypeLift();
 
   Command m_autonomousCommand;
   SendableChooser<Command> m_chooser = new SendableChooser<>();

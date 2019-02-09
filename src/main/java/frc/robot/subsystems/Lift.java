@@ -131,6 +131,6 @@ public class Lift extends Subsystem {
 	 * to TC_LiftMotor so that it is ALWAYS running throughout Tele-Op.
 	 */
     public void initDefaultCommand() {
-       setDefaultCommand(new TC_LiftMotor());
+       //setDefaultCommand(new TC_LiftMotor());
     }
 }

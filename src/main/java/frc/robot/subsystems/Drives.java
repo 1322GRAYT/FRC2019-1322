@@ -50,7 +50,7 @@ public class Drives extends Subsystem {
       EncoderedDrives[i].configFactoryDefault();
       EncoderedDrives[i].configMotionCruiseVelocity(3000);
       EncoderedDrives[i].configMotionAcceleration(3000);
-      EncoderedDrives[i].configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
+      EncoderedDrives[i].configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
       EncoderedDrives[i].config_kF(0, 0.1);
       EncoderedDrives[i].config_kP(0, 0.25);
       EncoderedDrives[i].config_kI(0, 0.0005);
@@ -134,11 +134,11 @@ public class Drives extends Subsystem {
    * 
    */
   public void DriveInVoltage(double F, double L, double R) {
-    var y = deadzone(F);
+    var y = deadzone(-F);
     var x = deadzone(L);
     var r = deadzone(R);
 
-    double wheelSpeeds[] = { y + x + r, y - x - r, y - x + r, y + x - r };
+    double wheelSpeeds[] = { y - x - r, y - x + r, y + x - r, y + x + r };
     wheelSpeeds = normalize(scale(wheelSpeeds, 1.0));
 
     for (int i = 0; i < EncoderedDrives.length; i++) {

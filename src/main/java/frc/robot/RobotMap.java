@@ -29,7 +29,18 @@ public class RobotMap {
   /***********************************************
    * Lift
    */
-  public static final int[] LiftMotorAddresses = {8, 9};
+  
+  // CAN Talons
+  public static final int LiftMotorAddress = 8;
+  public static final int BallIntakeAddress = 9;
+
+
+  /***********************************************
+   * Robot Lift
+   */
+
+  public static final int[] RobotLiftAddresses = {10,11};
+  public static final int RobotLiftExtendAddress = 12;
 
 	/***********************************************
    * Air Things

@@ -20,7 +20,8 @@ import frc.robot.models.CustomXbox;
 public class OI {
 
   //Because the WPI bundled one is dumbbbbbbbbbbb
-  public CustomXbox DriverStick = new CustomXbox(0), AuxStick = new CustomXbox(1);
+  public CustomXbox DriverStick = new CustomXbox(0);
+  public CustomXbox AuxStick = new CustomXbox(1);
 
   //// TRIGGERING COMMANDS WITH BUTTONS
   // Once you have a button, it's trivial to bind it to a button in one of
@@ -46,7 +47,7 @@ public class OI {
     AuxStick.rightBumper.whenPressed(new BM_ControlClaw(true));
     AuxStick.leftBumper.whenPressed(new BM_ControlClaw(false));
 
-    DriverStick.aButton.whenPressed(new TranslateToPos(0, 50000));
+    //DriverStick.aButton.whenPressed(new TranslateToPos(0, 50000));
     DriverStick.bButton.whenPressed(new setEncodersZero());
 
   }
