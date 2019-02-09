@@ -13,16 +13,28 @@ import frc.robot.Robot;
 public class BM_ControlLeds extends Command {
 
   private int mode;
+  private int color;
 
-  public BM_ControlLeds(int mode) {
+  public BM_ControlLeds(int color) {
     requires(Robot.LEDS);
+    this.color = color;
+    this.mode = -1;
+  }
+
+  public BM_ControlLeds(int color, int mode) {
+    requires(Robot.LEDS);
+    this.color = color;
     this.mode = mode;
   }
 
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-    Robot.LEDS.setLEDs(mode);
+    if(mode > -1){
+      Robot.LEDS.setMode(color, mode);
+    } else {
+      Robot.LEDS.setLEDs(color);
+    }
   }
 
   // Called repeatedly when this Command is scheduled to run

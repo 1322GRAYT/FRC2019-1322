@@ -2,7 +2,7 @@
 #include <Wire.h>
 
 #define PIN 6
-#define LEDNUM 150
+#define LEDNUM 60
 
 // Parameter 1 = number of pixels in strip
 // Parameter 2 = pin number (most are valid)
@@ -46,13 +46,15 @@ void setup() {
   strip.begin();
   strip.setBrightness(30); //adjust brightness here
   strip.show(); // Initialize all pixels to 'off'
-  colorWipe(colorYellow,2);
-  delay(50);
-  colorWipe(strip.Color(0,0,0),0);
-  delay(50);
-  colorWipe(colorYellow,2);
-  delay(50);
-  colorWipe(strip.Color(0,0,0),0);
+  //colorWipe(colorYellow,2);
+  //delay(50);
+  //colorWipe(strip.Color(0,0,0),0);
+  //delay(50);
+  //colorWipe(colorYellow,2);
+  //delay(50);
+  //colorWipe(strip.Color(0,0,0),0);
+  //breathe('y');
+  visualize2();
 }
 
 void loop() {
@@ -139,6 +141,7 @@ void receiveEvent(int howMany){
     currentColor = 'b';
   }
 }
+
 // Fill the dots one after the other with a color
 void colorWipe(uint32_t c, uint8_t wait) {
   for(uint16_t i=0; i<strip.numPixels(); i++) {
@@ -229,6 +232,16 @@ void breathe(char c){
   }
   else if(c=='g'){
     for(int x=0; x<255;x+=15){
+      colorWipe(strip.Color(0,0,x),0);
+      delay(2);
+    }
+    for(int x=255; x>0;x-=15){
+      colorWipe(strip.Color(0,0,x),0);
+      delay(2);
+    }
+  }
+  else if(c=='b'){
+    for(int x=0; x<255;x+=15){
       colorWipe(strip.Color(0,x,0),0);
       delay(2);
     }
@@ -237,16 +250,18 @@ void breathe(char c){
       delay(2);
     }
   }
-  else if(c=='b'){
+  else if(c=='y'){
     for(int x=0; x<255;x+=15){
-      colorWipe(strip.Color(0,0,x),0);
+      int y = (x > 51) ? x - 50 : 0;
+      colorWipe(strip.Color(x,0,y),0);
       delay(2);
     }
     for(int x=255; x>0;x-=15){
-      colorWipe(strip.Color(0,0,x),0);
+      int y = (x > 51) ? x - 50 : 0;
+      colorWipe(strip.Color(x,0,y),0);
       delay(2);
     }
-  } //TODO: Add Yellow Breath
+  }//TODO: Add Yellow Breath
 }
 
 void visualize(uint16_t c){
@@ -311,10 +326,7 @@ void rainbowCycle2(uint8_t wait) {
      if (vol> 10) {
 
       return;
-
      }
-
-
   }
 }
 

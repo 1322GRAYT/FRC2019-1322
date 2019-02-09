@@ -2,10 +2,12 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.TalonSRXPIDSetConfiguration;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import frc.robot.commands.*;
+import frc.robot.models.EncoderConversions;
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.robot.RobotMap;
 
@@ -15,20 +17,15 @@ enum DrivePosition {
 
 public class Drives extends Subsystem {
 
+  WPI_TalonSRX[] EncoderedDrives = { new WPI_TalonSRX(RobotMap.EncoderDriveAddresses[0]),
+      new WPI_TalonSRX(RobotMap.EncoderDriveAddresses[1]), new WPI_TalonSRX(RobotMap.EncoderDriveAddresses[2]),
+      new WPI_TalonSRX(RobotMap.EncoderDriveAddresses[3]) };
 
-  TalonSRX[] EncoderedDrives = {new TalonSRX(RobotMap.EncoderDriveAddresses[0]),
-    new TalonSRX(RobotMap.EncoderDriveAddresses[1]),
-    new TalonSRX(RobotMap.EncoderDriveAddresses[2]),
-    new TalonSRX(RobotMap.EncoderDriveAddresses[3])};
+  WPI_TalonSRX[] FolowerDrives = { new WPI_TalonSRX(RobotMap.FollowerDriveAddresses[0]),
+      new WPI_TalonSRX(RobotMap.FollowerDriveAddresses[1]), new WPI_TalonSRX(RobotMap.FollowerDriveAddresses[2]),
+      new WPI_TalonSRX(RobotMap.FollowerDriveAddresses[3]) };
 
-
-  TalonSRX[] FolowerDrives = {new TalonSRX(RobotMap.FollowerDriveAddresses[0]),
-    new TalonSRX(RobotMap.FollowerDriveAddresses[1]),
-    new TalonSRX(RobotMap.FollowerDriveAddresses[2]),
-    new TalonSRX(RobotMap.FollowerDriveAddresses[3])};
-  
-
-  public Drives(){
+  public Drives() {
     setFollowers();
     setEncoders();
     talonSettings();
@@ -38,11 +35,41 @@ public class Drives extends Subsystem {
    * Drive Settings
    */
 
-  private void talonSettings(){
-    TalonSRXPIDSetConfiguration p1 = new TalonSRXPIDSetConfiguration();
+  private void talonSettings() {
+    /*
+    EncoderedDrives[0].configFactoryDefault();
     EncoderedDrives[0].configMotionCruiseVelocity(3000);
-    EncoderedDrives[0].configMotionAcceleration(1500);
-    EncoderedDrives[0].config_kF(0, 0.191);
+    EncoderedDrives[0].configMotionAcceleration(2000);
+    EncoderedDrives[0].config_kF(0, 0.3);
+    EncoderedDrives[0].config_kP(0, 0.25);
+    EncoderedDrives[0].config_kI(0, 0.0005);
+    EncoderedDrives[0].config_kD(0, 0.00);
+    */
+
+    for (var i = 0; i < EncoderedDrives.length; i++) {
+      EncoderedDrives[i].configFactoryDefault();
+      EncoderedDrives[i].configMotionCruiseVelocity(3000);
+      EncoderedDrives[i].configMotionAcceleration(3000);
+      EncoderedDrives[i].configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
+      EncoderedDrives[i].config_kF(0, 0.1);
+      EncoderedDrives[i].config_kP(0, 0.25);
+      EncoderedDrives[i].config_kI(0, 0.0005);
+      EncoderedDrives[i].config_kD(0, 0.00);
+    }
+
+    EncoderedDrives[0].setInverted(false);
+    EncoderedDrives[0].setSensorPhase(false);
+    FolowerDrives[0].setInverted(false);
+
+    EncoderedDrives[1].setInverted(false);
+    EncoderedDrives[1].setSensorPhase(true);
+    FolowerDrives[1].setInverted(false);
+
+    EncoderedDrives[2].setInverted(false);
+    EncoderedDrives[2].setSensorPhase(true);
+    FolowerDrives[2].setInverted(false);
+
+
   }
 
   private void setFollowers() {
@@ -57,29 +84,10 @@ public class Drives extends Subsystem {
     }
   }
 
-  /************
-   * Unit Conversions
-   * 
-   * inToTicks converts linear inches to encoder ticks For use to read encoder
-   * counts to ticksToIn converts encoder ticks to linear inches
-   */
-  private final int countsPerCycle = 200 * 4; // 200 ticks at 4x encoder (4x Encoder counts Up and Down)
-  private final double diaOfWheel = 4; // in inches
-  private final double circOfWheel = Math.PI * diaOfWheel; // D * PI
-  private final double gearRatio = (54 / 28) * (22 / 12); // 28 to 54 to 12 to 22
-
-  public int inToTicks(double Inches) {
-    return (int) (Inches * (gearRatio * countsPerCycle / circOfWheel));
-  }
-
-  public double ticksToIn(int Ticks) {
-    return ((double) Ticks) / (gearRatio * countsPerCycle / circOfWheel);
-  }
-
   /***************
    * Get raw Velocities
    * 
-   * @return In Ticks per 10ms
+   * @return In Ticks per 100ms
    */
   public double[] rawVelocities() {
     var Velocities = new double[EncoderedDrives.length];
@@ -100,7 +108,14 @@ public class Drives extends Subsystem {
     for (int i = 0; i < EncoderedDrives.length; i++) {
       Positions[i] = EncoderedDrives[i].getSelectedSensorPosition();
     }
+    return Positions;
+  }
 
+  public int[] rawiPosition() {
+    var Positions = new int[EncoderedDrives.length];
+    for (int i = 0; i < EncoderedDrives.length; i++) {
+      Positions[i] = EncoderedDrives[i].getSelectedSensorPosition();
+    }
     return Positions;
   }
 
@@ -110,15 +125,20 @@ public class Drives extends Subsystem {
     }
   }
 
-  /*************************************
+  /****************************************************************
    * Drive Functions
+   * 
+   * 
+   * Includes all functions required to drive the robot
+   * 
+   * 
    */
   public void DriveInVoltage(double F, double L, double R) {
-    var y = deadzone(F);
+    var y = deadzone(-F);
     var x = deadzone(L);
     var r = deadzone(R);
 
-    double wheelSpeeds[] = { y + x + r, y - x - r, y - x + r, y + x - r };
+    double wheelSpeeds[] = { y - x - r, y - x + r, y + x - r, y + x + r };
     wheelSpeeds = normalize(scale(wheelSpeeds, 1.0));
 
     for (int i = 0; i < EncoderedDrives.length; i++) {
@@ -155,17 +175,23 @@ public class Drives extends Subsystem {
    * Autonomous Mode Functions
    */
 
-  public void MMControl(int Distance) {
+  public void MMControl(int[] Distance) {
 
     for (var i = 0; i < EncoderedDrives.length; i++) {
-      EncoderedDrives[i].set(ControlMode.MotionMagic, Distance);
+      EncoderedDrives[i].set(ControlMode.MotionMagic, Distance[i]);
     }
 
   }
 
+  public void MMControlTest(int Distance) {
+    EncoderedDrives[0].set(ControlMode.MotionMagic, Distance);
+    EncoderedDrives[1].set(ControlMode.MotionMagic, Distance);
+    EncoderedDrives[2].set(ControlMode.MotionMagic, Distance);
+  }
+
   public void MMControl(double Distance) {
     for (var i = 0; i < EncoderedDrives.length; i++) {
-      EncoderedDrives[i].set(ControlMode.MotionMagic, inToTicks(Distance));
+      EncoderedDrives[i].set(ControlMode.MotionMagic, EncoderConversions.inToTicks(Distance));
     }
   }
 
@@ -193,12 +219,27 @@ public class Drives extends Subsystem {
     }
   }
 
+  public int[] getClosedLoopError() {
+    int[] val = new int[4];
+    for (int i = 0; i < EncoderedDrives.length; i++) {
+      val[i] = EncoderedDrives[i].getClosedLoopError();
+    }
+    return val;
+  }
+
   public boolean[] mmIsDone() {
     boolean[] flags = new boolean[4];
     for (int i = 0; i < EncoderedDrives.length; i++) {
       flags[i] = EncoderedDrives[i].getClosedLoopError() < 500;
     }
     return flags;
+  }
+
+  public void setSafety(boolean set) {
+    for (int i = 0; i < EncoderedDrives.length; i++) {
+      EncoderedDrives[i].setSafetyEnabled(set);
+    }
+
   }
 
   @Override

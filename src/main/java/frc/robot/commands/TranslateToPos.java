@@ -7,45 +7,92 @@
 
 package frc.robot.commands;
 
-import java.util.Arrays;
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
 
 public class TranslateToPos extends Command {
 
-    int X = 0, Y = 0;
     int[] motorDistance = new int[4];
+    int pHolder = 0;
+    int EError = TOLERANCE + 1; // For Error
+    int x = 0, y = 0; // Placeholders
+    final static int TOLERANCE = 500;
 
     public TranslateToPos(int x, int y) {
-        X = x;
-        Y = y;
+        requires(Robot.DRIVES);
+        this.x = x;
+        this.y = y;
     }
 
     // Called just before this Command runs the first time
     @Override
     protected void initialize() {
-        requires(Robot.DRIVES);
-        Robot.DRIVES.RelativeMotionMagic(X, Y);
 
+        /********************
+         * TODO: In the near future, I will need to be able to ensure that the PID slot
+         * I choose to use gets set, as I will be setting the gyro to be using another
+         * slot 1/27/19
+         */
+
+        // First we need to create a setpoint, we need to determine which value we are
+        // taking
+        if (x != 0) {
+            final int[] motorD = { (int) Math.signum(x) * x, (int) Math.signum(-x) * x, (int) Math.signum(-x) * x,
+                    (int) Math.signum(x) * x };
+            motorDistance = motorD;
+        } else {
+            final int[] motorD = { y, y, y, y };
+            motorDistance = motorD;
+        }
+
+        // We are trying not to reset the encoders, so we need to move with respect to
+        // where we are currently
+        setRelativePosition();
+        for (int i = 0; i < motorDistance.length; i++) {
+            motorDistance[i] += Robot.DRIVES.rawPosition()[i];
+        }
+        System.out.println(motorDistance[0]);
+
+        System.out.println("Initializing");
+        Robot.DRIVES.setSafety(false);
+        Robot.DRIVES.MMControlTest(this.motorDistance[0]);
+        toSDBoard("Drive 1", calcError(0), Robot.DRIVES.rawVelocities()[0],
+                Robot.DRIVES.getClosedLoopError()[0], motorDistance[0],
+                Robot.DRIVES.rawPosition()[0]);
+        toSDBoard("Drive 2", calcError(1), Robot.DRIVES.rawVelocities()[1],
+                Robot.DRIVES.getClosedLoopError()[1], motorDistance[1],
+                Robot.DRIVES.rawPosition()[0]);
+        toSDBoard("Drive 3", calcError(2), Robot.DRIVES.rawVelocities()[2],
+                Robot.DRIVES.getClosedLoopError()[2], motorDistance[2]);
     }
 
     // Called repeatedly when this Command is scheduled to run
+
     @Override
     protected void execute() {
+        // Display Command Stats
+        toSDBoard("Drive 1", calcError(0), Robot.DRIVES.rawVelocities()[0],
+                Robot.DRIVES.getClosedLoopError()[0], motorDistance[0]);
+        toSDBoard("Drive 2", calcError(1), Robot.DRIVES.rawVelocities()[1],
+                Robot.DRIVES.getClosedLoopError()[1], motorDistance[1]);
+        toSDBoard("Drive 3", calcError(2), Robot.DRIVES.rawVelocities()[2],
+                Robot.DRIVES.getClosedLoopError()[2], motorDistance[2]);
     }
 
     // Make this return true when this Command no longer needs to run execute()
-    final boolean[] flagCheck = { true, true, true, true };
 
     @Override
     protected boolean isFinished() {
-        return Arrays.equals(Robot.DRIVES.mmIsDone(), flagCheck);
+        return Math.abs(calcError(0)) < TOLERANCE;
     }
 
     // Called once after isFinished returns true
     @Override
     protected void end() {
         Robot.DRIVES.DriveInVoltage(0, 0, 0);
+        Robot.DRIVES.setSafety(true);
+        System.out.println("Done");
     }
 
     // Called when another command which requires one or more of the same
@@ -53,6 +100,21 @@ public class TranslateToPos extends Command {
     @Override
     protected void interrupted() {
         end();
+        System.out.println("Interrupted");
+    }
+
+    private int[] relativePosition = new int[4];
+
+    public void setRelativePosition() {
+        relativePosition = Robot.DRIVES.rawiPosition();
+    }
+
+    public int calcError(int motor){
+        return (int)Robot.DRIVES.rawPosition()[motor] - motorDistance[motor];
+    }
+
+    public void toSDBoard(String Name,double... toSDB) {
+        SmartDashboard.putNumberArray(Name, toSDB);
     }
 
 }

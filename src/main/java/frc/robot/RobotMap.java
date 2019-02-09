@@ -29,14 +29,25 @@ public class RobotMap {
   /***********************************************
    * Lift
    */
-  public static final int[] LiftMotorAddresses = {8, 9};
+  
+  // CAN Talons
+  public static final int LiftMotorAddress = 8;
+  public static final int BallIntakeAddress = 9;
+
+
+  /***********************************************
+   * Robot Lift
+   */
+
+  public static final int[] RobotLiftAddresses = {10,11};
+  public static final int RobotLiftExtendAddress = 12;
 
 	/***********************************************
    * Air Things
    */
 
-  public static final int[] ClawSolenoids = {0, 1};
-  public static final int[] EjectSolenoids = {2, 3};
+  public static final int[] ClawSolenoids = {3, 4};
+  public static final int[] EjectSolenoids = {5, 6};
 
   /***********************************************
    * Arm Lift for Prototype Bot
@@ -51,10 +62,10 @@ public class RobotMap {
   // Solenoids
   public static final int LIFT_SHIFT_O = 1;
 	public static final int LIFT_SHIFT_C = 2;
-	public static final int CLAW_CLOSE_O = 3;
-	public static final int CLAW_CLOSE_C = 4;
-	public static final int CLAW_LIFT_O  = 5;
-	public static final int CLAW_LIFT_C  = 6;
+	//public static final int CLAW_CLOSE_O = 3;
+	//public static final int CLAW_CLOSE_C = 4;
+	//public static final int CLAW_LIFT_O  = 5;
+	//public static final int CLAW_LIFT_C  = 6;
   public static final int LIFT_JAM  = 7;
   
   // Digital Input
