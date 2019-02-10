@@ -57,14 +57,6 @@ public class TranslateToPos extends Command {
         System.out.println("Initializing");
         Robot.DRIVES.setSafety(false);
         Robot.DRIVES.MMControlTest(this.motorDistance[0]);
-        toSDBoard("Drive 1", calcError(0), Robot.DRIVES.rawVelocities()[0],
-                Robot.DRIVES.getClosedLoopError()[0], motorDistance[0],
-                Robot.DRIVES.rawPosition()[0]);
-        toSDBoard("Drive 2", calcError(1), Robot.DRIVES.rawVelocities()[1],
-                Robot.DRIVES.getClosedLoopError()[1], motorDistance[1],
-                Robot.DRIVES.rawPosition()[0]);
-        toSDBoard("Drive 3", calcError(2), Robot.DRIVES.rawVelocities()[2],
-                Robot.DRIVES.getClosedLoopError()[2], motorDistance[2]);
     }
 
     // Called repeatedly when this Command is scheduled to run
@@ -78,6 +70,8 @@ public class TranslateToPos extends Command {
                 Robot.DRIVES.getClosedLoopError()[1], motorDistance[1]);
         toSDBoard("Drive 3", calcError(2), Robot.DRIVES.rawVelocities()[2],
                 Robot.DRIVES.getClosedLoopError()[2], motorDistance[2]);
+        toSDBoard("Drive 4", calcError(3), Robot.DRIVES.rawVelocities()[3],
+                Robot.DRIVES.getClosedLoopError()[3], motorDistance[3]);
     }
 
     // Make this return true when this Command no longer needs to run execute()
