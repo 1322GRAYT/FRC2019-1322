@@ -26,7 +26,13 @@ public class PtypeLift extends Subsystem {
   WPI_TalonSRX BallIntake = new WPI_TalonSRX(RobotMap.BallIntakeAddress);
 
   public PtypeLift(){
+    Lift.configMotionCruiseVelocity(3000);
+    Lift.configMotionAcceleration(3000);
     Lift.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
+    Lift.config_kF(0, 0.01);
+    Lift.config_kP(0, 0.0);
+    Lift.config_kI(0, 0.0);
+    Lift.config_kD(0, 0.0);
   }
 
   public int liftRawPosition(){
@@ -43,6 +49,22 @@ public class PtypeLift extends Subsystem {
 
   public void LiftByVoltage(double Power){
     Lift.set(ControlMode.PercentOutput, Power);
+  }
+
+  public void MMArm(int Pos){
+    Lift.set(ControlMode.MotionMagic, Pos);
+  }
+
+  public void armSafety(boolean safety){
+    Lift.setSafetyEnabled(safety);
+  }
+
+  public double armVoltage(){
+    return Lift.getMotorOutputVoltage();
+  }
+
+  public int armError(){
+    return Lift.getClosedLoopError();
   }
 
   @Override

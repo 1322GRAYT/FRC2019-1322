@@ -7,6 +7,7 @@
 
 package frc.robot;
 
+import frc.robot.commands.ArmToPos;
 import frc.robot.commands.BM_ControlClaw;
 import frc.robot.commands.BM_ControlEject;
 import frc.robot.commands.TranslateToPos;
@@ -47,8 +48,12 @@ public class OI {
     AuxStick.rightBumper.whenPressed(new BM_ControlClaw(true));
     AuxStick.leftBumper.whenPressed(new BM_ControlClaw(false));
 
-    //DriverStick.aButton.whenPressed(new TranslateToPos(0, 50000));
+    DriverStick.aButton.whenPressed(new TranslateToPos(0, 500000));
     DriverStick.bButton.whenPressed(new setEncodersZero());
+
+    //AuxStick.bButton.whenPressed(new ArmToPos(100000));
+    //AuxStick.xButton.whenPressed(new ArmToPos(50000));
+    //AuxStick.yButton.whenPressed(new ArmToPos(0));
 
   }
 
