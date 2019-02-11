@@ -8,44 +8,39 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
 
-public class ArmToPos extends Command {
-  int Place = 0;
-
-  public ArmToPos(int pos) {
+public class VelArm extends Command {
+  int Vel = 0;
+  public VelArm(int vel) {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
     requires(Robot.PTLIFT);
-    this.Place = pos;
+    Vel = vel;
   }
 
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
     Robot.PTLIFT.armSafety(false);
-    Robot.PTLIFT.MMArm(Place);
+    Robot.PTLIFT.VelArm(Vel);
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    Robot.PTLIFT.MMArm(Place);
-    toSDBoard("Arm Data", Robot.PTLIFT.liftRawPosition(), Robot.PTLIFT.liftRawVelocity(), Place,
-        Robot.PTLIFT.armVoltage(), Robot.PTLIFT.armError());
-    System.out.println("Still Here!");
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return Math.abs(Robot.PTLIFT.liftRawPosition() - Place) < 250;
+    return false;
   }
 
   // Called once after isFinished returns true
   @Override
   protected void end() {
+    Robot.PTLIFT.LiftByVoltage(0);
     Robot.PTLIFT.armSafety(true);
   }
 
@@ -55,9 +50,4 @@ public class ArmToPos extends Command {
   protected void interrupted() {
     end();
   }
-
-  public void toSDBoard(String Name, double... toSDB) {
-    SmartDashboard.putNumberArray(Name, toSDB);
-  }
-
 }
