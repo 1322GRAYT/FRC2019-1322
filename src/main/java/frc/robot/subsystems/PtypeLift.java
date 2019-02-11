@@ -55,6 +55,10 @@ public class PtypeLift extends Subsystem {
     Lift.set(ControlMode.MotionMagic, Pos);
   }
 
+  public void VelArm(int Vel){
+    Lift.set(ControlMode.Velocity, Vel);
+  }
+
   public void armSafety(boolean safety){
     Lift.setSafetyEnabled(safety);
   }

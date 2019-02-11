@@ -7,11 +7,7 @@
 
 package frc.robot;
 
-import frc.robot.commands.ArmToPos;
-import frc.robot.commands.BM_ControlClaw;
-import frc.robot.commands.BM_ControlEject;
-import frc.robot.commands.TranslateToPos;
-import frc.robot.commands.setEncodersZero;
+import frc.robot.commands.*;
 import frc.robot.models.CustomXbox;
 
 /**
@@ -50,10 +46,14 @@ public class OI {
 
     DriverStick.aButton.whenPressed(new TranslateToPos(0, 500000));
     DriverStick.bButton.whenPressed(new setEncodersZero());
+    DriverStick.xButton.whileHeld(new VelArm(3000));
+    DriverStick.yButton.whileHeld(new VelArm(-3000));
 
-    //AuxStick.bButton.whenPressed(new ArmToPos(100000));
-    //AuxStick.xButton.whenPressed(new ArmToPos(50000));
-    //AuxStick.yButton.whenPressed(new ArmToPos(0));
+    AuxStick.bButton.whenPressed(new ArmToPos(100000));
+    AuxStick.xButton.whenPressed(new ArmToPos(50000));
+    AuxStick.yButton.whenPressed(new ArmToPos(0));
+
+
 
   }
 
