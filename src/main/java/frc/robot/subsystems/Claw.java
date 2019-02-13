@@ -7,6 +7,7 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.robot.RobotMap;
@@ -16,8 +17,11 @@ import frc.robot.RobotMap;
  */
 public class Claw extends Subsystem {
   private Solenoid clawIn, clawOut, ejectIn, ejectOut;
+  private Compressor comp;
 
   public Claw() { //TODO: Update when Eric Pushes RobotMap
+    comp = new Compressor(0);
+    comp.enabled();
     clawIn = new Solenoid(RobotMap.ClawSolenoids[0]);
     clawOut = new Solenoid(RobotMap.ClawSolenoids[1]);
     ejectIn = new Solenoid(RobotMap.EjectSolenoids[0]);

@@ -1,8 +1,9 @@
 #include <Adafruit_NeoPixel.h>
 #include <Wire.h>
 
-#define PIN 6
-#define LEDNUM 60
+#define PIN_L 6
+#define PIN_R 5
+#define LEDNUM 24
 
 // Parameter 1 = number of pixels in strip
 // Parameter 2 = pin number (most are valid)
@@ -20,7 +21,9 @@
 */
 #define MIC_PIN A0
 
-Adafruit_NeoPixel strip = Adafruit_NeoPixel(LEDNUM, PIN, NEO_GRB + NEO_KHZ800);
+Adafruit_NeoPixel stripL = Adafruit_NeoPixel(LEDNUM, PIN_L, NEO_GRB + NEO_KHZ800);
+Adafruit_NeoPixel stripR = Adafruit_NeoPixel(LEDNUM, PIN_R, NEO_GRB + NEO_KHZ800);
+
 
 int vol = 0;
 float total = 0;
@@ -30,31 +33,35 @@ int volLast = 0;
 int fadeAmt = 0;
 int counter = 0;
 int c;
-char currentColor = 'n';
-char IData = 'o';
+char currentColor = 'y';
+char IData = 'p';
 int VData = 2;
-uint32_t colorRed = strip.Color(255, 0, 0);
-uint32_t colorGreen = strip.Color(0, 0, 255);
-uint32_t colorBlue = strip.Color(0, 255, 0);
-uint32_t colorYellow = strip.Color(255, 0, 200);
-uint32_t colorOff = strip.Color(0, 0, 0);
+
+uint32_t colorRed = stripR.Color(255, 0, 0);
+uint32_t colorGreen = stripR.Color(0, 0, 255);
+uint32_t colorBlue = stripR.Color(0, 255, 0);
+uint32_t colorYellow = stripR.Color(255, 0, 200);
+uint32_t colorOff = stripR.Color(0, 0, 0);
 
 void setup() {
   Serial.begin(9600);
   Wire.begin(8);
   Wire.onReceive(receiveEvent);
-  strip.begin();
-  strip.setBrightness(30); //adjust brightness here
-  strip.show(); // Initialize all pixels to 'off'
-  //colorWipe(colorYellow,2);
-  //delay(50);
-  //colorWipe(strip.Color(0,0,0),0);
-  //delay(50);
-  //colorWipe(colorYellow,2);
-  //delay(50);
-  //colorWipe(strip.Color(0,0,0),0);
-  //breathe('y');
-  visualize2();
+  stripL.begin();
+  stripR.begin();
+  stripL.setBrightness(100); //adjust brightness here
+  stripR.setBrightness(100); //adjust brightness here
+  stripL.show(); // Initialize all pixels to 'off'
+  stripR.show(); // Initialize all pixels to 'off'
+  colorWipe(colorYellow,2);
+  delay(50);
+  colorWipe(stripL.Color(0,0,0),0);
+  delay(50);
+  colorWipe(colorYellow,2);
+  delay(50);
+  colorWipe(stripL.Color(0,0,0),0);
+  breathe('y');
+  //visualize2();
 }
 
 void loop() {
@@ -118,6 +125,9 @@ void loop() {
       else if(currentColor == 'b'){
         breathe('b'); //breath blue
       }
+      else if(currentColor == 'y'){
+        breathe('y'); //breath yellow
+      }
       break;
     case 's': // i2c code (decimal format of string): 115
       visualize2();
@@ -144,9 +154,11 @@ void receiveEvent(int howMany){
 
 // Fill the dots one after the other with a color
 void colorWipe(uint32_t c, uint8_t wait) {
-  for(uint16_t i=0; i<strip.numPixels(); i++) {
-      strip.setPixelColor(i, c);
-      strip.show();
+  for(uint16_t i=0; i<stripL.numPixels(); i++) {
+      stripL.setPixelColor(i, c);
+      stripR.setPixelColor(i, c);
+      stripL.show();
+      stripR.show();
       delay(wait);
   }
 }
@@ -155,10 +167,12 @@ void rainbow(uint8_t wait) {
   uint16_t i, j;
 
   for(j=0; j<256; j++) {
-    for(i=0; i<strip.numPixels(); i++) {
-      strip.setPixelColor(i, Wheel((i+j) & 255));
+    for(i=0; i<stripL.numPixels(); i++) {
+      stripL.setPixelColor(i, Wheel((i+j) & 255));
+      stripR.setPixelColor(i, Wheel((i+j) & 255));
     }
-    strip.show();
+    stripL.show();
+    stripR.show();
     delay(wait);
   }
 }
@@ -168,10 +182,12 @@ void rainbowCycle(uint8_t wait) {
   uint16_t i, j;
 
   for(j=0; j<256*5; j++) { // 5 cycles of all colors on wheel
-    for(i=0; i< strip.numPixels(); i++) {
-      strip.setPixelColor(i, Wheel(((i * 256 / strip.numPixels()) + j) & 255));
+    for(i=0; i< stripL.numPixels(); i++) {
+      stripL.setPixelColor(i, Wheel(((i * 256 / stripL.numPixels()) + j) & 255));
+      stripR.setPixelColor(i, Wheel(((i * 256 / stripL.numPixels()) + j) & 255));
     }
-    strip.show();
+    stripL.show();
+    stripR.show();
     delay(wait);
   }
 }
@@ -180,41 +196,59 @@ void rainbowCycle(uint8_t wait) {
 // The colours are a transition r - g - b - back to r.
 uint32_t Wheel(byte WheelPos) {
   if(WheelPos < 85) {
-   return strip.Color(WheelPos * 3, 255 - WheelPos * 3, 0);
+   return stripL.Color(WheelPos * 3, 255 - WheelPos * 3, 0);
   } else if(WheelPos < 170) {
    WheelPos -= 85;
-   return strip.Color(255 - WheelPos * 3, 0, WheelPos * 3);
+   return stripL.Color(255 - WheelPos * 3, 0, WheelPos * 3);
   } else {
    WheelPos -= 170;
-   return strip.Color(0, WheelPos * 3, 255 - WheelPos * 3);
+   return stripL.Color(0, WheelPos * 3, 255 - WheelPos * 3);
   }
 }
  
 static void chase(uint32_t c) {
-  for(uint16_t i=0; i<strip.numPixels()+4; i++) {
-      strip.setPixelColor(i  , c); // Draw new pixel
-      strip.setPixelColor(i-4, 0); // Erase pixel a few steps back
-      strip.show();
+  for(uint16_t i=0; i<stripL.numPixels()+4; i++) {
+      stripL.setPixelColor(i  , c); // Draw new pixel
+      stripL.setPixelColor(i-4, 0); // Erase pixel a few steps back
+      stripL.show();
+      stripR.setPixelColor(i  , c); // Draw new pixel
+      stripR.setPixelColor(i-4, 0); // Erase pixel a few steps back
+      stripR.show();
       delay(25);
   }
 }
 
 void checkerboard(uint32_t c){
-  for(uint16_t i=0; i<strip.numPixels() + 2; i++){
-    strip.setPixelColor(i,c);
-    strip.setPixelColor(i - 1, (0,0,0));
-    strip.setPixelColor(i + 1, (0,0,0));
-    strip.setPixelColor(i + 2,c);
-    strip.setPixelColor(i - 10, (0,0,0));
-    strip.setPixelColor(i + 10, (0,0,0));
-    strip.setPixelColor(i + 12,c);
-    strip.setPixelColor(i - 18, (0,0,0));
-    strip.setPixelColor(i + 18, (0,0,0));
-    strip.setPixelColor(i + 20,c);
-    strip.setPixelColor(i - 26, (0,0,0));
-    strip.setPixelColor(i + 26, (0,0,0));
-    strip.setPixelColor(i + 28,c);
-    strip.show();
+  for(uint16_t i=0; i<stripL.numPixels() + 2; i++){
+    stripL.setPixelColor(i,c);
+    stripL.setPixelColor(i - 1, (0,0,0));
+    stripL.setPixelColor(i + 1, (0,0,0));
+    stripL.setPixelColor(i + 2,c);
+    stripL.setPixelColor(i - 10, (0,0,0));
+    stripL.setPixelColor(i + 10, (0,0,0));
+    stripL.setPixelColor(i + 12,c);
+    stripL.setPixelColor(i - 18, (0,0,0));
+    stripL.setPixelColor(i + 18, (0,0,0));
+    stripL.setPixelColor(i + 20,c);
+    stripL.setPixelColor(i - 26, (0,0,0));
+    stripL.setPixelColor(i + 26, (0,0,0));
+    stripL.setPixelColor(i + 28,c);
+    stripL.show();
+    
+    stripR.setPixelColor(i,c);
+    stripR.setPixelColor(i - 1, (0,0,0));
+    stripR.setPixelColor(i + 1, (0,0,0));
+    stripR.setPixelColor(i + 2,c);
+    stripR.setPixelColor(i - 10, (0,0,0));
+    stripR.setPixelColor(i + 10, (0,0,0));
+    stripR.setPixelColor(i + 12,c);
+    stripR.setPixelColor(i - 18, (0,0,0));
+    stripR.setPixelColor(i + 18, (0,0,0));
+    stripR.setPixelColor(i + 20,c);
+    stripR.setPixelColor(i - 26, (0,0,0));
+    stripR.setPixelColor(i + 26, (0,0,0));
+    stripR.setPixelColor(i + 28,c);
+    stripR.show();
     delay(75);
   }
 }
@@ -222,43 +256,43 @@ void checkerboard(uint32_t c){
 void breathe(char c){
   if(c == 'r'){
     for(int x=0; x<255;x+=15){
-      colorWipe(strip.Color(x,0,0),0);
+      colorWipe(stripL.Color(x,0,0),0);
       delay(2);
     }
     for(int x=255; x>0;x-=15){
-      colorWipe(strip.Color(x,0,0),0);
+      colorWipe(stripL.Color(x,0,0),0);
       delay(2);
     }
   }
   else if(c=='g'){
     for(int x=0; x<255;x+=15){
-      colorWipe(strip.Color(0,0,x),0);
+      colorWipe(stripL.Color(0,0,x),0);
       delay(2);
     }
     for(int x=255; x>0;x-=15){
-      colorWipe(strip.Color(0,0,x),0);
+      colorWipe(stripL.Color(0,0,x),0);
       delay(2);
     }
   }
   else if(c=='b'){
     for(int x=0; x<255;x+=15){
-      colorWipe(strip.Color(0,x,0),0);
+      colorWipe(stripL.Color(0,x,0),0);
       delay(2);
     }
     for(int x=255; x>0;x-=15){
-      colorWipe(strip.Color(0,x,0),0);
+      colorWipe(stripL.Color(0,x,0),0);
       delay(2);
     }
   }
   else if(c=='y'){
     for(int x=0; x<255;x+=15){
       int y = (x > 51) ? x - 50 : 0;
-      colorWipe(strip.Color(x,0,y),0);
+      colorWipe(stripL.Color(y,0,x),0);
       delay(2);
     }
     for(int x=255; x>0;x-=15){
       int y = (x > 51) ? x - 50 : 0;
-      colorWipe(strip.Color(x,0,y),0);
+      colorWipe(stripL.Color(y,0,x),0);
       delay(2);
     }
   }//TODO: Add Yellow Breath
@@ -270,46 +304,56 @@ void visualize(uint16_t c){
   int y = map(VData,300,500,1,20);
   if(y<21){
     for(int r=0; r<20;r++){
-      strip.setPixelColor(r,strip.Color(0,0,0));
+      stripL.setPixelColor(r,stripL.Color(0,0,0));
+      stripR.setPixelColor(r,stripR.Color(0,0,0));
     }
     if(y>8){
       for(int i=0;i<8;i++){
-        strip.setPixelColor(i,c);
-        strip.show();
+        stripL.setPixelColor(i,c);
+        stripL.show();
+        stripR.setPixelColor(i,c);
+        stripR.show();
       }
       if(y>12){
         for(int x=8;x<y;x++){
-        strip.setPixelColor(x,strip.Color(255,255,0));
-        strip.show();
+        stripL.setPixelColor(x,stripL.Color(255,255,0));
+        stripL.show();
+        stripR.setPixelColor(x,stripR.Color(255,255,0));
+        stripR.show();
       }
         if(y>=20){
           for(int p=13;p<y;p++){
-        strip.setPixelColor(p,strip.Color(255,0,0));
-        strip.show();
+        stripL.setPixelColor(p,stripL.Color(255,0,0));
+        stripL.show();
+        stripR.setPixelColor(p,stripR.Color(255,0,0));
+        stripR.show();
       }
         }
       }
     }
     else if(y<=8){
       for(int z=0;z<y;z++){
-        strip.setPixelColor(z,c);
-        strip.show();
+        stripL.setPixelColor(z,c);
+        stripL.show();
+        stripR.setPixelColor(z,c);
+        stripR.show();
       }
     }
   }
-  strip.show();
+  stripL.show();
+  stripR.show();
 }
 
 uint32_t Wheel2(byte WheelPos) {
   WheelPos = 255 - WheelPos;
   if(WheelPos < 85) {
-   return strip.Color(255 - WheelPos * 3, 0, WheelPos * 3);
+   return stripL.Color(255 - WheelPos * 3, 0, WheelPos * 3);
   } else if(WheelPos < 170) {
     WheelPos -= 85;
-   return strip.Color(0, WheelPos * 3, 255 - WheelPos * 3);
+   return stripL.Color(0, WheelPos * 3, 255 - WheelPos * 3);
   } else {
    WheelPos -= 170;
-   return strip.Color(WheelPos * 3, 255 - WheelPos * 3, 0);
+   return stripL.Color(WheelPos * 3, 255 - WheelPos * 3, 0);
   }
 }
 
@@ -317,10 +361,12 @@ void rainbowCycle2(uint8_t wait) {
   uint16_t i, j;
 
   for(j=0; j<256*5; j++) { // 5 cycles of all colors on wheel
-    for(i=0; i< strip.numPixels(); i++) {
-      strip.setPixelColor(i, Wheel2(((i * 256 / strip.numPixels()) + j) & 255));
+    for(i=0; i< stripL.numPixels(); i++) {
+      stripL.setPixelColor(i, Wheel2(((i * 256 / stripL.numPixels()) + j) & 255));
+      stripR.setPixelColor(i, Wheel2(((i * 256 / stripR.numPixels()) + j) & 255));
     }
-    strip.show();
+    stripL.show();
+    stripR.show();
     delay(wait);
      vol = analogRead(MIC_PIN);
      if (vol> 10) {
@@ -370,19 +416,26 @@ void visualize2(){
 // Serial.print("AFTER: ");
 //   Serial.println(vol);
     if (i < vol){
-         strip.setPixelColor((i+150), strip.Color(0,255,0));
-         strip.setPixelColor((150-i), strip.Color(0,255,0));
+         stripL.setPixelColor((i+150), stripL.Color(0,255,0));
+         stripL.setPixelColor((150-i), stripL.Color(0,255,0));
+         stripR.setPixelColor((i+150), stripR.Color(0,255,0));
+         stripR.setPixelColor((150-i), stripR.Color(0,255,0));
     }
     else if (i < (vol + 38)) {
-         strip.setPixelColor((i+150), strip.Color(255,0,0));
-         strip.setPixelColor((150-i), strip.Color(255,0,0));
+         stripL.setPixelColor((i+150), stripL.Color(255,0,0));
+         stripL.setPixelColor((150-i), stripL.Color(255,0,0));
+         stripR.setPixelColor((i+150), stripR.Color(255,0,0));
+         stripR.setPixelColor((150-i), stripR.Color(255,0,0));
     }
     else
     {
-         strip.setPixelColor((i+150), strip.Color(0,0,255));
-         strip.setPixelColor((150-i), strip.Color(0,0,255));
+         stripL.setPixelColor((i+150), stripL.Color(0,0,255));
+         stripL.setPixelColor((150-i), stripL.Color(0,0,255));
+         stripR.setPixelColor((i+150), stripR.Color(0,0,255));
+         stripR.setPixelColor((150-i), stripR.Color(0,0,255));
     }
   }
-  strip.show();
+  stripL.show();
+  stripR.show();
 
 }
