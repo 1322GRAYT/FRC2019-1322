@@ -13,25 +13,25 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.robot.RobotMap;
-import frc.robot.commands.pmArm;
+import frc.robot.commands.*;
 
 /**
  * Add your docs here.
  */
-public class PtypeLift extends Subsystem {
+public class Arm extends Subsystem {
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
 
   WPI_TalonSRX Lift = new WPI_TalonSRX(RobotMap.LiftMotorAddress);
   WPI_TalonSRX BallIntake = new WPI_TalonSRX(RobotMap.BallIntakeAddress);
 
-  public PtypeLift(){
-    Lift.configMotionCruiseVelocity(3000);
-    Lift.configMotionAcceleration(3000);
+  public Arm() {
+    Lift.configMotionCruiseVelocity(11000);
+    Lift.configMotionAcceleration(12000);
     Lift.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
-    Lift.config_kF(0, 0.01);
-    Lift.config_kP(0, 0.0);
-    Lift.config_kI(0, 0.0);
+    Lift.config_kF(0, 0.11);
+    Lift.config_kP(0, 0.13);
+    Lift.config_kI(0, 0.0001);
     Lift.config_kD(0, 0.0);
   }
 
@@ -74,6 +74,6 @@ public class PtypeLift extends Subsystem {
   @Override
   public void initDefaultCommand() {
     // Set the default command for a subsystem here.
-    setDefaultCommand(new pmArm());
+    setDefaultCommand(new TC_Arm());
   }
 }
