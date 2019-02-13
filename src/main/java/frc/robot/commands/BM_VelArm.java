@@ -7,24 +7,28 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 
-public class TC_Lift extends Command {
-  public TC_Lift() {
-    requires(Robot.LIFT);
+public class BM_VelArm extends Command {
+  int Vel = 0;
+  public BM_VelArm(int vel) {
+    // Use requires() here to declare subsystem dependencies
+    // eg. requires(chassis);
+    requires(Robot.ARM);
+    Vel = vel;
   }
 
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
+    Robot.ARM.armSafety(false);
+    Robot.ARM.VelArm(Vel);
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    Robot.LIFT.setSpeed(Robot.m_oi.AuxStick.getX(Hand.kRight));
   }
 
   // Make this return true when this Command no longer needs to run execute()
@@ -36,11 +40,14 @@ public class TC_Lift extends Command {
   // Called once after isFinished returns true
   @Override
   protected void end() {
+    Robot.ARM.LiftByVoltage(0);
+    Robot.ARM.armSafety(true);
   }
 
   // Called when another command which requires one or more of the same
   // subsystems is scheduled to run
   @Override
   protected void interrupted() {
+    end();
   }
 }

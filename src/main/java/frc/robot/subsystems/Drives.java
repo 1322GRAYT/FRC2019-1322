@@ -197,6 +197,6 @@ public class Drives extends Subsystem {
 
   @Override
   public void initDefaultCommand() {
-    setDefaultCommand(new TeleopDrives());
+    setDefaultCommand(new TC_Drives());
   }
 }
