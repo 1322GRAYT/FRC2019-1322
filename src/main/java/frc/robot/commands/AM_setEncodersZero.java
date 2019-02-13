@@ -7,17 +7,27 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.command.CommandGroup;
+import edu.wpi.first.wpilibj.command.InstantCommand;
+import frc.robot.Robot;
 
-public class TransToPos extends CommandGroup {
-
-  public TransToPos(double x, double y) {
-    if (x != 0){
-      addSequential(new TransToPos(x, 0));
-    }
-
-    if (y != 0){
-      addSequential(new TransToPos(0, y));
-    }
+/**
+ * Add your docs here.
+ */
+public class AM_setEncodersZero extends InstantCommand {
+  /**
+   * Add your docs here.
+   */
+  public AM_setEncodersZero() {
+    super();
+    requires(Robot.DRIVES);
+    // Use requires() here to declare subsystem dependencies
+    // eg. requires(chassis);
   }
+
+  // Called once when the command executes
+  @Override
+  protected void initialize() {
+    Robot.DRIVES.resetPosition();
+  }
+
 }

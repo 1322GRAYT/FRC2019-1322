@@ -27,7 +27,6 @@ public class Drives extends Subsystem {
 
   public Drives() {
     setFollowers();
-    setEncoders();
     talonSettings();
   }
 
@@ -36,51 +35,27 @@ public class Drives extends Subsystem {
    */
 
   private void talonSettings() {
-    /*
-    EncoderedDrives[0].configFactoryDefault();
-    EncoderedDrives[0].configMotionCruiseVelocity(3000);
-    EncoderedDrives[0].configMotionAcceleration(2000);
-    EncoderedDrives[0].config_kF(0, 0.3);
-    EncoderedDrives[0].config_kP(0, 0.25);
-    EncoderedDrives[0].config_kI(0, 0.0005);
-    EncoderedDrives[0].config_kD(0, 0.00);
-    */
 
+    final boolean[] dInv = {true, true, true, true}; // use this to invert the drives safely
+    final boolean[] sInv = {false, true, false, true}; // use this to invert the sensors safely
     for (var i = 0; i < EncoderedDrives.length; i++) {
       EncoderedDrives[i].configFactoryDefault();
-      EncoderedDrives[i].configMotionCruiseVelocity(3000);
-      EncoderedDrives[i].configMotionAcceleration(3000);
+      EncoderedDrives[i].configMotionCruiseVelocity(9000);
+      EncoderedDrives[i].configMotionAcceleration(9000);
       EncoderedDrives[i].configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
-      EncoderedDrives[i].config_kF(0, 0.1);
-      EncoderedDrives[i].config_kP(0, 0.25);
-      EncoderedDrives[i].config_kI(0, 0.0005);
-      EncoderedDrives[i].config_kD(0, 0.00);
+      EncoderedDrives[i].config_kF(0, 0.073);
+      EncoderedDrives[i].config_kP(0, 0.2);
+      EncoderedDrives[i].config_kI(0, 0.00007);
+      EncoderedDrives[i].config_kD(0, 0.0013);
+      EncoderedDrives[i].setInverted(dInv[i]);
+      FolowerDrives[i].setInverted(dInv[i]);
+      EncoderedDrives[i].setSensorPhase(sInv[i]);
     }
-
-    EncoderedDrives[0].setInverted(false);
-    EncoderedDrives[0].setSensorPhase(false);
-    FolowerDrives[0].setInverted(false);
-
-    EncoderedDrives[1].setInverted(false);
-    EncoderedDrives[1].setSensorPhase(true);
-    FolowerDrives[1].setInverted(false);
-
-    EncoderedDrives[2].setInverted(false);
-    EncoderedDrives[2].setSensorPhase(true);
-    FolowerDrives[2].setInverted(false);
-
-
   }
 
   private void setFollowers() {
     for (var i = 0; i < EncoderedDrives.length; i++) {
       FolowerDrives[i].set(ControlMode.Follower, EncoderedDrives[i].getDeviceID());
-    }
-  }
-
-  private void setEncoders() {
-    for (var i = 0; i < EncoderedDrives.length; i++) {
-      EncoderedDrives[i].configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
     }
   }
 
@@ -134,11 +109,11 @@ public class Drives extends Subsystem {
    * 
    */
   public void DriveInVoltage(double F, double L, double R) {
-    var y = deadzone(-F);
+    var y = deadzone(F);
     var x = deadzone(L);
     var r = deadzone(R);
 
-    double wheelSpeeds[] = { y - x - r, y - x + r, y + x - r, y + x + r };
+    double wheelSpeeds[] = { y + x + r, y + x - r, y - x + r, y - x - r };
     wheelSpeeds = normalize(scale(wheelSpeeds, 1.0));
 
     for (int i = 0; i < EncoderedDrives.length; i++) {
@@ -187,6 +162,7 @@ public class Drives extends Subsystem {
     EncoderedDrives[0].set(ControlMode.MotionMagic, Distance);
     EncoderedDrives[1].set(ControlMode.MotionMagic, Distance);
     EncoderedDrives[2].set(ControlMode.MotionMagic, Distance);
+    EncoderedDrives[3].set(ControlMode.MotionMagic, Distance);
   }
 
   public void MMControl(double Distance) {
@@ -195,29 +171,6 @@ public class Drives extends Subsystem {
     }
   }
 
-  private int[] relativePosition = new int[4];
-
-  public void setRelativePosition() {
-    for (var i = 0; i < relativePosition.length; i++) {
-      relativePosition[i] = EncoderedDrives[i].getSelectedSensorPosition();
-    }
-  }
-
-  /*******************************************
-   * For Moving a relative to the current position
-   */
-  public void RelativeMotionMagic(int x, int y) {
-    int pHolder = (x != 0 ? x : y);
-
-    int[] motorDistance = { (int) Math.signum(x) * pHolder, (int) Math.signum(-x) * pHolder,
-        (int) Math.signum(-x) * pHolder, (int) Math.signum(x) * pHolder }; // Determine which direction the robot needs
-                                                                           // to go
-
-    for (int i = 0; i < EncoderedDrives.length; i++) {
-      EncoderedDrives[i].set(ControlMode.MotionMagic,
-          EncoderedDrives[i].getSelectedSensorPosition() + motorDistance[i]);
-    }
-  }
 
   public int[] getClosedLoopError() {
     int[] val = new int[4];
@@ -244,6 +197,6 @@ public class Drives extends Subsystem {
 
   @Override
   public void initDefaultCommand() {
-    setDefaultCommand(new TeleopDrives());
+    setDefaultCommand(new TC_Drives());
   }
 }

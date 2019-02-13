@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
 
-public class TranslateToPos extends Command {
+public class AM_TranslateToPos extends Command {
 
     int[] motorDistance = new int[4];
     int pHolder = 0;
@@ -19,7 +19,7 @@ public class TranslateToPos extends Command {
     int x = 0, y = 0; // Placeholders
     final static int TOLERANCE = 500;
 
-    public TranslateToPos(int x, int y) {
+    public AM_TranslateToPos(int x, int y) {
         requires(Robot.DRIVES);
         this.x = x;
         this.y = y;
@@ -28,12 +28,6 @@ public class TranslateToPos extends Command {
     // Called just before this Command runs the first time
     @Override
     protected void initialize() {
-
-        /********************
-         * TODO: In the near future, I will need to be able to ensure that the PID slot
-         * I choose to use gets set, as I will be setting the gyro to be using another
-         * slot 1/27/19
-         */
 
         // First we need to create a setpoint, we need to determine which value we are
         // taking
@@ -48,23 +42,12 @@ public class TranslateToPos extends Command {
 
         // We are trying not to reset the encoders, so we need to move with respect to
         // where we are currently
-        setRelativePosition();
         for (int i = 0; i < motorDistance.length; i++) {
             motorDistance[i] += Robot.DRIVES.rawPosition()[i];
         }
-        System.out.println(motorDistance[0]);
-
-        System.out.println("Initializing");
+        
         Robot.DRIVES.setSafety(false);
-        Robot.DRIVES.MMControlTest(this.motorDistance[0]);
-        toSDBoard("Drive 1", calcError(0), Robot.DRIVES.rawVelocities()[0],
-                Robot.DRIVES.getClosedLoopError()[0], motorDistance[0],
-                Robot.DRIVES.rawPosition()[0]);
-        toSDBoard("Drive 2", calcError(1), Robot.DRIVES.rawVelocities()[1],
-                Robot.DRIVES.getClosedLoopError()[1], motorDistance[1],
-                Robot.DRIVES.rawPosition()[0]);
-        toSDBoard("Drive 3", calcError(2), Robot.DRIVES.rawVelocities()[2],
-                Robot.DRIVES.getClosedLoopError()[2], motorDistance[2]);
+        Robot.DRIVES.MMControl(motorDistance);
     }
 
     // Called repeatedly when this Command is scheduled to run
@@ -78,6 +61,8 @@ public class TranslateToPos extends Command {
                 Robot.DRIVES.getClosedLoopError()[1], motorDistance[1]);
         toSDBoard("Drive 3", calcError(2), Robot.DRIVES.rawVelocities()[2],
                 Robot.DRIVES.getClosedLoopError()[2], motorDistance[2]);
+        toSDBoard("Drive 4", calcError(3), Robot.DRIVES.rawVelocities()[3],
+                Robot.DRIVES.getClosedLoopError()[3], motorDistance[3]);
     }
 
     // Make this return true when this Command no longer needs to run execute()
@@ -103,11 +88,6 @@ public class TranslateToPos extends Command {
         System.out.println("Interrupted");
     }
 
-    private int[] relativePosition = new int[4];
-
-    public void setRelativePosition() {
-        relativePosition = Robot.DRIVES.rawiPosition();
-    }
 
     public int calcError(int motor){
         return (int)Robot.DRIVES.rawPosition()[motor] - motorDistance[motor];

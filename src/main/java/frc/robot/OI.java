@@ -7,10 +7,7 @@
 
 package frc.robot;
 
-import frc.robot.commands.BM_ControlClaw;
-import frc.robot.commands.BM_ControlEject;
-import frc.robot.commands.TranslateToPos;
-import frc.robot.commands.setEncodersZero;
+import frc.robot.commands.*;
 import frc.robot.models.CustomXbox;
 
 /**
@@ -46,9 +43,6 @@ public class OI {
     //When Right Bumper is pressed, push claw out, when Left bumper is pressed, pull claw in
     AuxStick.rightBumper.whenPressed(new BM_ControlClaw(true));
     AuxStick.leftBumper.whenPressed(new BM_ControlClaw(false));
-
-    //DriverStick.aButton.whenPressed(new TranslateToPos(0, 50000));
-    DriverStick.bButton.whenPressed(new setEncodersZero());
 
   }
 
