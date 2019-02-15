@@ -27,7 +27,6 @@ public class Drives extends Subsystem {
 
   public Drives() {
     setFollowers();
-    setEncoders();
     talonSettings();
   }
 
@@ -36,16 +35,9 @@ public class Drives extends Subsystem {
    */
 
   private void talonSettings() {
-    /*
-    EncoderedDrives[0].configFactoryDefault();
-    EncoderedDrives[0].configMotionCruiseVelocity(3000);
-    EncoderedDrives[0].configMotionAcceleration(2000);
-    EncoderedDrives[0].config_kF(0, 0.3);
-    EncoderedDrives[0].config_kP(0, 0.25);
-    EncoderedDrives[0].config_kI(0, 0.0005);
-    EncoderedDrives[0].config_kD(0, 0.00);
-    */
 
+    final boolean[] dInv = {true, true, true, true}; // use this to invert the drives safely
+    final boolean[] sInv = {false, true, false, true}; // use this to invert the sensors safely
     for (var i = 0; i < EncoderedDrives.length; i++) {
       EncoderedDrives[i].configFactoryDefault();
       EncoderedDrives[i].configMotionCruiseVelocity(9000);
@@ -55,38 +47,15 @@ public class Drives extends Subsystem {
       EncoderedDrives[i].config_kP(0, 0.2);
       EncoderedDrives[i].config_kI(0, 0.00007);
       EncoderedDrives[i].config_kD(0, 0.0013);
+      EncoderedDrives[i].setInverted(dInv[i]);
+      FolowerDrives[i].setInverted(dInv[i]);
+      EncoderedDrives[i].setSensorPhase(sInv[i]);
     }
-    
-    final boolean[] dInv = {true, true, true, true}; // use this to invert the drives safely
-
-    EncoderedDrives[0].setInverted(dInv[0]);
-    EncoderedDrives[0].setSensorPhase(false);
-    FolowerDrives[0].setInverted(dInv[0]);
-
-    EncoderedDrives[1].setInverted(dInv[1]);
-    EncoderedDrives[1].setSensorPhase(true);
-    FolowerDrives[1].setInverted(dInv[1]);
-
-    EncoderedDrives[2].setInverted(dInv[2]);
-    EncoderedDrives[2].setSensorPhase(false);
-    FolowerDrives[2].setInverted(dInv[2]);
-
-    EncoderedDrives[3].setInverted(dInv[3]);
-    EncoderedDrives[3].setSensorPhase(true);
-    FolowerDrives[3].setInverted(dInv[3]);
-
-
   }
 
   private void setFollowers() {
     for (var i = 0; i < EncoderedDrives.length; i++) {
       FolowerDrives[i].set(ControlMode.Follower, EncoderedDrives[i].getDeviceID());
-    }
-  }
-
-  private void setEncoders() {
-    for (var i = 0; i < EncoderedDrives.length; i++) {
-      EncoderedDrives[i].configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder);
     }
   }
 
@@ -228,6 +197,6 @@ public class Drives extends Subsystem {
 
   @Override
   public void initDefaultCommand() {
-    setDefaultCommand(new TeleopDrives());
+    setDefaultCommand(new TC_Drives());
   }
 }

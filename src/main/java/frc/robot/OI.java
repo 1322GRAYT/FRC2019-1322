@@ -7,11 +7,7 @@
 
 package frc.robot;
 
-import frc.robot.commands.ArmToPos;
-import frc.robot.commands.BM_ControlClaw;
-import frc.robot.commands.BM_ControlEject;
-import frc.robot.commands.TranslateToPos;
-import frc.robot.commands.setEncodersZero;
+import frc.robot.commands.*;
 import frc.robot.models.CustomXbox;
 
 /**
@@ -47,13 +43,22 @@ public class OI {
     //When Right Bumper is pressed, push claw out, when Left bumper is pressed, pull claw in
     AuxStick.rightBumper.whenPressed(new BM_ControlClaw(true));
     AuxStick.leftBumper.whenPressed(new BM_ControlClaw(false));
-
-    DriverStick.aButton.whenPressed(new TranslateToPos(0, 500000));
-    DriverStick.bButton.whenPressed(new setEncodersZero());
-
-    //AuxStick.bButton.whenPressed(new ArmToPos(100000));
-    //AuxStick.xButton.whenPressed(new ArmToPos(50000));
-    //AuxStick.yButton.whenPressed(new ArmToPos(0));
+    //When A button is pressed, Extend Lift
+    DriverStick.aButton.whenPressed(new BM_ExtendLift(1));
+    DriverStick.aButton.whenReleased(new BM_ExtendLift(0));
+    //When B button is pressed, retract lift
+    DriverStick.bButton.whenPressed(new BM_ExtendLift(-1));
+    DriverStick.bButton.whenReleased(new BM_ExtendLift(0));
+    //When Right Trigger is pressed, lift bot
+    DriverStick.rightTriggerButton.whenPressed(new BM_ScissorLift(.5));
+    DriverStick.rightTriggerButton.whenReleased(new BM_ScissorLift(0));
+    //When Left Trigger is pressed, lift bot
+    DriverStick.leftTriggerButton.whenPressed(new BM_ScissorLift(-.5));
+    DriverStick.leftTriggerButton.whenReleased(new BM_ScissorLift(0));
+    //When Right Bumper is pressed, extend lift pnumatics
+    DriverStick.rightBumper.whenPressed(new BM_LiftRobotPnuematic(true));
+    //When Left Bimper is pressed, retract lift pnumatics
+    DriverStick.leftBumper.whenPressed(new BM_LiftRobotPnuematic(false));
 
   }
 

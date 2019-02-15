@@ -7,13 +7,13 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
 
-public class TC_Lift extends Command {
-  public TC_Lift() {
-    requires(Robot.LIFT);
+public class BM_AutoClose extends Command {
+  public BM_AutoClose() {
+    requires(Robot.CLAW);
   }
 
   // Called just before this Command runs the first time
@@ -24,7 +24,9 @@ public class TC_Lift extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    Robot.LIFT.setSpeed(Robot.m_oi.AuxStick.getX(Hand.kRight));
+    if(Robot.CLAW.getClaw()) {
+      Robot.CLAW.controlClaw(false);
+    }
   }
 
   // Make this return true when this Command no longer needs to run execute()

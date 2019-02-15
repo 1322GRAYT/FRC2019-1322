@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
 
-public class TranslateToPos extends Command {
+public class AM_TranslateToPos extends Command {
 
     int[] motorDistance = new int[4];
     int pHolder = 0;
@@ -19,7 +19,7 @@ public class TranslateToPos extends Command {
     int x = 0, y = 0; // Placeholders
     final static int TOLERANCE = 500;
 
-    public TranslateToPos(int x, int y) {
+    public AM_TranslateToPos(int x, int y) {
         requires(Robot.DRIVES);
         this.x = x;
         this.y = y;
@@ -28,12 +28,6 @@ public class TranslateToPos extends Command {
     // Called just before this Command runs the first time
     @Override
     protected void initialize() {
-
-        /********************
-         * TODO: In the near future, I will need to be able to ensure that the PID slot
-         * I choose to use gets set, as I will be setting the gyro to be using another
-         * slot 1/27/19
-         */
 
         // First we need to create a setpoint, we need to determine which value we are
         // taking
@@ -48,15 +42,12 @@ public class TranslateToPos extends Command {
 
         // We are trying not to reset the encoders, so we need to move with respect to
         // where we are currently
-        setRelativePosition();
         for (int i = 0; i < motorDistance.length; i++) {
             motorDistance[i] += Robot.DRIVES.rawPosition()[i];
         }
-        System.out.println(motorDistance[0]);
-
-        System.out.println("Initializing");
+        
         Robot.DRIVES.setSafety(false);
-        Robot.DRIVES.MMControlTest(this.motorDistance[0]);
+        Robot.DRIVES.MMControl(motorDistance);
     }
 
     // Called repeatedly when this Command is scheduled to run
@@ -97,11 +88,6 @@ public class TranslateToPos extends Command {
         System.out.println("Interrupted");
     }
 
-    private int[] relativePosition = new int[4];
-
-    public void setRelativePosition() {
-        relativePosition = Robot.DRIVES.rawiPosition();
-    }
 
     public int calcError(int motor){
         return (int)Robot.DRIVES.rawPosition()[motor] - motorDistance[motor];
