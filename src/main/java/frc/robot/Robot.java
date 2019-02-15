@@ -24,10 +24,11 @@ import frc.robot.subsystems.*;
 public class Robot extends TimedRobot {
   public static OI m_oi;
 
-  public final static Drives          DRIVES = new Drives();
-  public final static Claw            CLAW   = new Claw();
-  public final static LEDController   LEDS   = new LEDController();
-  public final static Arm             ARM = new Arm();
+  public final static Drives          DRIVES  = new Drives();
+  public final static Claw            CLAW    = new Claw();
+  public final static LEDController   LEDS    = new LEDController();
+  public final static Arm             ARM     = new Arm();
+  public final static Scissor         SCISSOR = new Scissor();
 
   Command m_autonomousCommand;
   SendableChooser<Command> m_chooser = new SendableChooser<>();
