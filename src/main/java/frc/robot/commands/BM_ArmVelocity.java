@@ -10,9 +10,9 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 
-public class BM_VelArm extends Command {
+public class BM_ArmVelocity extends Command {
   int Vel = 0;
-  public BM_VelArm(int vel) {
+  public BM_ArmVelocity(int vel) {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
     requires(Robot.ARM);

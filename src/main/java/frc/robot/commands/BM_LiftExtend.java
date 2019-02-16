@@ -8,31 +8,34 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
 
-public class BM_AutoClose extends Command {
-  public BM_AutoClose() {
-    requires(Robot.CLAW);
+public class BM_LiftExtend extends Command {
+  double speed;
+  public BM_LiftExtend(double speed) {
+    requires(Robot.SCISSOR);
+    this.speed = speed;
   }
 
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
+    Robot.SCISSOR.extendLift(speed);
   }
-
+  private boolean finished = false;
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    if(Robot.CLAW.getClaw()) {
-      Robot.CLAW.controlClaw(false);
+    System.out.println(Robot.SCISSOR.getFloorSensor());
+    if(!Robot.SCISSOR.getFloorSensor() && speed < 0) {
+      Robot.SCISSOR.liftRobotPnumatic(false);
     }
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return false;
+    return finished;
   }
 
   // Called once after isFinished returns true

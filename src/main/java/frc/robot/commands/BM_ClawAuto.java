@@ -8,24 +8,29 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
 
-public class BM_ExtendLift extends Command {
-  double speed;
-  public BM_ExtendLift(double speed) {
-    requires(Robot.SCISSOR);
-    this.speed = speed;
+public class BM_ClawAuto extends Command {
+  public BM_ClawAuto() {
+    requires(Robot.CLAW);
   }
 
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-    Robot.SCISSOR.extendLift(speed);
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
+    if(!Robot.CLAW.getClaw()) {
+      Robot.CLAW.controlClaw(false);
+    }
+
+    if(!Robot.CLAW.getDisk() && !Robot.m_oi.AuxStick.bButton.get()) {
+      Robot.CLAW.diskGrabber(false);
+    }
   }
 
   // Make this return true when this Command no longer needs to run execute()

@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.robot.RobotMap;
-import frc.robot.commands.BM_AutoClose;
+import frc.robot.commands.BM_ClawAuto;
 
 /**
  * Add your docs here.
@@ -20,7 +20,7 @@ import frc.robot.commands.BM_AutoClose;
 public class Claw extends Subsystem {
   private Solenoid clawIn, clawOut, ejectIn, ejectOut;
   private Compressor comp;
-  private DigitalInput clawDis;
+  private DigitalInput clawDis, diskPress;
 
   public Claw() { //TODO: Update when Eric Pushes RobotMap
     comp = new Compressor(0);
@@ -30,13 +30,14 @@ public class Claw extends Subsystem {
     ejectIn = new Solenoid(RobotMap.EjectSolenoids[0]);
     ejectOut = new Solenoid(RobotMap.EjectSolenoids[1]);
     clawDis = new DigitalInput(RobotMap.ClawSensor);
+    diskPress = new DigitalInput(RobotMap.DiskSensor);
   }
 
   /**
    * 
    * @param eject Pushes out hatch ejectors if true
    */
-  public void controlEject(boolean eject) {
+  public void diskGrabber(boolean eject) {
     ejectOut.set(eject);
     ejectIn.set(!eject);
   }
@@ -51,11 +52,15 @@ public class Claw extends Subsystem {
   }
 
   public boolean getClaw() {
-    return clawDis.get();
+    return !clawDis.get();
+  }
+
+  public boolean getDisk() {
+    return diskPress.get();
   }
 
   @Override
   public void initDefaultCommand() {
-    setDefaultCommand(new BM_AutoClose());
+    setDefaultCommand(new BM_ClawAuto());
   }
 }

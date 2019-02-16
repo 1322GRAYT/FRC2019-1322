@@ -25,7 +25,7 @@ public class BM_ControlEject extends Command {
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-    Robot.CLAW.controlEject(out);
+    Robot.CLAW.diskGrabber(out);
   }
 
   // Called repeatedly when this Command is scheduled to run
