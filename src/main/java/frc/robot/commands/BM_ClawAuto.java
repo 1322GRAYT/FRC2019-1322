@@ -11,8 +11,8 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
 
-public class BM_AutoClose extends Command {
-  public BM_AutoClose() {
+public class BM_ClawAuto extends Command {
+  public BM_ClawAuto() {
     requires(Robot.CLAW);
   }
 

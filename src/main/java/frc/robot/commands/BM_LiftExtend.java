@@ -10,44 +10,42 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 
-public class BM_VelArm extends Command {
-  int Vel = 0;
-  public BM_VelArm(int vel) {
-    // Use requires() here to declare subsystem dependencies
-    // eg. requires(chassis);
-    requires(Robot.ARM);
-    Vel = vel;
+public class BM_LiftExtend extends Command {
+  double speed;
+  public BM_LiftExtend(double speed) {
+    requires(Robot.SCISSOR);
+    this.speed = speed;
   }
 
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-    Robot.ARM.armSafety(false);
-    Robot.ARM.VelArm(Vel);
+    Robot.SCISSOR.extendLift(speed);
   }
-
+  private boolean finished = false;
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
+    System.out.println(Robot.SCISSOR.getFloorSensor());
+    if(!Robot.SCISSOR.getFloorSensor() && speed < 0) {
+      Robot.SCISSOR.liftRobotPnumatic(false);
+    }
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return false;
+    return finished;
   }
 
   // Called once after isFinished returns true
   @Override
   protected void end() {
-    Robot.ARM.LiftByVoltage(0);
-    Robot.ARM.armSafety(true);
   }
 
   // Called when another command which requires one or more of the same
   // subsystems is scheduled to run
   @Override
   protected void interrupted() {
-    end();
   }
 }
