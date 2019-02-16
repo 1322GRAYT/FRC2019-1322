@@ -10,6 +10,7 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.robot.RobotMap;
@@ -22,11 +23,14 @@ public class Scissor extends Subsystem {
   // here. Call these from Commands.
   private WPI_TalonSRX scissorL, scissorR, scissorOut;
   private Solenoid robotLiftL, robotLiftR;
+  private DigitalInput edgeSensor;
 
   public Scissor() {
     scissorL = new WPI_TalonSRX(RobotMap.RobotLiftAddresses[0]);
     scissorR = new WPI_TalonSRX(RobotMap.RobotLiftAddresses[1]);
     scissorR.set(ControlMode.Follower, RobotMap.RobotLiftAddresses[0]);
+
+    edgeSensor = new DigitalInput(RobotMap.FloorSensor);
 
     scissorOut = new WPI_TalonSRX(RobotMap.RobotLiftExtendAddress);
 
@@ -53,6 +57,10 @@ public class Scissor extends Subsystem {
   public void liftRobotPnumatic(boolean up) {
     robotLiftL.set(up);
     robotLiftR.set(!up);
+  }
+
+  public boolean getFloorSensor() {
+    return edgeSensor.get();
   }
 
   @Override

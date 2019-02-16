@@ -24,8 +24,12 @@ public class BM_AutoClose extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    if(Robot.CLAW.getClaw()) {
+    if(!Robot.CLAW.getClaw()) {
       Robot.CLAW.controlClaw(false);
+    }
+
+    if(!Robot.CLAW.getDisk() && !Robot.m_oi.AuxStick.bButton.get()) {
+      Robot.CLAW.diskGrabber(false);
     }
   }
 

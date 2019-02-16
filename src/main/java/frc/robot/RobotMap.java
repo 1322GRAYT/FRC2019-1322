@@ -50,15 +50,18 @@ public class RobotMap {
   public static final int[] EjectSolenoids = {3, 4};
   public static final int[] RobotLift = {1, 6};
 
+  	/***********************************************
+   * Sensors
+   */
+
+  public static final int ClawSensor = 1;
+  public static final int FloorSensor = 2;
+  public static final int DiskSensor = 4;
+
   /***********************************************
    * Arm Lift for Prototype Bot
    */
 
-	/***********************************************
-   * Air Things
-   */
-
-  public static final int ClawSensor = 1;
   // CAN Talons
   public static final int LIFT_1    = 8;
 	public static final int LIFT_2    = 9;

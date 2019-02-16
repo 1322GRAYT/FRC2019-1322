@@ -39,7 +39,7 @@ public class OI {
   public OI() {
     //When "A" button is pressed, eject Hatch Panel, When Released, Retract pnuematics
     AuxStick.aButton.whenPressed (new BM_ControlEject(false));
-    AuxStick.aButton.whenReleased(new BM_ControlEject(true));
+    AuxStick.bButton.whenPressed(new BM_ControlEject(true));
     //When Right Bumper is pressed, push claw out, when Left bumper is pressed, pull claw in
     AuxStick.rightBumper.whenPressed(new BM_ControlClaw(true));
     AuxStick.leftBumper.whenPressed(new BM_ControlClaw(false));

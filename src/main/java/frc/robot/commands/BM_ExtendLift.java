@@ -22,16 +22,20 @@ public class BM_ExtendLift extends Command {
   protected void initialize() {
     Robot.SCISSOR.extendLift(speed);
   }
-
+  private boolean finished = false;
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
+    System.out.println(Robot.SCISSOR.getFloorSensor());
+    if(!Robot.SCISSOR.getFloorSensor() && speed < 0) {
+      Robot.SCISSOR.liftRobotPnumatic(false);
+    }
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return false;
+    return finished;
   }
 
   // Called once after isFinished returns true
