@@ -113,7 +113,7 @@ public class Drives extends Subsystem {
     var x = deadzone(L);
     var r = deadzone(R);
 
-    double wheelSpeeds[] = { y + x + r, y + x - r, y - x + r, y - x - r };
+    double wheelSpeeds[] = { y - x + r, y + x - r, y + x + r, y - x - r };
     wheelSpeeds = normalize(scale(wheelSpeeds, 1.0));
 
     for (int i = 0; i < EncoderedDrives.length; i++) {
