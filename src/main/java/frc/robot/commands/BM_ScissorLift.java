@@ -10,20 +10,17 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 
-public class BM_VelArm extends Command {
-  int Vel = 0;
-  public BM_VelArm(int vel) {
-    // Use requires() here to declare subsystem dependencies
-    // eg. requires(chassis);
-    requires(Robot.ARM);
-    Vel = vel;
+public class BM_ScissorLift extends Command {
+  private double speed;
+  public BM_ScissorLift(double speed) {
+    this.speed = speed;
+    requires(Robot.SCISSOR);
   }
 
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-    Robot.ARM.armSafety(false);
-    Robot.ARM.VelArm(Vel);
+    Robot.SCISSOR.liftRobot(speed);
   }
 
   // Called repeatedly when this Command is scheduled to run
@@ -40,14 +37,11 @@ public class BM_VelArm extends Command {
   // Called once after isFinished returns true
   @Override
   protected void end() {
-    Robot.ARM.LiftByVoltage(0);
-    Robot.ARM.armSafety(true);
   }
 
   // Called when another command which requires one or more of the same
   // subsystems is scheduled to run
   @Override
   protected void interrupted() {
-    end();
   }
 }

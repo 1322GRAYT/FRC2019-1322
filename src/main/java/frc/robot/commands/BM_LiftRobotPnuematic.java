@@ -10,22 +10,17 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 
-public class BM_ControlEject extends Command {
-  private boolean out;
-
-  /**
-   * 
-   * @param out Pushes out the claw if true
-   */
-  public BM_ControlEject(boolean out) {
-    requires(Robot.CLAW);
-    this.out = out;
+public class BM_LiftRobotPnuematic extends Command {
+  private boolean up;
+  public BM_LiftRobotPnuematic(boolean up) {
+    this.up = up;
+    requires(Robot.SCISSOR);
   }
 
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-    Robot.CLAW.diskGrabber(out);
+    Robot.SCISSOR.liftRobotPnumatic(up);
   }
 
   // Called repeatedly when this Command is scheduled to run
@@ -36,7 +31,7 @@ public class BM_ControlEject extends Command {
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return true;
+    return false;
   }
 
   // Called once after isFinished returns true

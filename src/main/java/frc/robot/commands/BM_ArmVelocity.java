@@ -10,22 +10,20 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 
-public class BM_ControlEject extends Command {
-  private boolean out;
-
-  /**
-   * 
-   * @param out Pushes out the claw if true
-   */
-  public BM_ControlEject(boolean out) {
-    requires(Robot.CLAW);
-    this.out = out;
+public class BM_ArmVelocity extends Command {
+  int Vel = 0;
+  public BM_ArmVelocity(int vel) {
+    // Use requires() here to declare subsystem dependencies
+    // eg. requires(chassis);
+    requires(Robot.ARM);
+    Vel = vel;
   }
 
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-    Robot.CLAW.diskGrabber(out);
+    Robot.ARM.armSafety(false);
+    Robot.ARM.VelArm(Vel);
   }
 
   // Called repeatedly when this Command is scheduled to run
@@ -36,17 +34,20 @@ public class BM_ControlEject extends Command {
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return true;
+    return false;
   }
 
   // Called once after isFinished returns true
   @Override
   protected void end() {
+    Robot.ARM.LiftByVoltage(0);
+    Robot.ARM.armSafety(true);
   }
 
   // Called when another command which requires one or more of the same
   // subsystems is scheduled to run
   @Override
   protected void interrupted() {
+    end();
   }
 }
