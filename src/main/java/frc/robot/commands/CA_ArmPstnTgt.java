@@ -1,5 +1,5 @@
 /*----------------------------------------------------------------------------*/
-/* Copyright (c) 2017-2018 FIRST. All Rights Reserved.                        */
+/* Copyright (c) 2018 FIRST. All Rights Reserved.                             */
 /* Open Source Software - may be modified and shared by FRC teams. The code   */
 /* must be accompanied by the FIRST BSD license file in the root directory of */
 /* the project.                                                               */
@@ -7,45 +7,45 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
 
-public class TC_Drives extends Command {
+public class CA_ArmPstnTgt extends Command {
+  int pos = 0;
 
-  public TC_Drives() {
-    requires(Robot.DRIVES);
+  public CA_ArmPstnTgt(int pos) {
+    // Use requires() here to declare subsystem dependencies
+    // eg. requires(chassis);
+    requires(Robot.ARM);
+    this.pos = pos;
   }
 
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-    SmartDashboard.putNumberArray("Velocity", Robot.DRIVES.rawVelocities());
+    Robot.ARM.armSafety(false);
+    Robot.ARM.MMArm(pos);
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    Robot.DRIVES.DriveInVoltage(Robot.m_oi.DriverStick.getLeftStickY(), Robot.m_oi.DriverStick.getLeftStickX(),
-        Robot.m_oi.DriverStick.getRightStickX());
-    
-    SmartDashboard.putNumber("Joystick", Robot.m_oi.DriverStick.getY(Hand.kLeft));
-    SmartDashboard.putNumberArray("Velocity", Robot.DRIVES.rawVelocities());
-    SmartDashboard.putNumberArray("Position", Robot.DRIVES.rawPosition());
-
+    Robot.ARM.MMArm(pos);
+    toSDBoard("Arm Data", Robot.ARM.liftRawPosition(), Robot.ARM.liftRawVelocity(), pos,
+        Robot.ARM.armVoltage(), Robot.ARM.armError());
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return false;
+    return Math.abs(Robot.ARM.liftRawPosition() - pos) < 1000;
   }
 
   // Called once after isFinished returns true
   @Override
   protected void end() {
-    Robot.DRIVES.DriveInVoltage(0, 0, 0);
+    Robot.ARM.armSafety(true);
   }
 
   // Called when another command which requires one or more of the same
@@ -53,6 +53,10 @@ public class TC_Drives extends Command {
   @Override
   protected void interrupted() {
     end();
+  }
+
+  public void toSDBoard(String Name, double... toSDB) {
+    SmartDashboard.putNumberArray(Name, toSDB);
   }
 
 }

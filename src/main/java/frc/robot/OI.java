@@ -37,28 +37,28 @@ public class OI {
   // button.whenReleased(new ExampleCommand());
 
   public OI() {
-    //When "A" button is pressed, eject Hatch Panel, When Released, Retract pnuematics
-    AuxStick.aButton.whenPressed (new BM_ControlEject(false));
-    AuxStick.bButton.whenPressed(new BM_ControlEject(true));
+    //When "A" Button is pressed, eject Hatch Panel, When Released, Retract pnuematics
+    AuxStick.aButton.whenPressed (new CC_ClawHatchCntrl(false));
+    AuxStick.bButton.whenPressed(new CC_ClawHatchCntrl(true));
     //When Right Bumper is pressed, push claw out, when Left bumper is pressed, pull claw in
-    AuxStick.rightBumper.whenPressed(new BM_ControlClaw(true));
-    AuxStick.leftBumper.whenPressed(new BM_ControlClaw(false));
-    //When A button is pressed, Extend Lift
-    DriverStick.aButton.whenPressed(new BM_LiftExtend(1));
-    DriverStick.aButton.whenReleased(new BM_LiftExtend(0));
-    //When B button is pressed, retract lift
-    DriverStick.bButton.whenPressed(new BM_LiftExtend(-1));
-    DriverStick.bButton.whenReleased(new BM_LiftExtend(0));
+    AuxStick.rightBumper.whenPressed(new CC_ClawBallCntrl(true));
+    AuxStick.leftBumper.whenPressed(new CC_ClawBallCntrl(false));
+    //When A Button is pressed, Extend Lift
+    DriverStick.aButton.whenPressed(new CC_LiftHorizSpdTgt(1));
+    DriverStick.aButton.whenReleased(new CC_LiftHorizSpdTgt(0));
+    //When B Button is pressed, retract lift
+    DriverStick.bButton.whenPressed(new CC_LiftHorizSpdTgt(-1));
+    DriverStick.bButton.whenReleased(new CC_LiftHorizSpdTgt(0));
     //When Right Trigger is pressed, lift bot
-    DriverStick.rightTriggerButton.whenPressed(new BM_ScissorLift(.5));
-    DriverStick.rightTriggerButton.whenReleased(new BM_ScissorLift(0));
+    DriverStick.rightTriggerButton.whenPressed(new CC_LiftVertSpdTgt(.5));
+    DriverStick.rightTriggerButton.whenReleased(new CC_LiftVertSpdTgt(0));
     //When Left Trigger is pressed, lift bot
-    DriverStick.leftTriggerButton.whenPressed(new BM_ScissorLift(-.5));
-    DriverStick.leftTriggerButton.whenReleased(new BM_ScissorLift(0));
+    DriverStick.leftTriggerButton.whenPressed(new CC_LiftVertSpdTgt(-.5));
+    DriverStick.leftTriggerButton.whenReleased(new CC_LiftVertSpdTgt(0));
     //When Right Bumper is pressed, extend lift pnumatics
-    DriverStick.rightBumper.whenPressed(new BM_LiftRobotPnuematic(true));
-    //When Left Bimper is pressed, retract lift pnumatics
-    DriverStick.leftBumper.whenPressed(new BM_LiftRobotPnuematic(false));
+    DriverStick.rightBumper.whenPressed(new CC_LiftChassisWhlCntrl(true));
+    //When Left Bumper is pressed, retract lift pnumatics
+    DriverStick.leftBumper.whenPressed(new CC_LiftChassisWhlCntrl(false));
 
   }
 

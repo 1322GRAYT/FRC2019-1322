@@ -53,6 +53,6 @@ public class LEDController extends Subsystem {
 
   @Override
   public void initDefaultCommand() {
-    //setDefaultCommand(new BM_ControlLeds());
+    //setDefaultCommand(new CC_LEDCntrl());
   }
 }

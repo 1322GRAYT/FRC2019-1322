@@ -13,11 +13,11 @@ import frc.robot.Robot;
 /**
  * Add your docs here.
  */
-public class AM_setEncodersZero extends InstantCommand {
+public class CA_DrvEncoderRst extends InstantCommand {
   /**
    * Add your docs here.
    */
-  public AM_setEncodersZero() {
+  public CA_DrvEncoderRst() {
     super();
     requires(Robot.DRIVES);
     // Use requires() here to declare subsystem dependencies

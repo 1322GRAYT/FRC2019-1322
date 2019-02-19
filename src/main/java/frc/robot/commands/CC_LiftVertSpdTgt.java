@@ -10,9 +10,9 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 
-public class BM_ScissorLift extends Command {
+public class CC_LiftVertSpdTgt extends Command {
   private double speed;
-  public BM_ScissorLift(double speed) {
+  public CC_LiftVertSpdTgt(double speed) {
     this.speed = speed;
     requires(Robot.SCISSOR);
   }

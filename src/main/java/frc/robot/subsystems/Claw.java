@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.robot.RobotMap;
-import frc.robot.commands.BM_ClawAuto;
+import frc.robot.commands.CC_ClawAutoGrab;
 
 /**
  * Add your docs here.
@@ -61,6 +61,6 @@ public class Claw extends Subsystem {
 
   @Override
   public void initDefaultCommand() {
-    setDefaultCommand(new BM_ClawAuto());
+    setDefaultCommand(new CC_ClawAutoGrab());
   }
 }

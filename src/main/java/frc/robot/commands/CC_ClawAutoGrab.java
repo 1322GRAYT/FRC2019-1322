@@ -8,34 +8,36 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
 
-public class BM_ControlClaw extends Command {
-  private boolean out;
-  /**
-   * 
-   * @param out Pushes out the claw if true
-   */
-  public BM_ControlClaw(boolean out) {
+public class CC_ClawAutoGrab extends Command {
+
+  public CC_ClawAutoGrab() {
     requires(Robot.CLAW);
-    this.out = out;
   }
 
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-    Robot.CLAW.controlClaw(out);
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
+    if(!Robot.CLAW.getClaw()) {
+      Robot.CLAW.controlClaw(false);
+    }
+
+    if(!Robot.CLAW.getDisk() && !Robot.m_oi.AuxStick.bButton.get()) {
+      Robot.CLAW.diskGrabber(false);
+    }
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return true;
+    return false;
   }
 
   // Called once after isFinished returns true

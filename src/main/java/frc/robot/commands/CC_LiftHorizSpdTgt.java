@@ -10,33 +10,32 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 
-public class BM_ControlEject extends Command {
-  private boolean out;
-
-  /**
-   * 
-   * @param out Pushes out the claw if true
-   */
-  public BM_ControlEject(boolean out) {
-    requires(Robot.CLAW);
-    this.out = out;
+public class CC_LiftHorizSpdTgt extends Command {
+  double speed;
+  public CC_LiftHorizSpdTgt(double speed) {
+    requires(Robot.SCISSOR);
+    this.speed = speed;
   }
 
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-    Robot.CLAW.diskGrabber(out);
+    Robot.SCISSOR.extendLift(speed);
   }
-
+  private boolean finished = false;
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
+    System.out.println(Robot.SCISSOR.getFloorSensor());
+    if(!Robot.SCISSOR.getFloorSensor() && speed < 0) {
+      Robot.SCISSOR.liftRobotPnumatic(false);
+    }
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return true;
+    return finished;
   }
 
   // Called once after isFinished returns true

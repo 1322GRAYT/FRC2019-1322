@@ -8,27 +8,38 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
 
-public class TC_Arm extends Command {
-  public TC_Arm() {
-    // Use requires() here to declare subsystem dependencies
-    // eg. requires(chassis);
-    requires(Robot.ARM);
+public class CC_LEDCntrl extends Command {
+
+  private int mode;
+  private int color;
+
+  public CC_LEDCntrl(int color) {
+    requires(Robot.LEDS);
+    this.color = color;
+    this.mode = -1;
+  }
+
+  public CC_LEDCntrl(int color, int mode) {
+    requires(Robot.LEDS);
+    this.color = color;
+    this.mode = mode;
   }
 
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
+    if(mode > -1){
+      Robot.LEDS.setMode(color, mode);
+    } else {
+      Robot.LEDS.setLEDs(color);
+    }
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    Robot.ARM.LiftByVoltage(Robot.m_oi.AuxStick.getLeftStickY());
-    Robot.ARM.intakePower(Robot.m_oi.AuxStick.getRightStickY());
-    toSDBoard("Arm Data", Robot.ARM.liftRawPosition(), Robot.ARM.liftRawVelocity(), Robot.ARM.armVoltage());
   }
 
   // Make this return true when this Command no longer needs to run execute()
@@ -46,9 +57,5 @@ public class TC_Arm extends Command {
   // subsystems is scheduled to run
   @Override
   protected void interrupted() {
-  }
-
-  public void toSDBoard(String Name,double... toSDB) {
-    SmartDashboard.putNumberArray(Name, toSDB);
   }
 }

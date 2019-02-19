@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
 
-public class AM_TranslateToPos extends Command {
+public class CA_DrvPstnTgt extends Command {
 
     int[] motorDistance = new int[4];
     int pHolder = 0;
@@ -19,7 +19,7 @@ public class AM_TranslateToPos extends Command {
     int x = 0, y = 0; // Placeholders
     final static int TOLERANCE = 500;
 
-    public AM_TranslateToPos(int x, int y) {
+    public CA_DrvPstnTgt(int x, int y) {
         requires(Robot.DRIVES);
         this.x = x;
         this.y = y;

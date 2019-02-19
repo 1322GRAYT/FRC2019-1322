@@ -11,9 +11,12 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
 
-public class BM_ClawAuto extends Command {
-  public BM_ClawAuto() {
-    requires(Robot.CLAW);
+public class CT_ArmCntrl extends Command {
+
+  public CT_ArmCntrl() {
+    // Use requires() here to declare subsystem dependencies
+    // eg. requires(chassis);
+    requires(Robot.ARM);
   }
 
   // Called just before this Command runs the first time
@@ -24,13 +27,9 @@ public class BM_ClawAuto extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    if(!Robot.CLAW.getClaw()) {
-      Robot.CLAW.controlClaw(false);
-    }
-
-    if(!Robot.CLAW.getDisk() && !Robot.m_oi.AuxStick.bButton.get()) {
-      Robot.CLAW.diskGrabber(false);
-    }
+    Robot.ARM.LiftByVoltage(Robot.m_oi.AuxStick.getLeftStickY());
+    Robot.ARM.intakePower(Robot.m_oi.AuxStick.getRightStickY());
+    toSDBoard("Arm Data", Robot.ARM.liftRawPosition(), Robot.ARM.liftRawVelocity(), Robot.ARM.armVoltage());
   }
 
   // Make this return true when this Command no longer needs to run execute()
@@ -48,5 +47,9 @@ public class BM_ClawAuto extends Command {
   // subsystems is scheduled to run
   @Override
   protected void interrupted() {
+  }
+
+  public void toSDBoard(String Name,double... toSDB) {
+    SmartDashboard.putNumberArray(Name, toSDB);
   }
 }
