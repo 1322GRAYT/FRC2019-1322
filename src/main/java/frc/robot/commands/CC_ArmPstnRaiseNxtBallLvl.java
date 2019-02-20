@@ -12,23 +12,20 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
 import frc.robot.subsystems.Arm;
 
-public class BM_ArmLowerLevel extends Command {
+public class CC_ArmPstnRaiseNxtBallLvl extends Command {
 
   int setLevel = 0;
 
-  public BM_ArmLowerLevel() {
-    // Use requires() here to declare subsystem dependencies
-    // eg. requires(chassis);
+  public CC_ArmPstnRaiseNxtBallLvl() {
     requires(Robot.ARM);
-
   }
 
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-    if (Robot.ARM.getSetPoint() != 0){
-      Robot.ARM.setSetPoint(Robot.ARM.getSetPoint() - 1);
-    }
+    Robot.ARM.ballPoint++;
+    Robot.ARM.panelPoint = 0;
+    Robot.ARM.setSetPoint(Arm.getBalllevels(Robot.ARM.ballPoint));
     
     Robot.ARM.armSafety(false);
     setLevel = Arm.ARMLEVELS[Robot.ARM.getSetPoint()];
@@ -46,7 +43,7 @@ public class BM_ArmLowerLevel extends Command {
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return Math.abs(Robot.ARM.liftRawPosition() - setLevel) < 1000;
+    return Math.abs(Robot.ARM.liftRawPosition() - setLevel) < 750;
   }
 
   // Called once after isFinished returns true

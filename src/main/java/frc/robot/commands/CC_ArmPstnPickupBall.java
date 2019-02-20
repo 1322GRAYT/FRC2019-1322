@@ -12,11 +12,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
 import frc.robot.subsystems.Arm;
 
-public class BM_ArmPanelPickup extends Command {
+public class CC_ArmPstnPickupBall extends Command {
 
   int setLevel = 0;
 
-  public BM_ArmPanelPickup() {
+  public CC_ArmPstnPickupBall() {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
     requires(Robot.ARM);
@@ -26,7 +26,7 @@ public class BM_ArmPanelPickup extends Command {
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-    Robot.ARM.setSetPoint(1);
+    Robot.ARM.setSetPoint(0);
     
     Robot.ARM.armSafety(false);
     setLevel = Arm.ARMLEVELS[Robot.ARM.getSetPoint()];
