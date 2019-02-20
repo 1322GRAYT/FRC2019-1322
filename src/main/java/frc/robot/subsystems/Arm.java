@@ -24,6 +24,13 @@ public class Arm extends Subsystem {
 
   WPI_TalonSRX Lift = new WPI_TalonSRX(RobotMap.LiftMotorAddress);
   WPI_TalonSRX BallIntake = new WPI_TalonSRX(RobotMap.BallIntakeAddress);
+  final static public int[] ARMLEVELS = {0, 24312, 114800, 173133, 185000, 197000, 254185, 312056, 402000};
+  final static private int[] BALLLEVELS = {0, 2, 3, 5, 6, ARMLEVELS.length-1}; //{0, 114800, 173150, 197000, 254185, 402000};
+  final static private int[] PANELLEVELS = {1, 4, 7};
+  private int setPoint = 0;
+  public int ballPoint = 0;
+  public int panelPoint = 0;
+  
 
   public Arm() {
     Lift.configMotionCruiseVelocity(11000);
@@ -33,9 +40,39 @@ public class Arm extends Subsystem {
     Lift.config_kP(0, 0.13);
     Lift.config_kI(0, 0.0001);
     Lift.config_kD(0, 0.0);
+    Lift.configForwardSoftLimitThreshold(ARMLEVELS[ARMLEVELS.length-1]);
+    Lift.configForwardSoftLimitEnable(true);
   }
 
-  public int liftRawPosition(){
+  /**
+   * @return the balllevels
+   */
+  public static int getBalllevels(int level) {
+    return BALLLEVELS[level];
+  }
+
+  /**
+   * @return the panellevels
+   */
+  public static int getPanellevels(int level) {
+    return PANELLEVELS[level];
+  }
+
+  /**
+   * @return the setPoint
+   */
+  public int getSetPoint() {
+    return setPoint;
+  }
+
+  /**
+   * @param setPoint the setPoint to set
+   */
+  public void setSetPoint(int setPoint) {
+    this.setPoint = setPoint;
+  }
+
+  public int liftRawPosition() {
     return Lift.getSelectedSensorPosition();
   }
 

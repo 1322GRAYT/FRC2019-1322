@@ -60,6 +60,11 @@ public class OI {
     //When Left Bimper is pressed, retract lift pnumatics
     DriverStick.leftBumper.whenPressed(new BM_LiftRobotPnuematic(false));
 
+    AuxStick.xButton.whenPressed(new BM_ArmToNextBallLevel());
+    AuxStick.yButton.whenPressed(new BM_ArmToNextDiskLevel());
+    AuxStick.selectButton.whenPressed(new BM_ArmToNextBallLevel());
+    AuxStick.startButton.whenPressed(new BM_ArmToNextDiskLevel());
+
   }
 
 }
