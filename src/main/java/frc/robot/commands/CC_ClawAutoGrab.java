@@ -12,7 +12,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
 
 public class CC_ClawAutoGrab extends Command {
-
   public CC_ClawAutoGrab() {
     requires(Robot.CLAW);
   }

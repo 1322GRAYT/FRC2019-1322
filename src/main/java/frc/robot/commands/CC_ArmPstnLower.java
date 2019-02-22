@@ -12,11 +12,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
 import frc.robot.subsystems.Arm;
 
-public class BM_ArmToNextDiskLevel extends Command {
+public class CC_ArmPstnLower extends Command {
 
   int setLevel = 0;
 
-  public BM_ArmToNextDiskLevel() {
+  public CC_ArmPstnLower() {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
     requires(Robot.ARM);
@@ -26,9 +26,9 @@ public class BM_ArmToNextDiskLevel extends Command {
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-    Robot.ARM.panelPoint++;
-    Robot.ARM.ballPoint = 0;
-    Robot.ARM.setSetPoint(1);
+    if (Robot.ARM.getSetPoint() != 0){
+      Robot.ARM.setSetPoint(Robot.ARM.getSetPoint() - 1);
+    }
     
     Robot.ARM.armSafety(false);
     setLevel = Arm.ARMLEVELS[Robot.ARM.getSetPoint()];
@@ -39,13 +39,14 @@ public class BM_ArmToNextDiskLevel extends Command {
   @Override
   protected void execute() {
     toSDBoard("Arm Data", Robot.ARM.liftRawPosition(), Robot.ARM.liftRawVelocity(), setLevel, Robot.ARM.armVoltage(),
-      Robot.ARM.armError());
+        Robot.ARM.armError());
+
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return Math.abs(Robot.ARM.liftRawPosition() - setLevel) < 750;
+    return Math.abs(Robot.ARM.liftRawPosition() - setLevel) < 1000;
   }
 
   // Called once after isFinished returns true

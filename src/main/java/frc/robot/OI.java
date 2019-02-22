@@ -60,10 +60,10 @@ public class OI {
     //When Left Bumper is pressed, retract lift pnumatics
     DriverStick.leftBumper.whenPressed(new CC_LiftChassisWhlCntrl(false));
 
-    AuxStick.xButton.whenPressed(new BM_ArmToNextBallLevel());
-    AuxStick.yButton.whenPressed(new BM_ArmToNextDiskLevel());
-    AuxStick.selectButton.whenPressed(new BM_ArmToNextBallLevel());
-    AuxStick.startButton.whenPressed(new BM_ArmToNextDiskLevel());
+    AuxStick.xButton.whenPressed(new CC_ArmPstnRaiseNxtBallLvl());
+    AuxStick.yButton.whenPressed(new CC_ArmPstnRaiseNxtHatchLvl());
+    AuxStick.selectButton.whenPressed(new CC_ArmPstnRaiseNxtBallLvl());
+    AuxStick.startButton.whenPressed(new CC_ArmPstnRaiseNxtHatchLvl());
 
   }
 
