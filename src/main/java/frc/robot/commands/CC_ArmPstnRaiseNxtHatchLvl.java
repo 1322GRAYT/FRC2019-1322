@@ -28,7 +28,7 @@ public class CC_ArmPstnRaiseNxtHatchLvl extends Command {
   protected void initialize() {
     Robot.ARM.panelPoint++;
     Robot.ARM.ballPoint = 0;
-    Robot.ARM.setSetPoint(1);
+    Robot.ARM.setSetPoint(Arm.getPanellevels(Robot.ARM.panelPoint));
     
     Robot.ARM.armSafety(false);
     setLevel = Arm.ARMLEVELS[Robot.ARM.getSetPoint()];
