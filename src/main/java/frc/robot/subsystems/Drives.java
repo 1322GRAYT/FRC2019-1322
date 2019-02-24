@@ -21,7 +21,7 @@ public class Drives extends Subsystem {
       new WPI_TalonSRX(RobotMap.EncoderDriveAddresses[1]), new WPI_TalonSRX(RobotMap.EncoderDriveAddresses[2]),
       new WPI_TalonSRX(RobotMap.EncoderDriveAddresses[3]) };
 
-  WPI_TalonSRX[] FolowerDrives = { new WPI_TalonSRX(RobotMap.FollowerDriveAddresses[0]),
+  WPI_TalonSRX[] FollowerDrives = { new WPI_TalonSRX(RobotMap.FollowerDriveAddresses[0]),
       new WPI_TalonSRX(RobotMap.FollowerDriveAddresses[1]), new WPI_TalonSRX(RobotMap.FollowerDriveAddresses[2]),
       new WPI_TalonSRX(RobotMap.FollowerDriveAddresses[3]) };
 
@@ -48,14 +48,14 @@ public class Drives extends Subsystem {
       EncoderedDrives[i].config_kI(0, 0.00007);
       EncoderedDrives[i].config_kD(0, 0.0013);
       EncoderedDrives[i].setInverted(dInv[i]);
-      FolowerDrives[i].setInverted(dInv[i]);
+      FollowerDrives[i].setInverted(dInv[i]);
       EncoderedDrives[i].setSensorPhase(sInv[i]);
     }
   }
 
   private void setFollowers() {
     for (var i = 0; i < EncoderedDrives.length; i++) {
-      FolowerDrives[i].set(ControlMode.Follower, EncoderedDrives[i].getDeviceID());
+      FollowerDrives[i].set(ControlMode.Follower, EncoderedDrives[i].getDeviceID());
     }
   }
 

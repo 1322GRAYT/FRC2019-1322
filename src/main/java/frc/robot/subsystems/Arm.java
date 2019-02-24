@@ -14,6 +14,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.robot.RobotMap;
 import frc.robot.commands.*;
+import frc.robot.calibrations.K_Arm;
 
 /**
  * Add your docs here.
@@ -24,8 +25,16 @@ public class Arm extends Subsystem {
 
   WPI_TalonSRX Lift = new WPI_TalonSRX(RobotMap.LiftMotorAddress);
   WPI_TalonSRX BallIntake = new WPI_TalonSRX(RobotMap.BallIntakeAddress);
-  final static public int[] ARMLEVELS = {0, 24312, 114800, 173133, 185000, 197000, 254185, 312056, 402000};
-  final static private int[] BALLLEVELS = {0, 2, 3, 5, 6, ARMLEVELS.length-1}; //{0, 114800, 173150, 197000, 254185, 402000};
+  final static public int[] ARMLEVELS = {K_Arm.KARM_Cnt_BallPickUpFloor,
+                                         K_Arm.KARM_Cnt_HatchLow,
+                                         K_Arm.KARM_Cnt_BallRocketLow,
+                                         K_Arm.KARM_Cnt_BallPickUpFeed,
+                                         K_Arm.KARM_Cnt_HatchMid,
+                                         K_Arm.KARM_Cnt_BallCargoShip,
+                                         K_Arm.KARM_Cnt_BallRocketMid,
+                                         K_Arm.KARM_Cnt_HatchHigh,
+                                         K_Arm.KARM_Cnt_BallRocketHigh};
+  final static private int[] BALLLEVELS = {0, 2, 3, 5, 6, ARMLEVELS.length-1};
   final static private int[] PANELLEVELS = {1, 4, 7};
   private int setPoint = 0;
   public int ballPoint = 0;

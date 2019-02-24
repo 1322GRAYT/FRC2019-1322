@@ -43,7 +43,7 @@ public class OI {
     //When Right Bumper is pressed, push claw out, when Left bumper is pressed, pull claw in
     AuxStick.rightBumper.whenPressed(new CC_ClawBallCntrl(true));
     AuxStick.leftBumper.whenPressed(new CC_ClawBallCntrl(false));
-    //When A Button is pressed, Extend Lift
+    //When A Button is pressed, extend Lift
     DriverStick.aButton.whenPressed(new CC_LiftHorizSpdTgt(1));
     DriverStick.aButton.whenReleased(new CC_LiftHorizSpdTgt(0));
     //When B Button is pressed, retract lift
@@ -52,7 +52,7 @@ public class OI {
     //When Right Trigger is pressed, lift bot
     DriverStick.rightTriggerButton.whenPressed(new CC_LiftVertSpdTgt(.5));
     DriverStick.rightTriggerButton.whenReleased(new CC_LiftVertSpdTgt(0));
-    //When Left Trigger is pressed, lift bot
+    //When Left Trigger is pressed, lower bot
     DriverStick.leftTriggerButton.whenPressed(new CC_LiftVertSpdTgt(-.5));
     DriverStick.leftTriggerButton.whenReleased(new CC_LiftVertSpdTgt(0));
     //When Right Bumper is pressed, extend lift pnumatics
