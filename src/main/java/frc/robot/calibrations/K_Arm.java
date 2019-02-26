@@ -6,64 +6,54 @@
 /*----------------------------------------------------------------------------*/
 
 package frc.robot.calibrations;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import frc.robot.models.PositionData;
 
 /**
  * Class: K_Arm - Contains Control Calibrations for the Arm system.
  */
 public class K_Arm {
 
-    /**************************************************************/
-	/*  Arm Position Encoder Counts Array Cell Index Assignments  */
-	/**************************************************************/	 	 
-    public static final int CeARM_BallPickUpFloor = 0;
-    public static final int CeARM_HatchLow        = 1;
-    public static final int CeARM_BallRocketLow   = 2;
-    public static final int CeARM_BallPickUpFeed  = 3;
-    public static final int CeARM_HatchMid        = 4;
-    public static final int CeARM_BallCargoShip   = 5;
-    public static final int CeARM_BallRocketMid   = 6;
-    public static final int CeARM_HatchHigh       = 7;
-    public static final int CeARM_BallRocketHigh  = 8;
-
-
     /********************************************/
 	/*  Arm Position Encoder Count Definitions  */
 	/********************************************/	 	
-	
-	/** KARM_Cnt_BallPickUpFloor: Arm Position in Encoder Counts associated
-     *  with the Floor for Ball/Cargo pick-up. */
-    public static final int KARM_Cnt_BallPickUpFloor = 0;  // Cell CeARM_BallPickUpFloor
+    // As a list, this is complicated to use but more precice (Using a set may be most precice)
+    // The idea is to use this as a stream and filter its use.
+    /*
+    public static List<PositionData> L_ARM_POS_DATA = Arrays.asList(
+        new PositionData(0, "Floor Pickup", "Ball"),
+        new PositionData(24312, "Rocket Level 1", "Panel"),
+        new PositionData(114800, "Rocket Level 1", "Ball"),
+        new PositionData(173133, "Human Feed", "Ball"),
+        new PositionData(185000, "Rocket Level 2", "Panel"),
+        new PositionData(197000, "Cargo Ship", "Ball"),
+        new PositionData(254185, "Rocket Level 2", "Ball"),
+        new PositionData(312056, "Rocket Level 3", "Panel"),
+        new PositionData(402000, "Rocket Level 3", "Ball")
+    );*/
 
- 	/** KARM_Cnt_BallPickUpFeed: Arm Position in Encoder Counts associated
-     *  with the Human Feed for Ball/Cargo pick-up. */
-     public static final int KARM_Cnt_BallPickUpFeed = 173133;  // Cell CeARM_BallPickUpFeed
+    public final static PositionData[] ARM_POS_DATA = {
+        new PositionData(0, "Floor Pickup", "Ball"),
+        new PositionData(24312, "Rocket Level 1", "Panel"),
+        new PositionData(114800, "Rocket Level 1", "Ball"),
+        new PositionData(173133, "Human Feed", "Ball"),
+        new PositionData(185000, "Rocket Level 2", "Panel"),
+        new PositionData(197000, "Cargo Ship", "Ball"),
+        new PositionData(254185, "Rocket Level 2", "Ball"),
+        new PositionData(312056, "Rocket Level 3", "Panel"),
+        new PositionData(402000, "Rocket Level 3", "Ball")
+    };
+    public final static int MAX_ARM_POSITION = ARM_POS_DATA.length - 1;
 
- 	/** KARM_Cnt_BallCargoShip: Arm Position in Encoder Counts associated
-     *  with the Cargo Ship Ball/Cargo placement. */
-     public static final int KARM_Cnt_BallCargoShip = 197000;  // Cell CeARM_BallCargoShip
+    // Define Ball Positions - Max is used to ensure no overflow errors
+    public final static int[] BALL_POSITIONS = {0, 2, 3, 5, 6, 8};
+    public final static int MAX_BALL_POSITION = BALL_POSITIONS.length - 1;
 
-	/** KARM_Cnt_BallRocketLow: Arm Position in Encoder Counts associated
-     *  with the Rocket LOW level Ball/Cargo placement. */
-    public static final int KARM_Cnt_BallRocketLow = 114800;  // Cell CeARM_BallRocketLow
-   
-	/** KARM_Cnt_BallRocketMid: Arm Position in Encoder Counts associated
-     *  with the Rocket MID level Ball/Cargo placement. */
-    public static final int KARM_Cnt_BallRocketMid =  254185;  // Cell CeARM_BallRocketMid
-    
-	/** KARM_Cnt_BallRocketHigh: Arm Position in Encoder Counts associated
-     *  with the Rocket HIGH level Ball/Cargo placement. */
-    public static final int KARM_Cnt_BallRocketHigh = 402000;  // Cell CeARM_BallRocketHigh
-
-	/** KARM_Cnt_HatchLow: Arm Position in Encoder Counts associated
-     *  with the LOW level hatch placement. */
-    public static final int KARM_Cnt_HatchLow = 24312;  // Cell CeARM_HatchLow
-
-	/** KARM_Cnt_HatchMid: Arm Position in Encoder Counts associated
-     *  with the MID level hatch placement. */
-    public static final int KARM_Cnt_HatchMid = 185000;  // Cell CeARM_HatchMid
-
-	/** KARM_Cnt_HatchHigh: Arm Position in Encoder Counts associated
-     *  with the HIGH level hatch placement. */
-    public static final int KARM_Cnt_HatchHigh = 312056;  // Cell CeARM_HatchHigh
+    // Define Panel Positions - Max is used to ensure no overflow errors
+    public final static int[] PANEL_POSITIONS = {1, 4, 7};
+    public final static int MAX_PANEL_POSITION = PANEL_POSITIONS.length - 1;
     
 }

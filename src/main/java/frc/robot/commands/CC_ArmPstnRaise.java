@@ -10,6 +10,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
+import frc.robot.calibrations.K_Arm;
 import frc.robot.subsystems.Arm;
 
 public class CC_ArmPstnRaise extends Command {
@@ -26,11 +27,11 @@ public class CC_ArmPstnRaise extends Command {
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-    if (Robot.ARM.getSetPoint() < Arm.ARMLEVELS.length - 1){
+    if (Robot.ARM.getSetPoint() < K_Arm.MAX_ARM_POSITION - 1){
       Robot.ARM.setSetPoint(Robot.ARM.getSetPoint() + 1);
     }
     Robot.ARM.armSafety(false);
-    setLevel = Arm.ARMLEVELS[Robot.ARM.getSetPoint()];
+    setLevel = K_Arm.ARM_POS_DATA[Robot.ARM.getSetPoint()].location;
     Robot.ARM.MMArm(setLevel);
   }
 

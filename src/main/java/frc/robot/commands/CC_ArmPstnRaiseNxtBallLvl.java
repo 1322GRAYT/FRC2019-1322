@@ -10,6 +10,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
+import frc.robot.calibrations.K_Arm;
 import frc.robot.subsystems.Arm;
 
 public class CC_ArmPstnRaiseNxtBallLvl extends Command {
@@ -23,12 +24,14 @@ public class CC_ArmPstnRaiseNxtBallLvl extends Command {
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-    Robot.ARM.ballPoint++;
+    if (K_Arm.MAX_BALL_POSITION != Robot.ARM.ballPoint){
+      Robot.ARM.ballPoint++;
+    }
     Robot.ARM.panelPoint = 0;
     Robot.ARM.setSetPoint(Arm.getBalllevels(Robot.ARM.ballPoint));
     
     Robot.ARM.armSafety(false);
-    setLevel = Arm.ARMLEVELS[Robot.ARM.getSetPoint()];
+    setLevel = K_Arm.ARM_POS_DATA[Robot.ARM.getSetPoint()].location;
     Robot.ARM.MMArm(setLevel);
   }
 
