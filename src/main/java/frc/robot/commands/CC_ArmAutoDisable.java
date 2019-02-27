@@ -9,17 +9,15 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.InstantCommand;
 import frc.robot.Robot;
-import frc.robot.calibrations.K_Arm;
-import frc.robot.subsystems.Arm;
 
 /**
  * Add your docs here.
  */
-public class CC_ArmPstNextBall extends InstantCommand {
+public class CC_ArmAutoDisable extends InstantCommand {
   /**
    * Add your docs here.
    */
-  public CC_ArmPstNextBall() {
+  public CC_ArmAutoDisable() {
     super();
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
@@ -29,12 +27,7 @@ public class CC_ArmPstNextBall extends InstantCommand {
   // Called once when the command executes
   @Override
   protected void initialize() {
-    if (K_Arm.MAX_BALL_POSITION != Robot.ARM.ballPoint){
-      Robot.ARM.ballPoint++;
-    }
-    Robot.ARM.AUTOMATIC_ACTIVE = true;
-    Robot.ARM.panelPoint = 0;
-    Robot.ARM.setSetPoint(Arm.getBalllevels(Robot.ARM.ballPoint));
+    Robot.ARM.AUTOMATIC_ACTIVE = false;
   }
 
 }

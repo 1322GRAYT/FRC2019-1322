@@ -20,7 +20,7 @@ public class K_Arm {
     /********************************************/
 	/*  Arm Position Encoder Count Definitions  */
 	/********************************************/	 	
-    // As a list, this is complicated to use but more precice (Using a set may be most precice)
+    // As a list, this is complicated to use but most precice
     // The idea is to use this as a stream and filter its use.
     /*
     public static List<PositionData> L_ARM_POS_DATA = Arrays.asList(
@@ -33,7 +33,8 @@ public class K_Arm {
         new PositionData(254185, "Rocket Level 2", "Ball"),
         new PositionData(312056, "Rocket Level 3", "Panel"),
         new PositionData(402000, "Rocket Level 3", "Ball")
-    );*/
+    );
+    int[] test = L_ARM_POS_DATA.stream().filter(p -> p.name == "Ball" || p.name == "Both"). */
 
     public final static PositionData[] ARM_POS_DATA = {
         new PositionData(0, "Floor Pickup", "Ball"),
