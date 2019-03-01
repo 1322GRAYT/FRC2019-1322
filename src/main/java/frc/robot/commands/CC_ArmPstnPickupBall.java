@@ -11,7 +11,6 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
 import frc.robot.calibrations.K_Arm;
-import frc.robot.subsystems.Arm;
 
 public class CC_ArmPstnPickupBall extends Command {
 
@@ -39,7 +38,7 @@ public class CC_ArmPstnPickupBall extends Command {
   protected void execute() {
     toSDBoard("Arm Data", Robot.ARM.liftRawPosition(), Robot.ARM.liftRawVelocity(), setLevel, Robot.ARM.armVoltage(),
         Robot.ARM.armError());
-        SmartDashboard.putString("Arm Level", K_Arm.ARM_POS_DATA[Robot.ARM.getSetPoint()].name);
+        SmartDashboard.putString("Arm Level", K_Arm.ARM_POS_DATA[Robot.ARM.getSetPoint()].name + " " + K_Arm.ARM_POS_DATA[Robot.ARM.getSetPoint()].type);
 
   }
 

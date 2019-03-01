@@ -9,7 +9,6 @@ package frc.robot;
 
 import frc.robot.commands.*;
 import frc.robot.models.CustomXbox;
-import frc.robot.trigger.TurnOffAutoArm;
 
 /**
  * This class is the glue that binds the controls on the physical operator
@@ -20,7 +19,6 @@ public class OI {
   //Because the WPI bundled one is dumbbbbbbbbbbb
   public CustomXbox DriverStick = new CustomXbox(0);
   public CustomXbox AuxStick = new CustomXbox(1);
-  private TurnOffAutoArm turnOffAutoArm = new TurnOffAutoArm();
 
   //// TRIGGERING COMMANDS WITH BUTTONS
   // Once you have a button, it's trivial to bind it to a button in one of
@@ -66,8 +64,6 @@ public class OI {
     AuxStick.yButton.whenPressed(new CC_ArmPstnRaiseNxtHatchLvl());
     AuxStick.selectButton.whenPressed(new CC_ArmPstnPickupBall());
     AuxStick.startButton.whenPressed(new CC_ArmPstnPickupHatch());
-
-    //turnOffAutoArm.whenActive(new CC_ArmAutoDisable());
   }
 
 }

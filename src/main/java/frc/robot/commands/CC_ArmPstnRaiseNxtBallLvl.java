@@ -40,6 +40,7 @@ public class CC_ArmPstnRaiseNxtBallLvl extends Command {
   protected void execute() {
     toSDBoard("Arm Data", Robot.ARM.liftRawPosition(), Robot.ARM.liftRawVelocity(), setLevel, Robot.ARM.armVoltage(),
         Robot.ARM.armError());
+        SmartDashboard.putString("Arm Level", K_Arm.ARM_POS_DATA[Robot.ARM.getSetPoint()].name + " " + K_Arm.ARM_POS_DATA[Robot.ARM.getSetPoint()].type);
 
   }
 
