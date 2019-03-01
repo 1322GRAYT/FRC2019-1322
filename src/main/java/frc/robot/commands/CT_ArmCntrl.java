@@ -29,6 +29,7 @@ public class CT_ArmCntrl extends Command {
   protected void execute() {
     Robot.ARM.LiftByVoltage(Robot.m_oi.AuxStick.getLeftStickY());
     Robot.ARM.intakePower(Robot.m_oi.AuxStick.getRightStickY());
+    SmartDashboard.putNumber("ArmLevel", Robot.ARM.liftRawPosition());
     toSDBoard("Arm Data", Robot.ARM.liftRawPosition(), Robot.ARM.liftRawVelocity(), Robot.ARM.armVoltage());
   }
 

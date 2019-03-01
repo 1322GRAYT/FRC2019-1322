@@ -46,7 +46,7 @@ public class CC_ArmPstnRaiseNxtBallLvl extends Command {
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return Math.abs(Robot.ARM.liftRawPosition() - setLevel) < 750;
+    return Math.abs(Robot.ARM.liftRawPosition() - setLevel) < K_Arm.TOLERANCE;
   }
 
   // Called once after isFinished returns true

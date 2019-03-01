@@ -67,7 +67,7 @@ public class OI {
     AuxStick.selectButton.whenPressed(new CC_ArmPstnPickupBall());
     AuxStick.startButton.whenPressed(new CC_ArmPstnPickupHatch());
 
-    turnOffAutoArm.whenActive(new CC_ArmAutoDisable());
+    //turnOffAutoArm.whenActive(new CC_ArmAutoDisable());
   }
 
 }

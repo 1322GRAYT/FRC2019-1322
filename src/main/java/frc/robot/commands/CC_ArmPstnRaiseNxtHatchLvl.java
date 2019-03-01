@@ -43,12 +43,13 @@ public class CC_ArmPstnRaiseNxtHatchLvl extends Command {
   protected void execute() {
     toSDBoard("Arm Data", Robot.ARM.liftRawPosition(), Robot.ARM.liftRawVelocity(), setLevel, Robot.ARM.armVoltage(),
       Robot.ARM.armError());
+      SmartDashboard.putString("Arm Level", K_Arm.ARM_POS_DATA[Robot.ARM.getSetPoint()].name);
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return Math.abs(Robot.ARM.liftRawPosition() - setLevel) < 750;
+    return Math.abs(Robot.ARM.liftRawPosition() - setLevel) < K_Arm.TOLERANCE;
   }
 
   // Called once after isFinished returns true

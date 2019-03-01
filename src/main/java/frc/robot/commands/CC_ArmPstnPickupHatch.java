@@ -28,6 +28,8 @@ public class CC_ArmPstnPickupHatch extends Command {
   @Override
   protected void initialize() {
     Robot.ARM.setSetPoint(1);
+    Robot.ARM.ballPoint = 0;
+    Robot.ARM.panelPoint = 0;
     
     Robot.ARM.armSafety(false);
     setLevel = K_Arm.ARM_POS_DATA[Robot.ARM.getSetPoint()].location;
@@ -45,7 +47,7 @@ public class CC_ArmPstnPickupHatch extends Command {
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return Math.abs(Robot.ARM.liftRawPosition() - setLevel) < 1000;
+    return Math.abs(Robot.ARM.liftRawPosition() - setLevel) < K_Arm.TOLERANCE;
   }
 
   // Called once after isFinished returns true
