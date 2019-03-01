@@ -26,7 +26,6 @@ public class CC_ClawHatchCntrl extends Command {
   @Override
   protected void initialize() {
     Robot.CLAW.diskGrabber(out);
-    Robot.ARM.intakePower(out?-1.0:0);
   }
 
   // Called repeatedly when this Command is scheduled to run

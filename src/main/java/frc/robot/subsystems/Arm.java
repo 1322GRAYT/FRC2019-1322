@@ -24,7 +24,6 @@ public class Arm extends Subsystem {
   // here. Call these from Commands.
 
   WPI_TalonSRX Lift = new WPI_TalonSRX(RobotMap.LiftMotorAddress);
-  WPI_TalonSRX BallIntake = new WPI_TalonSRX(RobotMap.BallIntakeAddress);
   /************************************************
    * Section depreciated of ARMLEVELS, use K_Arm.ARM_POS_LEVEL to replace this variable
    * Reason for this is to provide a better model for how 
@@ -81,10 +80,6 @@ public class Arm extends Subsystem {
 
   public int liftRawVelocity(){
     return Lift.getSelectedSensorVelocity();
-  }
-
-  public void intakePower(double Power){
-    BallIntake.set(ControlMode.PercentOutput, Power);
   }
 
   public void LiftByVoltage(double Power){

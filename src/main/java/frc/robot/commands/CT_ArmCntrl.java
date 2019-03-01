@@ -10,6 +10,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
+import frc.robot.calibrations.K_Arm;
 
 public class CT_ArmCntrl extends Command {
 
@@ -28,8 +29,18 @@ public class CT_ArmCntrl extends Command {
   @Override
   protected void execute() {
     Robot.ARM.LiftByVoltage(Robot.m_oi.AuxStick.getLeftStickY());
-    Robot.ARM.intakePower(Robot.m_oi.AuxStick.getRightStickY());
+    
+    if(!Robot.CLAW.getBallClawStatus()){
+      Robot.CLAW.intakePower(-1);
+    }
+    else{
+      Robot.CLAW.intakePower(Robot.m_oi.AuxStick.getRightStickY());
+    }
+
+
     SmartDashboard.putNumber("ArmLevel", Robot.ARM.liftRawPosition());
+    SmartDashboard.putString("Arm Level", K_Arm.ARM_POS_DATA[Robot.ARM.getSetPoint()].name + " " + K_Arm.ARM_POS_DATA[Robot.ARM.getSetPoint()].type);
+
     toSDBoard("Arm Data", Robot.ARM.liftRawPosition(), Robot.ARM.liftRawVelocity(), Robot.ARM.armVoltage());
   }
 
@@ -50,7 +61,7 @@ public class CT_ArmCntrl extends Command {
   protected void interrupted() {
   }
 
-  public void toSDBoard(String Name,double... toSDB) {
+  public void toSDBoard(String Name, double... toSDB) {
     SmartDashboard.putNumberArray(Name, toSDB);
   }
 }

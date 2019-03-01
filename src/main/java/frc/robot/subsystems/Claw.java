@@ -7,6 +7,9 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Solenoid;
@@ -21,8 +24,9 @@ public class Claw extends Subsystem {
   private Solenoid clawIn, clawOut, ejectIn, ejectOut;
   private Compressor comp;
   private DigitalInput clawDis, diskPress;
+  WPI_TalonSRX BallIntake;
 
-  public Claw() { //TODO: Update when Eric Pushes RobotMap
+  public Claw() { 
     comp = new Compressor(0);
     comp.enabled();
     clawIn = new Solenoid(RobotMap.ClawSolenoids[0]);
@@ -31,6 +35,9 @@ public class Claw extends Subsystem {
     ejectOut = new Solenoid(RobotMap.EjectSolenoids[1]);
     clawDis = new DigitalInput(RobotMap.ClawSensor);
     diskPress = new DigitalInput(RobotMap.DiskSensor);
+    BallIntake = new WPI_TalonSRX(RobotMap.BallIntakeAddress);
+    
+    
   }
 
   /**
@@ -51,12 +58,20 @@ public class Claw extends Subsystem {
     clawOut.set(!out);
   }
 
+  public boolean getBallClawStatus(){
+    return clawOut.get();
+  }
+
   public boolean getClaw() {
     return !clawDis.get();
   }
 
   public boolean getDisk() {
     return diskPress.get();
+  }
+
+  public void intakePower(double Power){
+    BallIntake.set(ControlMode.PercentOutput, Power);
   }
 
   @Override
