@@ -10,6 +10,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
+import frc.robot.calibrations.K_Arm;
 import frc.robot.subsystems.Arm;
 
 public class CC_ArmPstnPickupHatch extends Command {
@@ -27,9 +28,11 @@ public class CC_ArmPstnPickupHatch extends Command {
   @Override
   protected void initialize() {
     Robot.ARM.setSetPoint(1);
+    Robot.ARM.ballPoint = 0;
+    Robot.ARM.panelPoint = 0;
     
     Robot.ARM.armSafety(false);
-    setLevel = Arm.ARMLEVELS[Robot.ARM.getSetPoint()];
+    setLevel = K_Arm.ARM_POS_DATA[Robot.ARM.getSetPoint()].location;
     Robot.ARM.MMArm(setLevel);
   }
 
@@ -44,7 +47,7 @@ public class CC_ArmPstnPickupHatch extends Command {
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return Math.abs(Robot.ARM.liftRawPosition() - setLevel) < 1000;
+    return Math.abs(Robot.ARM.liftRawPosition() - setLevel) < K_Arm.TOLERANCE;
   }
 
   // Called once after isFinished returns true

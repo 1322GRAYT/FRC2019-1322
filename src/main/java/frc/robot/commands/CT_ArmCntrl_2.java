@@ -8,62 +8,52 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
 import frc.robot.calibrations.K_Arm;
-import frc.robot.subsystems.Arm;
 
-public class CC_ArmPstnLower extends Command {
 
-  int setLevel = 0;
+/*********************************
+ * THIS CODE IS TO BE IMPLEMENTED WHEN EVERYONE IS GOOD WITH IT
+ */
 
-  public CC_ArmPstnLower() {
+public class CT_ArmCntrl_2 extends Command {
+  public CT_ArmCntrl_2() {
     // Use requires() here to declare subsystem dependencies
     // eg. requires(chassis);
     requires(Robot.ARM);
-
   }
 
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-    if (Robot.ARM.getSetPoint() != 0){
-      Robot.ARM.setSetPoint(Robot.ARM.getSetPoint() - 1);
+    if (Robot.ARM.AUTOMATIC_ACTIVE){
+      Robot.ARM.MMArm(K_Arm.ARM_POS_DATA[Robot.ARM.getSetPoint()].location);
     }
-    
-    Robot.ARM.armSafety(false);
-    setLevel = K_Arm.ARM_POS_DATA[Robot.ARM.getSetPoint()].location;
-    Robot.ARM.MMArm(setLevel);
+    Robot.ARM.armSafety(!Robot.ARM.AUTOMATIC_ACTIVE);
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    toSDBoard("Arm Data", Robot.ARM.liftRawPosition(), Robot.ARM.liftRawVelocity(), setLevel, Robot.ARM.armVoltage(),
-        Robot.ARM.armError());
-
+    if (!Robot.ARM.AUTOMATIC_ACTIVE){
+      Robot.ARM.LiftByVoltage(Robot.m_oi.AuxStick.getLeftStickY());
+    }
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return Math.abs(Robot.ARM.liftRawPosition() - setLevel) < 1000;
+    return false;
   }
 
   // Called once after isFinished returns true
   @Override
   protected void end() {
-    Robot.ARM.armSafety(true);
   }
 
   // Called when another command which requires one or more of the same
   // subsystems is scheduled to run
   @Override
   protected void interrupted() {
-    end();
-  }
-
-  public void toSDBoard(String Name, double... toSDB) {
-    SmartDashboard.putNumberArray(Name, toSDB);
   }
 }
