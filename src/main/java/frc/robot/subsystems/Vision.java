@@ -74,7 +74,7 @@ public class Vision extends Subsystem {
       imgPoints.add(new Point(VeVSN_Cnt_PxlImgBtmRt[Xcell],VeVSN_Cnt_PxlImgBtmRt[Ycell]));
       imgPoints.add(new Point(VeVSN_Cnt_PxlImgTopRt[Xcell],VeVSN_Cnt_PxlImgTopRt[Ycell]));
       /* Build Object Matrix from Array */ 
-      imgPointsMat.fromList(imgPoints);
+      imgPointMat.fromList(imgPoints);
 
 
 //    test = solvePnP(objPointsMat, imgPointsMat, Mat cameraMatrix, MatOfDouble distCoeffs, rotMat, transVec);
