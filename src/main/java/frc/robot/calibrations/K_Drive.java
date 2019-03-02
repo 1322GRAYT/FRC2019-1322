@@ -18,7 +18,7 @@ public class K_Drive {
 
 	/** KDRV_dPct_VelFeedFwdTerm: Drive System Velocity Control
      * Feed Forward Term for Motion Magic Control in units of
-     * 1023 * duty-cycle / encoder-counte-per-100ms.
+     * 1023 * duty-cycle / encoder-counter-per-100ms.
      */
     public static final double KDRV_dPct_VelFeedFwdTerm = 0.073;
 
@@ -45,7 +45,7 @@ public class K_Drive {
    
     /**************************************************/
     /*  Drive System Motion Speed Profile Settings    */
- 	/**************************************************/	 	
+    /**************************************************/	 	
 
 	/** KDRV_n_MM_CruiseVel: Drive System Motion Magic
      * Speed Profiling Cruise Velocity in units of encoder

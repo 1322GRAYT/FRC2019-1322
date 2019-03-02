@@ -13,6 +13,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import frc.robot.Robot;
 import frc.robot.RobotMap;
 
 /**
@@ -39,10 +40,12 @@ public class Scissor extends Subsystem {
   }
 
   public void liftRobot(double speed) {
+    Robot.LEDS.setMode(Robot.LEDS.ledRed, Robot.LEDS.ledModeChase);
     scissorL.set(ControlMode.PercentOutput, speed);
   }
 
   public void extendLift(double speed) {
+    Robot.LEDS.setMode(Robot.LEDS.ledYellow, Robot.LEDS.ledModeChase);
     scissorOut.set(ControlMode.PercentOutput, speed);
   }
 
@@ -55,6 +58,7 @@ public class Scissor extends Subsystem {
   }
 
   public void liftRobotPnumatic(boolean up) {
+    Robot.LEDS.setLEDs(Robot.LEDS.ledRainbow);
     robotLiftL.set(up);
     robotLiftR.set(!up);
   }
