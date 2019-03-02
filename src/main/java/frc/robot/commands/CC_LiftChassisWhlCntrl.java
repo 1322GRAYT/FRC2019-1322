@@ -20,7 +20,9 @@ public class CC_LiftChassisWhlCntrl extends Command {
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-    Robot.SCISSOR.liftRobotPnumatic(up);
+    boolean test = !up && Robot.SCISSOR.getLimits(); //returns true if pnuematic should not go down
+    if (test) Robot.SCISSOR.liftRobotPnumatic(true);
+    else Robot.SCISSOR.liftRobotPnumatic(up);
   }
 
   // Called repeatedly when this Command is scheduled to run

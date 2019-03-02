@@ -38,7 +38,7 @@ public class Drives extends Subsystem {
     for (var i = 0; i < EncoderedDrives.length; i++) {
       EncoderedDrives[i].configFactoryDefault();
       EncoderedDrives[i].configMotionCruiseVelocity(9000);
-      EncoderedDrives[i].configMotionAcceleration(9000);
+      EncoderedDrives[i].configMotionAcceleration(13000);
       EncoderedDrives[i].configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
       EncoderedDrives[i].config_kF(0, 0.073);
       EncoderedDrives[i].config_kP(0, 0.2);

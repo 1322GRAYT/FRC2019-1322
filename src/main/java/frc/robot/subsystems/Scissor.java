@@ -63,6 +63,10 @@ public class Scissor extends Subsystem {
     return edgeSensor.get();
   }
 
+  public boolean getLimits(){
+    return scissorL.getSensorCollection().isFwdLimitSwitchClosed();
+  }
+
   @Override
   public void initDefaultCommand() {
     // Set the default command for a subsystem here.
