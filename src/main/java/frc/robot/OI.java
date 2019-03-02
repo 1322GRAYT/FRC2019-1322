@@ -9,6 +9,7 @@ package frc.robot;
 
 import frc.robot.commands.*;
 import frc.robot.models.CustomXbox;
+import frc.robot.models.EncoderConversions;
 
 /**
  * This class is the glue that binds the controls on the physical operator
@@ -61,7 +62,7 @@ public class OI {
     DriverStick.leftBumper.whenPressed(new CC_LiftChassisWhlCntrl(false));
 
     // Autonomous forward
-    
+    DriverStick.selectButton.whileHeld(new CA_DrvPstnTgt(0, 140000));
 
     // Arm Controls
     AuxStick.xButton.whenPressed(new CC_ArmPstnRaiseNxtBallLvl());
