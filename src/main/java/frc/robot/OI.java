@@ -62,9 +62,8 @@ public class OI {
 
     AuxStick.xButton.whenPressed(new CC_ArmPstnRaiseNxtBallLvl());
     AuxStick.yButton.whenPressed(new CC_ArmPstnRaiseNxtHatchLvl());
-    AuxStick.selectButton.whenPressed(new CC_ArmPstnRaiseNxtBallLvl());
-    AuxStick.startButton.whenPressed(new CC_ArmPstnRaiseNxtHatchLvl());
-
+    AuxStick.selectButton.whenPressed(new CC_ArmPstnPickupBall());
+    AuxStick.startButton.whenPressed(new CC_ArmPstnPickupHatch());
   }
 
 }

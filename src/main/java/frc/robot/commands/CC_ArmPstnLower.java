@@ -10,7 +10,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
-import frc.robot.subsystems.Arm;
+import frc.robot.calibrations.K_Arm;
 
 public class CC_ArmPstnLower extends Command {
 
@@ -31,7 +31,7 @@ public class CC_ArmPstnLower extends Command {
     }
     
     Robot.ARM.armSafety(false);
-    setLevel = Arm.ARMLEVELS[Robot.ARM.getSetPoint()];
+    setLevel = K_Arm.ARM_POS_DATA[Robot.ARM.getSetPoint()].location;
     Robot.ARM.MMArm(setLevel);
   }
 

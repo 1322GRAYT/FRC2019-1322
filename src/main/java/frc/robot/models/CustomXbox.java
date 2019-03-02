@@ -16,7 +16,6 @@ public class CustomXbox extends Joystick {
 
 	public CustomXbox(int port) {
 		super(port);
-		// TODO Auto-generated constructor stub
 	}
 
 	public JoystickButton xButton = new JoystickButton(this, 3);
