@@ -17,17 +17,17 @@ public class K_Tele {
 	/*  Lift Horizontal Normalized Power for Tele-Op  */
 	/**************************************************/	 	
 	
-	/** KLFT_r_PwrHorizExtend: Normalized Power Level commanded to the motors
+	/** KLFT_r_TelePwrHorizExtend: Normalized Power Level commanded to the motors
      * when extending the horizontal slide of the Lift Mechanism. */
-    public static final double KLFT_r_PwrHorizExtend = 1;
+    public static final double KLFT_r_TelePwrHorizExtend = 1.0;
 
-    /** KLFT_r_PwrHorizRetract: Normalized Power Level commanded to the motors
+    /** KLFT_r_TelePwrHorizRetract: Normalized Power Level commanded to the motors
      * when retracting the horizontal slide of the Lift Mechanism. */
-    public static final double KLFT_r_PwrHorizRetract = -1;
+    public static final double KLFT_r_TelePwrHorizRetract = -1.0;
 
-    /** KLFT_r_PwrHorizDsbl: Normalized Power Level commanded to the motors
+    /** KLFT_r_TelePwrHorizDsbl: Normalized Power Level commanded to the motors
      * when disabling the horizontal slide control. */
-    public static final double KLFT_r_PwrHorizDsbl = 0;
+    public static final double KLFT_r_TelePwrHorizDsbl = 0;
 
 
 
@@ -35,16 +35,16 @@ public class K_Tele {
 	/*  Lift Vertical Normalized Power for Tele-Op  */
 	/**************************************************/	 	
 	
-	/** KLFT_r_PwrVertRaise: Normalized Power Level commanded to the motors
+	/** KLFT_r_TelePwrVertRaise: Normalized Power Level commanded to the motors
      * when extending/raising the vertical jack of the Lift Mechanism. */
-    public static final double KLFT_r_PwrVertRaise = 0.5;
+    public static final double KLFT_r_TelePwrVertRaise = 1.0;
 
-    /** KLFT_r_PwrVertLower: Normalized Power Level commanded to the motors
+    /** KLFT_r_PwrVertLowerTele: Normalized Power Level commanded to the motors
      * when retracting/lowering the vertical jack of the Lift Mechanism. */
-    public static final double KLFT_r_PwrVertLower = -0.5;
+    public static final double KLFT_r_PwrVertLowerTele = -1.0;
 
-    /** KLFT_r_PwrVertDsbl: Normalized Power Level commanded to the motors
+    /** KLFT_r_PwrVertDsblTele: Normalized Power Level commanded to the motors
      * when disabling the vertical jack control. */
-    public static final double KLFT_r_PwrVertDsbl = 0;
+    public static final double KLFT_r_PwrVertDsblTele = 0;
     
 }
