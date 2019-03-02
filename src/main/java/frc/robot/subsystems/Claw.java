@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import frc.robot.Robot;
 import frc.robot.RobotMap;
 import frc.robot.commands.CC_ClawAutoGrab;
 
@@ -38,6 +39,11 @@ public class Claw extends Subsystem {
    * @param eject Pushes out hatch ejectors if true
    */
   public void diskGrabber(boolean eject) {
+    if(eject) {
+      Robot.LEDS.setLEDs(Robot.LEDS.ledRed);
+    } else {
+      Robot.LEDS.setLEDs(Robot.LEDS.ledBlue);
+    }
     ejectOut.set(eject);
     ejectIn.set(!eject);
   }
@@ -47,6 +53,11 @@ public class Claw extends Subsystem {
  * @param out Pushes out the claw if true
  */
   public void controlClaw(boolean out) {
+    if(out) {
+      Robot.LEDS.setLEDs(Robot.LEDS.ledRed);
+    } else {
+      Robot.LEDS.setLEDs(Robot.LEDS.ledGreen);
+    }
     clawIn.set(out);
     clawOut.set(!out);
   }
