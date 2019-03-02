@@ -14,6 +14,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.robot.RobotMap;
 import frc.robot.commands.*;
+import frc.robot.calibrations.K_Arm;
 
 /**
  * Add your docs here.
@@ -23,13 +24,14 @@ public class Arm extends Subsystem {
   // here. Call these from Commands.
 
   WPI_TalonSRX Lift = new WPI_TalonSRX(RobotMap.LiftMotorAddress);
-  WPI_TalonSRX BallIntake = new WPI_TalonSRX(RobotMap.BallIntakeAddress);
-  final static public int[] ARMLEVELS = {0, 24312, 114800, 173133, 185000, 197000, 254185, 312056, 402000};
-  final static private int[] BALLLEVELS = {0, 2, 3, 5, 6, ARMLEVELS.length-1}; //{0, 114800, 173150, 197000, 254185, 402000};
-  final static private int[] PANELLEVELS = {1, 4, 7};
+  /************************************************
+   * Section depreciated of ARMLEVELS, use K_Arm.ARM_POS_LEVEL to replace this variable
+   * Reason for this is to provide a better model for how 
+  */
   private int setPoint = 0;
   public int ballPoint = 0;
   public int panelPoint = 0;
+  public boolean AUTOMATIC_ACTIVE = false;
   
 
   public Arm() {
@@ -40,7 +42,7 @@ public class Arm extends Subsystem {
     Lift.config_kP(0, 0.13);
     Lift.config_kI(0, 0.0001);
     Lift.config_kD(0, 0.0);
-    Lift.configForwardSoftLimitThreshold(ARMLEVELS[ARMLEVELS.length-1]);
+    Lift.configForwardSoftLimitThreshold(K_Arm.ARM_POS_DATA[K_Arm.MAX_ARM_POSITION].location); //ARMLEVELS[ARMLEVELS.length-1]);
     Lift.configForwardSoftLimitEnable(true);
   }
 
@@ -48,14 +50,14 @@ public class Arm extends Subsystem {
    * @return the balllevels
    */
   public static int getBalllevels(int level) {
-    return BALLLEVELS[level];
+    return K_Arm.BALL_POSITIONS[level];
   }
 
   /**
    * @return the panellevels
    */
   public static int getPanellevels(int level) {
-    return PANELLEVELS[level];
+    return K_Arm.PANEL_POSITIONS[level];
   }
 
   /**
@@ -78,10 +80,6 @@ public class Arm extends Subsystem {
 
   public int liftRawVelocity(){
     return Lift.getSelectedSensorVelocity();
-  }
-
-  public void intakePower(double Power){
-    BallIntake.set(ControlMode.PercentOutput, Power);
   }
 
   public void LiftByVoltage(double Power){

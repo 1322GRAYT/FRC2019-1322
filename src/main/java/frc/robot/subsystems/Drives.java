@@ -2,12 +2,9 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
-import com.ctre.phoenix.motorcontrol.can.TalonSRXPIDSetConfiguration;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
-
 import frc.robot.commands.*;
 import frc.robot.models.EncoderConversions;
-import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.robot.RobotMap;
 
@@ -21,7 +18,7 @@ public class Drives extends Subsystem {
       new WPI_TalonSRX(RobotMap.EncoderDriveAddresses[1]), new WPI_TalonSRX(RobotMap.EncoderDriveAddresses[2]),
       new WPI_TalonSRX(RobotMap.EncoderDriveAddresses[3]) };
 
-  WPI_TalonSRX[] FolowerDrives = { new WPI_TalonSRX(RobotMap.FollowerDriveAddresses[0]),
+  WPI_TalonSRX[] FollowerDrives = { new WPI_TalonSRX(RobotMap.FollowerDriveAddresses[0]),
       new WPI_TalonSRX(RobotMap.FollowerDriveAddresses[1]), new WPI_TalonSRX(RobotMap.FollowerDriveAddresses[2]),
       new WPI_TalonSRX(RobotMap.FollowerDriveAddresses[3]) };
 
@@ -41,21 +38,21 @@ public class Drives extends Subsystem {
     for (var i = 0; i < EncoderedDrives.length; i++) {
       EncoderedDrives[i].configFactoryDefault();
       EncoderedDrives[i].configMotionCruiseVelocity(9000);
-      EncoderedDrives[i].configMotionAcceleration(9000);
+      EncoderedDrives[i].configMotionAcceleration(13000);
       EncoderedDrives[i].configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
       EncoderedDrives[i].config_kF(0, 0.073);
       EncoderedDrives[i].config_kP(0, 0.2);
       EncoderedDrives[i].config_kI(0, 0.00007);
       EncoderedDrives[i].config_kD(0, 0.0013);
       EncoderedDrives[i].setInverted(dInv[i]);
-      FolowerDrives[i].setInverted(dInv[i]);
+      FollowerDrives[i].setInverted(dInv[i]);
       EncoderedDrives[i].setSensorPhase(sInv[i]);
     }
   }
 
   private void setFollowers() {
     for (var i = 0; i < EncoderedDrives.length; i++) {
-      FolowerDrives[i].set(ControlMode.Follower, EncoderedDrives[i].getDeviceID());
+      FollowerDrives[i].set(ControlMode.Follower, EncoderedDrives[i].getDeviceID());
     }
   }
 
