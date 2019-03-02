@@ -36,6 +36,8 @@ public class Claw extends Subsystem {
     clawDis = new DigitalInput(RobotMap.ClawSensor);
     diskPress = new DigitalInput(RobotMap.DiskSensor);
     BallIntake = new WPI_TalonSRX(RobotMap.BallIntakeAddress);
+    clawIn.set(false);
+    clawOut.set(true);
     
     
   }
