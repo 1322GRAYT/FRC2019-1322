@@ -45,12 +45,15 @@ public class Vision extends Subsystem {
 
 
   /* Matricies for Object Dimensions and Images */
-  private MatOfPoint3f VmVSN_l_RefObj = new MatOfPoint3f();
+  private MatOfPoint3f VmVSN_l_RefObj   = new MatOfPoint3f();
   private MatOfPoint2f VmVSN_Pxl_RefImg = new MatOfPoint2f();
-  private MatOfPoint3f VmVSN_Pxl_Cam = new MatOfPoint3f();
+  private MatOfPoint3f VmVSN_Pxl_Cam    = new MatOfPoint3f();
   private MatOfDouble VmVSN_k_DistCoeff = new MatOfDouble();
-  private Mat VmVSM_k_Rot = new Mat(3,3,CvType.CV_64F);
-  private Mat VmVSM_k_TransVec = new Mat(3,1,CvType.CV_64F);
+  private Mat VmVSM_k_RotVect   = new Mat(3,1,CvType.CV_64F);
+  private Mat VmVSM_k_TransVect = new Mat(3,1,CvType.CV_64F);
+  private Mat VmVSM_k_Rot       = new Mat(3,3,CvType.CV_64F);
+  private Mat VmVSM_k_RotInv    = new Mat(3,3,CvType.CV_64F);
+  private Mat VmVSM_k_ImgPlaneZeroWorld = new Mat(3,3,CvType.CV_64F);
 
 
   /* Arrays of the Matrix Data for viewing via Instrumentation */
@@ -80,8 +83,11 @@ public class Vision extends Subsystem {
       calcVSN_CamFocalPt();
       calcVSN_CamMat();
       VmVSN_k_DistCoeff.zeros(4,1,CvType.CV_64F);
+      VmVSM_k_RotVect.zeros(3,1,CvType.CV_64F);
+      VmVSM_k_TransVect.zeros(3,1,CvType.CV_64F);
       VmVSM_k_Rot.zeros(3,3,CvType.CV_64F);
-      VmVSM_k_TransVec.zeros(3,1,CvType.CV_64F);
+      VmVSM_k_RotInv.zeros(3,3,CvType.CV_64F);
+      VmVSM_k_ImgPlaneZeroWorld.zeros(3,3,CvType.CV_64F);
       }
 
 
@@ -108,26 +114,38 @@ public class Vision extends Subsystem {
     */
     private void calcVSN_TgtData() {
       boolean Err_PnP;
-      double x[];
-      double z[];
+      double x[], z[];
+      double NegOne = 2.0;
+      Mat LmVSM_k_ZerosVect = new Mat(3,1,CvType.CV_64F);
+      Mat LmVSM_k_TransVectNeg = new Mat(1,3,CvType.CV_64F);
+
 
       /* Calculate the Rotation Matrix and Translation Vector */
       Err_PnP = Calib3d.solvePnP(VmVSN_l_RefObj, VmVSN_Pxl_RefImg, VmVSN_Pxl_Cam,
-                                 VmVSN_k_DistCoeff, VmVSM_k_Rot, VmVSM_k_TransVec);
+                                 VmVSN_k_DistCoeff, VmVSM_k_RotVect, VmVSM_k_TransVect);
   
       if (Err_PnP == false)
         {
-        x = VmVSM_k_TransVec.get(Xcell,0);
-        z = VmVSM_k_TransVec.get(Zcell,0);
-
+        /* Calculate Distance between Target and Camera/Robot */
+        x = VmVSM_k_TransVect.get(Xcell,0);
+        z = VmVSM_k_TransVect.get(Zcell,0);
         VeVSN_l_Cam2Tgt = Math.sqrt(Math.pow(x[0],2) + Math.pow(z[0],2));
         VeVSN_l_Rbt2Tgt = VeVSN_l_Cam2Tgt - 0; // todo: Subtract Robot Front to Cam Distance
-        
+
+
+        /* Calculate horiz angle from robot/camera forward and the robot-target line */
         VeVSN_deg_Rbt2Tgt = Math.atan2(x[0], z[0]);
 
-        //VeVSN_deg_RbtRot = ;
-        /* todo: To Be Continued - VeVSN_deg_RbtRot */
-
+        
+        /* Calculate horiz angle between the target perpendicular and the robot-target line */
+        Calib3d.Rodrigues(VmVSM_k_RotVect, VmVSM_k_Rot);
+        Core.transpose(VmVSM_k_Rot,VmVSM_k_RotInv);
+        LmVSM_k_ZerosVect.zeros(3,1,CvType.CV_64F);
+        Core.scaleAdd(VmVSM_k_TransVect, -1.0, LmVSM_k_ZerosVect, LmVSM_k_TransVectNeg);
+        Core.multiply(VmVSM_k_RotInv, LmVSM_k_TransVectNeg, VmVSM_k_ImgPlaneZeroWorld);
+        x = VmVSM_k_ImgPlaneZeroWorld.get(0,0);
+        z = VmVSM_k_ImgPlaneZeroWorld.get(2,0);
+        VeVSN_deg_RbtRot = Math.atan2(x[0], z[0]);
         }
       else /* (Err_PnP == true) */
         {
