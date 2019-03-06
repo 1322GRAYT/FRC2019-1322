@@ -43,8 +43,11 @@ public class Vision extends Subsystem {
   private static final int TopRt = 3;  // Top Right Cell for array Indexing;
   private static final int NumPts = 4; // Total Number of Data Points;
 
-
+  /**********************************************/
   /* Matricies for Object Dimensions and Images */
+  /**********************************************/
+
+  /* */
   private MatOfPoint3f VmVSN_l_RefObj   = new MatOfPoint3f();
   private MatOfPoint2f VmVSN_Pxl_RefImg = new MatOfPoint2f();
   private MatOfPoint3f VmVSN_Pxl_Cam    = new MatOfPoint3f();
@@ -52,7 +55,6 @@ public class Vision extends Subsystem {
   private Mat VmVSM_k_RotVect   = new Mat(3,1,CvType.CV_64F);
   private Mat VmVSM_k_TransVect = new Mat(3,1,CvType.CV_64F);
   private Mat VmVSM_k_Rot       = new Mat(3,3,CvType.CV_64F);
-  private Mat VmVSM_k_RotInv    = new Mat(3,3,CvType.CV_64F);
   private Mat VmVSM_k_ImgPlaneZeroWorld = new Mat(3,3,CvType.CV_64F);
 
 
@@ -83,12 +85,22 @@ public class Vision extends Subsystem {
       calcVSN_CamFocalPt();
       calcVSN_CamMat();
       VmVSN_k_DistCoeff.zeros(4,1,CvType.CV_64F);
+      RstVSN_CamMats();
+      }
+
+
+
+   /**
+    * Method: RstVSN_CamMats - Resets the persistent Camera Matricies
+      by loading them as zero matricies..
+    */
+    public void RstVSN_CamMats() {
       VmVSM_k_RotVect.zeros(3,1,CvType.CV_64F);
       VmVSM_k_TransVect.zeros(3,1,CvType.CV_64F);
       VmVSM_k_Rot.zeros(3,3,CvType.CV_64F);
-      VmVSM_k_RotInv.zeros(3,3,CvType.CV_64F);
       VmVSM_k_ImgPlaneZeroWorld.zeros(3,3,CvType.CV_64F);
       }
+
 
 
    /**
@@ -96,6 +108,7 @@ public class Vision extends Subsystem {
     * of the vision target in pixels, i.e. the length of all the sides.
     */
     public void MngVSN_CamImgProc() {
+      parseVSN_CamImgData();
       calcVSN_CamTgtImgGeometry();
       calcVSN_TgtDist();
       calcVSN_TgtData();
@@ -106,19 +119,36 @@ public class Vision extends Subsystem {
   /*******************************/
   /* Internal Class Methods      */
   /*******************************/   
-  
+
+   /**
+    * Method: parseVSN_CamImgData - Update the Raw Image Data from
+    * the Camera and loading it into the proper arrays for Target
+    * Distance and Angle processing.  Receives the data from the
+    * Network Tables that have been transmitted from the Rpi Controller.
+    */
+    private void parseVSN_CamImgData() {
+      int i;
+
+      // todo - waiting on Network Table format info from Soren.
+      for (i=0;i<NumPts;i++) {
+        VaVSN_Pxl_CamImgCoord[i][Xcell] = 0;
+        VaVSN_Pxl_CamImgCoord[i][Ycell] = 0;
+        }
+      }
+
+
    /**
     * Method: calcVSN_TgtData - Calculate the target image pose
     * data, i.e. Target to Camera distance, Camera to Target Angle,
     * and Robot Rotation Angle wrt the Target.
+    *  @return:  Indication that the PnP Calculation is has failed.
     */
-    private void calcVSN_TgtData() {
+    private boolean calcVSN_TgtData() {
       boolean Err_PnP;
       double x[], z[];
-      double NegOne = 2.0;
-      Mat LmVSM_k_ZerosVect = new Mat(3,1,CvType.CV_64F);
+      Mat LmVSM_k_RotInv       = new Mat(3,3,CvType.CV_64F);
       Mat LmVSM_k_TransVectNeg = new Mat(1,3,CvType.CV_64F);
-
+      Mat LmVSM_k_ZerosVect    = new Mat(3,1,CvType.CV_64F);
 
       /* Calculate the Rotation Matrix and Translation Vector */
       Err_PnP = Calib3d.solvePnP(VmVSN_l_RefObj, VmVSN_Pxl_RefImg, VmVSN_Pxl_Cam,
@@ -133,24 +163,36 @@ public class Vision extends Subsystem {
         VeVSN_l_Rbt2Tgt = VeVSN_l_Cam2Tgt - 0; // todo: Subtract Robot Front to Cam Distance
 
 
-        /* Calculate horiz angle from robot/camera forward and the robot-target line */
+        /* Angle1: Calculate horiz angle from robot/camera forward and the robot-target line */
         VeVSN_deg_Rbt2Tgt = Math.atan2(x[0], z[0]);
 
         
-        /* Calculate horiz angle between the target perpendicular and the robot-target line */
-        Calib3d.Rodrigues(VmVSM_k_RotVect, VmVSM_k_Rot);
-        Core.transpose(VmVSM_k_Rot,VmVSM_k_RotInv);
+        /* Initialize Local Matricies for prior to Angle2 calculation */
+        LmVSM_k_RotInv.zeros(3,3,CvType.CV_64F);
+        LmVSM_k_TransVectNeg.zeros(1,3,CvType.CV_64F);
         LmVSM_k_ZerosVect.zeros(3,1,CvType.CV_64F);
+
+        /* Angle2: Calculate horiz angle between the target perpendicular and the robot-target line */
+        Calib3d.Rodrigues(VmVSM_k_RotVect, VmVSM_k_Rot);
+        Core.transpose(VmVSM_k_Rot,LmVSM_k_RotInv);
         Core.scaleAdd(VmVSM_k_TransVect, -1.0, LmVSM_k_ZerosVect, LmVSM_k_TransVectNeg);
-        Core.multiply(VmVSM_k_RotInv, LmVSM_k_TransVectNeg, VmVSM_k_ImgPlaneZeroWorld);
+        Core.multiply(LmVSM_k_RotInv, LmVSM_k_TransVectNeg, VmVSM_k_ImgPlaneZeroWorld);
         x = VmVSM_k_ImgPlaneZeroWorld.get(0,0);
         z = VmVSM_k_ImgPlaneZeroWorld.get(2,0);
         VeVSN_deg_RbtRot = Math.atan2(x[0], z[0]);
         }
       else /* (Err_PnP == true) */
         {
-        /* todo: Take Action for failure to calculate Target Pose Data */
+        /* Failed to calculated proper PnP values - Clear out Peristant Matrices and Variables */
+        RstVSN_CamMats();
         }
+
+      /* free-up memory from the locally martricies */
+      LmVSM_k_RotInv.release();
+      LmVSM_k_TransVectNeg.release();
+      LmVSM_k_ZerosVect.release();
+
+      return(Err_PnP);
       }
 
 
