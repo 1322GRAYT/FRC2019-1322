@@ -12,50 +12,81 @@ package frc.robot.calibrations;
  */
 public class K_Vision {
 
+
+    /**************************************************/
+	/*  Camera Image Resolution Settings              */
+	/**************************************************/	 	
+	
+	/** KaVSN_Pxl_CamDim: Dimensions of the Camera Image in Pixels
+     * (X-Dim,Y-Dim). */
+    public static final int KaVSN_Pxl_CamDim[] = {640, 480};
+
+
+    /**************************************************/
+	/*  Target Reference Pixel Coordinates            */
+	/**************************************************/	 	
+	
+	/** KaVSN_Pxl_RefImgCoordTopLt: Coordinates of the reference target
+     * image camera for the Top Left image point in Pixel Coordinates
+     * (X,Y). */
+    public static final int KaVSN_Pxl_RefImgCoordTopLt[] = {120, 80};
+
+    /** KaVSN_Pxl_RefImgCoordTopRt: Coordinates of the reference target
+     * image camera for the Top Right image point in Pixel Coordinates
+     * (X,Y). */
+    public static final int KaVSN_Pxl_RefImgCoordTopRt[] =  {300, 80};
+
+	/** KaVSN_Pxl_RefImgCoordTopLt: Coordinates of the reference target
+     * image camera for the Bottom Left image point in Pixel Coordinates
+     * (X,Y). */
+    public static final int KaVSN_Pxl_RefImgCoordBtmLt[] =  {100, 100};
+
+	/** KaVSN_Pxl_RefImgCoordTopLt: Coordinates of the reference target
+     * image camera for the Bottom Right image point in Pixel Coordinates
+     * (X,Y). */
+    public static final int KaVSN_Pxl_RefImgCoordBtmRt[] =  {320, 100};
+
+
     /**************************************************/
 	/*  Target Reference Pixel Measurements           */
 	/**************************************************/	 	
 	
-	/** KVSN_Cnt_PxlTgtTop: Width of the top of the target image in
+	/** KeVSN_Cnt_PxlTgtTop: Width of the top of the target image in
      * camera pixels at the camera calibration reference distance. */
-    public static final int KVSN_Cnt_PxlTgtTop = 70;  // pixels
+    public static final int KeVSN_Cnt_PxlTgtTop = 70;  // pixels
 
-  	/** KVSN_Cnt_PxlTgtBtm: Width of the bottom of the target image in
+  	/** KeVSN_Cnt_PxlTgtBtm: Width of the bottom of the target image in
      * camera pixels at the camera calibration reference distance. */
-    public static final int KVSN_Cnt_PxlTgtBtm = 50; // pixels
+    public static final int KeVSN_Cnt_PxlTgtBtm = 50; // pixels
 
-	/** KVSN_Cnt_PxlTgtLt: Length of the left side of the target image in
+	/** KeVSN_Cnt_PxlTgtLt: Length of the left side of the target image in
      * camera pixels at the camera calibration reference distance. */
-    public static final int KVSN_Cnt_PxlTgtLt = 40; // pixels
+    public static final int KeVSN_Cnt_PxlTgtLt = 40; // pixels
 
-  	/** KVSN_Cnt_PxlTgtRt: Length of the left side of the target image in
+  	/** KeVSN_Cnt_PxlTgtRt: Length of the left side of the target image in
      * camera pixels at the camera calibration reference distance. */
-    public static final int KVSN_Cnt_PxlTgtRt = 40; // pixels
+    public static final int KeVSN_Cnt_PxlTgtRt = 40; // pixels
 
 
     /**************************************************/
 	/*  Target Reference Physical Measurements        */
 	/**************************************************/	 	
 	
-	/** KVSN_l_RefTgtTop: Width of the top of the target image in
+	/** KeVSN_l_RefTgtTop: Width of the top of the target image in
      * measured inches. */
-    public static final double KVSN_l_RefTgtTop = 14.75;  // inches
+    public static final double KeVSN_l_RefTgtTop = 12.0;  // inches
 
-  	/** KVSN_l_RefTgtBtm: Width of the bottom of the target image in
+  	/** KeVSN_l_RefTgtBtm: Width of the bottom of the target image in
      * measured inches. */
-    public static final double KVSN_l_RefTgtBtm = 10.875; // inches
+    public static final double KeVSN_l_RefTgtBtm = 14.1875; // inches
 
-	/** KVSN_l_RefTgtLt: Length of the left side of the target image in
-     * camera pixels at the camera calibration reference distance. */
-    public static final double KVSN_l_RefTgtLt = 5.5; // inches
+	/** KeVSN_l_RefTgtLt: Length of the equal left and right sides of
+     * the target image in measured inches. */
+    public static final double KeVSN_l_RefTgtSides = 5.5; // inches
 
-  	/** KVSN_l_RefTgtRt: Length of the left side of the target image in
-     * camera pixels at the camera calibration reference distance. */
-    public static final double KVSN_l_RefTgtRt = 5.5; // inches
-
- 	/** KVSN_l_RefTgtToCamDist: Length of 
-      * the left side of the target image in
-     * camera pixels at the camera calibration reference distance. */
-    public static final double KVSN_l_RefTgtToCamDist = 100; // inches
-
+ 	/** KeVSN_l_RefTgtToCamDist: Length of the distance between the
+     * target and the camera at the camera calibration reference
+     * distance in measured inches. */
+    public static final double KeVSN_l_RefTgtToCamDist = 100; // inches
+    
 }
