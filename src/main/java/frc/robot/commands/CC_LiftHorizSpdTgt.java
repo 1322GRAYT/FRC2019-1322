@@ -26,7 +26,6 @@ public class CC_LiftHorizSpdTgt extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    System.out.println(Robot.SCISSOR.getFloorSensor());
     if(!Robot.SCISSOR.getFloorSensor() && speed < 0) {
       Robot.SCISSOR.liftRobotPnumatic(false);
     }
