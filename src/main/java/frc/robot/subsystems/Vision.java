@@ -31,6 +31,18 @@ public class Vision extends Subsystem {
   private double VeVSN_deg_Rbt2Tgt;
   private double VeVSN_deg_RbtRot;
 
+  private double LL_TgtVld;        // Valid Target Acquired
+  private double LL_TgtAngX;       // Horizontal Offset from CrossHair to Target (-27 to 27 Degrees)
+  private double LL_TgtAngY;       // Vertical Offset from CrossHair to Target (-20.5 degrees to 20.5 degrees)
+  private double LL_TgtArea;       // Target Area (0% of image to 100% of image)
+  private double LL_TgtSkew;       // Target Skew or Rotation
+  private double LL_TgtSideShort;  // Sidelength of shortest side of the fitted bounding box (pixels)  
+  private double LL_TgtSideLong;   // Sidelength of longest side of the fitted bounding box (pixels)
+  private double LL_TgtLngthHort;  // Horizontal sidelength of the rough bounding box (0 - 320 pixels)
+  private double LL_TgtLngthVert;  // Vertical sidelength of the rough bounding box (0 - 320 pixels)
+  private double LL_TgtCornX[] = new double[4];  // Target Corner Coord-X: RH, RL, LL, LH
+  private double LL_TgtCornY[] = new double[4];  // Target Corner Coord-Y: RH, RL, LL, LH
+
 
   /* Arrays for building Matricies for Vision Pose Calculations */
   private static final int Xcell = 0; // X-Cell for array Indexing;
@@ -120,11 +132,41 @@ public class Vision extends Subsystem {
   /* Internal Class Methods      */
   /*******************************/   
 
+
+ /**
+    * Method: captureVSN_CamImgData - Capture the Raw Image Data from
+    * the Camera.  Receives the data from the
+    * Network Tables that have been transmitted from the Rpi Controller.
+    */
+    private boolean captureVSN_CamImgData() {
+      boolean LeVSN_b_TgtAcqVld = false;
+
+      //read values periodically
+      LL_TgtVld  = tv.getDouble(0.0);
+      if (LL_TgtVld == 1.0)
+        {
+        LeVSN_b_TgtAcqVld = true;   
+        LL_TgtAngX = tx.getDouble(0.0);
+        LL_TgtAngY = ty.getDouble(0.0);
+        LL_TgtArea = ta.getDouble(0.0);
+        LL_TgtSkew = ts.getDouble(0.0);
+        LL_TgtSideShort = tshort.getDouble(0.0);
+        LL_TgtSideLong  = tlong.getDouble(0.0);
+        LL_TgtLngthHort = thor.getDouble(0.0);
+        LL_TgtLngthVert = tvert.getDouble(0.0);
+        LL_TgtCornX[]   = tcornx.getDoubleArray(0.0);
+        LL_TgtCornY[]   = tcorny.getDoubleArray(0.0);    
+        }
+
+      return(LeVSN_b_TgtAcqVld);
+      }
+
+
+
    /**
     * Method: parseVSN_CamImgData - Update the Raw Image Data from
     * the Camera and loading it into the proper arrays for Target
-    * Distance and Angle processing.  Receives the data from the
-    * Network Tables that have been transmitted from the Rpi Controller.
+    * Distance and Angle processing.
     */
     private void parseVSN_CamImgData() {
       int i;
@@ -135,6 +177,7 @@ public class Vision extends Subsystem {
         VaVSN_Pxl_CamImgCoord[i][Ycell] = 0;
         }
       }
+
 
 
    /**

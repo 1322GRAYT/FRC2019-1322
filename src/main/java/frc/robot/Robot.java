@@ -10,6 +10,9 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.Vision;
@@ -40,8 +43,23 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
+    NetworkTableInstance NetTbl = NetworkTableInstance.getDefault();
+    NetworkTable LimeLightTbl = NetworkTableInstance.getDefault().getTable("limelight");
+    NetworkTableEntry tv = LimeLightTbl.getEntry("tv");
+    NetworkTableEntry tx = LimeLightTbl.getEntry("tx");
+    NetworkTableEntry ty = LimeLightTbl.getEntry("ty");
+    NetworkTableEntry ta = LimeLightTbl.getEntry("ta");
+    NetworkTableEntry ts = LimeLightTbl.getEntry("ts");
+    NetworkTableEntry tshort = LimeLightTbl.getEntry("tshort");
+    NetworkTableEntry tlong  = LimeLightTbl.getEntry("tlong");
+    NetworkTableEntry thor   = LimeLightTbl.getEntry("thor");
+    NetworkTableEntry tvert  = LimeLightTbl.getEntry("tvert");
+    NetworkTableEntry tcornx = LimeLightTbl.getEntry("tcornx");
+    NetworkTableEntry tcorny = LimeLightTbl.getEntry("tcorny");
+ 
+    VISION.MngVSN_InitCamCalibr();
+  
     m_oi = new OI();
-
   }
 
   /**
@@ -54,6 +72,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
+  
   }
 
   /**
@@ -83,8 +102,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
-    VISION.MngVSN_InitCamCalibr();
-
+ 
     m_autonomousCommand = m_chooser.getSelected();
 
     /*
