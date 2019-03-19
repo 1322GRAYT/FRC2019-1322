@@ -12,6 +12,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.Relay;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.robot.Robot;
@@ -26,6 +27,7 @@ public class Claw extends Subsystem {
   private Compressor comp;
   private DigitalInput clawDis, diskPress;
   WPI_TalonSRX BallIntake;
+  private Relay testBotCompressor;
 
   public Claw() { 
     comp = new Compressor(0);
@@ -40,6 +42,9 @@ public class Claw extends Subsystem {
     clawIn.set(false);
     clawOut.set(true);
     
+    if(!Robot.CompBot) {
+      testBotCompressor = new Relay(1); //Look, I know this should be in the robot map
+    }
     
   }
 
@@ -85,6 +90,14 @@ public class Claw extends Subsystem {
 
   public void intakePower(double Power){
     BallIntake.set(ControlMode.PercentOutput, Power);
+  }
+
+  public boolean getPressureSwitch() {
+    return comp.getPressureSwitchValue();
+  }
+
+  public void controlCompressor(boolean enable) {
+    testBotCompressor.set((enable) ? Relay.Value.kForward : Relay.Value.kOff);
   }
 
   @Override

@@ -23,12 +23,20 @@ public class CC_ClawAutoGrab extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    if(!Robot.CLAW.getClaw()) {
+    if(!Robot.CLAW.getClaw() && Robot.CompBot) {
       Robot.CLAW.controlClaw(false);
     }
 
     if(!Robot.CLAW.getDisk() && !Robot.m_oi.AuxStick.bButton.get()) {
       Robot.CLAW.diskGrabber(false);
+    }
+
+    if(!Robot.CompBot) {
+      if(Robot.CLAW.getPressureSwitch()) {
+        Robot.CLAW.controlCompressor(false);
+      } else {
+        Robot.CLAW.controlCompressor(true);
+      }
     }
   }
 

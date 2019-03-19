@@ -27,6 +27,8 @@ import frc.robot.subsystems.Vision;
 public class Robot extends TimedRobot {
   public static OI m_oi;
 
+  public final static boolean CompBot = false;
+  
   public final static Drives          DRIVES  = new Drives();
   public final static Claw            CLAW    = new Claw();
   public final static LEDController   LEDS    = new LEDController();
