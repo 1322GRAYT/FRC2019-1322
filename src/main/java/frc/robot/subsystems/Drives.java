@@ -4,7 +4,6 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import frc.robot.commands.*;
-import frc.robot.models.EncoderConversions;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.robot.RobotMap;
 
@@ -23,16 +22,6 @@ public class Drives extends Subsystem {
       new WPI_TalonSRX(RobotMap.FollowerDriveAddresses[3]) };
 
   public Drives() {
-    setFollowers();
-    talonSettings();
-  }
-
-  /********************************************
-   * Drive Settings
-   */
-
-  private void talonSettings() {
-
     final boolean[] dInv = {true, true, true, true}; // use this to invert the drives safely
     final boolean[] sInv = {false, true, false, true}; // use this to invert the sensors safely
     for (var i = 0; i < EncoderedDrives.length; i++) {
@@ -45,14 +34,9 @@ public class Drives extends Subsystem {
       EncoderedDrives[i].config_kI(0, 0.00007);
       EncoderedDrives[i].config_kD(0, 0.0013);
       EncoderedDrives[i].setInverted(dInv[i]);
+      FollowerDrives[i].set(ControlMode.Follower, EncoderedDrives[i].getDeviceID());
       FollowerDrives[i].setInverted(dInv[i]);
       EncoderedDrives[i].setSensorPhase(sInv[i]);
-    }
-  }
-
-  private void setFollowers() {
-    for (var i = 0; i < EncoderedDrives.length; i++) {
-      FollowerDrives[i].set(ControlMode.Follower, EncoderedDrives[i].getDeviceID());
     }
   }
 
@@ -83,14 +67,6 @@ public class Drives extends Subsystem {
     return Positions;
   }
 
-  public int[] rawiPosition() {
-    var Positions = new int[EncoderedDrives.length];
-    for (int i = 0; i < EncoderedDrives.length; i++) {
-      Positions[i] = EncoderedDrives[i].getSelectedSensorPosition();
-    }
-    return Positions;
-  }
-
   public void resetPosition() {
     for (int i = 0; i < EncoderedDrives.length; i++) {
       EncoderedDrives[i].setSelectedSensorPosition(0);
@@ -99,11 +75,7 @@ public class Drives extends Subsystem {
 
   /****************************************************************
    * Drive Functions
-   * 
-   * 
    * Includes all functions required to drive the robot
-   * 
-   * 
    */
   public void DriveInVoltage(double F, double L, double R) {
     var y = deadzone(F);
@@ -148,23 +120,8 @@ public class Drives extends Subsystem {
    */
 
   public void MMControl(int[] Distance) {
-
     for (var i = 0; i < EncoderedDrives.length; i++) {
       EncoderedDrives[i].set(ControlMode.MotionMagic, Distance[i]);
-    }
-
-  }
-
-  public void MMControlTest(int Distance) {
-    EncoderedDrives[0].set(ControlMode.MotionMagic, Distance);
-    EncoderedDrives[1].set(ControlMode.MotionMagic, Distance);
-    EncoderedDrives[2].set(ControlMode.MotionMagic, Distance);
-    EncoderedDrives[3].set(ControlMode.MotionMagic, Distance);
-  }
-
-  public void MMControl(double Distance) {
-    for (var i = 0; i < EncoderedDrives.length; i++) {
-      EncoderedDrives[i].set(ControlMode.MotionMagic, EncoderConversions.inToTicks(Distance));
     }
   }
 
@@ -189,7 +146,6 @@ public class Drives extends Subsystem {
     for (int i = 0; i < EncoderedDrives.length; i++) {
       EncoderedDrives[i].setSafetyEnabled(set);
     }
-
   }
 
   @Override
