@@ -14,38 +14,32 @@ import frc.robot.calibrations.K_Arm;
 
 public class CC_ArmPstnPickupBall extends Command {
 
-  int setLevel = 0;
-
   public CC_ArmPstnPickupBall() {
-    // Use requires() here to declare subsystem dependencies
-    // eg. requires(chassis);
     requires(Robot.ARM);
-
   }
 
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-    Robot.ARM.setSetPoint(0);
-    
+    Robot.ARM.resetToFloorCargoPickup();
+    SmartDashboard.putString("Arm Level",
+        Robot.ARM.getCurrenPositionData().name + " " + Robot.ARM.getCurrenPositionData().type);
+
     Robot.ARM.armSafety(false);
-    setLevel = K_Arm.ARM_POS_DATA[Robot.ARM.getSetPoint()].location;
-    Robot.ARM.MMArm(setLevel);
+    Robot.ARM.MMArm(Robot.ARM.getCurrenPositionData().location);
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    toSDBoard("Arm Data", Robot.ARM.liftRawPosition(), Robot.ARM.liftRawVelocity(), setLevel, Robot.ARM.armVoltage(),
-        Robot.ARM.armError());
-        SmartDashboard.putString("Arm Level", K_Arm.ARM_POS_DATA[Robot.ARM.getSetPoint()].name + " " + K_Arm.ARM_POS_DATA[Robot.ARM.getSetPoint()].type);
-
+    toSDBoard("Arm Data", Robot.ARM.liftRawPosition(), Robot.ARM.liftRawVelocity(),
+        Robot.ARM.getCurrenPositionData().location, Robot.ARM.armVoltage(), Robot.ARM.armError());
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return Math.abs(Robot.ARM.liftRawPosition() - setLevel) < K_Arm.TOLERANCE;
+    return Math.abs(Robot.ARM.liftRawPosition() - Robot.ARM.getCurrenPositionData().location) < K_Arm.TOLERANCE;
   }
 
   // Called once after isFinished returns true

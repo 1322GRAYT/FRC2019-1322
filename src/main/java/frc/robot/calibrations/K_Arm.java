@@ -7,6 +7,10 @@
 
 package frc.robot.calibrations;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import frc.robot.models.PositionData;
 
 /**
@@ -19,8 +23,7 @@ public class K_Arm {
 	/********************************************/	 	
     // As a list, this is complicated to use but most precice
     // The idea is to use this as a stream and filter its use.
-    /*
-    public static List<PositionData> L_ARM_POS_DATA = Arrays.asList(
+    public static final List<PositionData> ALL_POS_DATA = Arrays.asList(
         new PositionData(0, "Floor Pickup", "Ball"),
         new PositionData(24312, "Rocket Level 1", "Panel"),
         new PositionData(114800, "Rocket Level 1", "Ball"),
@@ -31,7 +34,10 @@ public class K_Arm {
         new PositionData(312056, "Rocket Level 3", "Panel"),
         new PositionData(402000, "Rocket Level 3", "Ball")
     );
-    int[] test = L_ARM_POS_DATA.stream().filter(p -> p.name == "Ball" || p.name == "Both"). */
+
+    public static final List<PositionData> BALL_POS_DATA = ALL_POS_DATA.stream().filter(p -> p.type == "Ball" || p.type == "Both").collect(Collectors.toList());
+    public static final List<PositionData> PANEL_POS_DATA = ALL_POS_DATA.stream().filter(p -> p.type == "Panel" || p.type == "Both").collect(Collectors.toList());
+    
 
     public final static PositionData[] ARM_POS_DATA = {
         new PositionData(0, "Floor Pickup", "Ball"),
