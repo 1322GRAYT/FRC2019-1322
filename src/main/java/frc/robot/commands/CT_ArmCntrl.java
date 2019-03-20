@@ -15,8 +15,6 @@ import frc.robot.calibrations.K_Arm;
 public class CT_ArmCntrl extends Command {
 
   public CT_ArmCntrl() {
-    // Use requires() here to declare subsystem dependencies
-    // eg. requires(chassis);
     requires(Robot.ARM);
   }
 
@@ -37,9 +35,9 @@ public class CT_ArmCntrl extends Command {
       Robot.CLAW.intakePower(Robot.m_oi.AuxStick.getRightStickY());
     }
 
-
     SmartDashboard.putNumber("ArmLevel", Robot.ARM.liftRawPosition());
-    SmartDashboard.putString("Arm Level", K_Arm.ARM_POS_DATA[Robot.ARM.getSetPoint()].name + " " + K_Arm.ARM_POS_DATA[Robot.ARM.getSetPoint()].type);
+    SmartDashboard.putString("Arm Level",
+        Robot.ARM.getCurrenPositionData().name + " " + Robot.ARM.getCurrenPositionData().type);
 
     toSDBoard("Arm Data", Robot.ARM.liftRawPosition(), Robot.ARM.liftRawVelocity(), Robot.ARM.armVoltage());
   }
