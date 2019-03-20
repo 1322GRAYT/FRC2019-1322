@@ -9,6 +9,9 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
 import java.util.*;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import org.opencv.core.*;
 import org.opencv.calib3d.*;
 import frc.robot.calibrations.K_Vision;
@@ -19,6 +22,34 @@ import frc.robot.calibrations.K_Vision;
  * the Field Target Markings.
  */
 public class Vision extends Subsystem {
+
+    NetworkTableInstance NetTbl;
+    NetworkTable LimeLightTbl;
+    NetworkTableEntry tv;
+    NetworkTableEntry tx;
+    NetworkTableEntry ty;
+    NetworkTableEntry ta;
+    NetworkTableEntry ts;
+    NetworkTableEntry tshort;
+    NetworkTableEntry tlong;
+    NetworkTableEntry thor;
+    NetworkTableEntry tvert;
+    NetworkTableEntry tcornx;
+    NetworkTableEntry tcorny;
+
+    private double LL_TgtVld;        // Valid Target Acquired
+    private double LL_TgtAngX;       // Horizontal Offset from CrossHair to Target (-27 to 27 Degrees)
+    private double LL_TgtAngY;       // Vertical Offset from CrossHair to Target (-20.5 degrees to 20.5 degrees)
+    private double LL_TgtArea;       // Target Area (0% of image to 100% of image)
+    private double LL_TgtSkew;       // Target Skew or Rotation
+    private double LL_TgtSideShort;  // Sidelength of shortest side of the fitted bounding box (pixels)  
+    private double LL_TgtSideLong;   // Sidelength of longest side of the fitted bounding box (pixels)
+    private double LL_TgtLngthHort;  // Horizontal sidelength of the rough bounding box (0 - 320 pixels)
+    private double LL_TgtLngthVert;  // Vertical sidelength of the rough bounding box (0 - 320 pixels)
+    private double LL_TgtCornX[] = new double[4];  // Target Corner Coord-X: RH, RL, LL, LH
+    private double LL_TgtCornY[] = new double[4];  // Target Corner Coord-Y: RH, RL, LL, LH
+
+
   private int VeVSN_Pxl_ImgWidthBtm;
   private int VeVSN_Pxl_ImgWidthTop;
   private int VeVSN_Pxl_ImgHeightLt;
@@ -31,35 +62,23 @@ public class Vision extends Subsystem {
   private double VeVSN_deg_Rbt2Tgt;
   private double VeVSN_deg_RbtRot;
 
-  private double LL_TgtVld;        // Valid Target Acquired
-  private double LL_TgtAngX;       // Horizontal Offset from CrossHair to Target (-27 to 27 Degrees)
-  private double LL_TgtAngY;       // Vertical Offset from CrossHair to Target (-20.5 degrees to 20.5 degrees)
-  private double LL_TgtArea;       // Target Area (0% of image to 100% of image)
-  private double LL_TgtSkew;       // Target Skew or Rotation
-  private double LL_TgtSideShort;  // Sidelength of shortest side of the fitted bounding box (pixels)  
-  private double LL_TgtSideLong;   // Sidelength of longest side of the fitted bounding box (pixels)
-  private double LL_TgtLngthHort;  // Horizontal sidelength of the rough bounding box (0 - 320 pixels)
-  private double LL_TgtLngthVert;  // Vertical sidelength of the rough bounding box (0 - 320 pixels)
-  private double LL_TgtCornX[] = new double[4];  // Target Corner Coord-X: RH, RL, LL, LH
-  private double LL_TgtCornY[] = new double[4];  // Target Corner Coord-Y: RH, RL, LL, LH
-
 
   /* Arrays for building Matricies for Vision Pose Calculations */
-  private static final int Xcell = 0; // X-Cell for array Indexing;
-  private static final int Ycell = 1; // Y-Cell for array Indexing;
-  private static final int Zcell = 2; // Z-Cell for array Indexing;
+  private static final int Xcell  = 0; // X-Cell for array Indexing;
+  private static final int Ycell  = 1; // Y-Cell for array Indexing;
+  private static final int Zcell  = 2; // Z-Cell for array Indexing;
 
-  private static final int TopLt = 0;  // Top Left Cell for array Indexing;
-  private static final int BtmLt = 1;  // Bottom Left Cell for array Indexing;
-  private static final int BtmRt = 2;  // Bottom Right Cell for array Indexing;
-  private static final int TopRt = 3;  // Top Right Cell for array Indexing;
-  private static final int NumPts = 4; // Total Number of Data Points;
+  private static final int TopRt  = 0;  // Top Right Cell for array Indexing;
+  private static final int BtmRt  = 1;  // Bottom Right Cell for array Indexing;
+  private static final int BtmLt  = 2;  // Bottom Left Cell for array Indexing;
+  private static final int TopLt  = 3;  // Top Left Cell for array Indexing;
+  private static final int NumPts = 4;  // Total Number of Data Points;
 
   /**********************************************/
   /* Matricies for Object Dimensions and Images */
   /**********************************************/
 
-  /* */
+  /* Matricies of Camera and Image Data */
   private MatOfPoint3f VmVSN_l_RefObj   = new MatOfPoint3f();
   private MatOfPoint2f VmVSN_Pxl_RefImg = new MatOfPoint2f();
   private MatOfPoint3f VmVSN_Pxl_Cam    = new MatOfPoint3f();
@@ -69,7 +88,6 @@ public class Vision extends Subsystem {
   private Mat VmVSM_k_Rot       = new Mat(3,3,CvType.CV_64F);
   private Mat VmVSM_k_ImgPlaneZeroWorld = new Mat(3,3,CvType.CV_64F);
 
-
   /* Arrays of the Matrix Data for viewing via Instrumentation */
   private int VaVSN_Pxl_RefImgCoord[][] = new int[4][2];
   private double VaVSN_l_RefObjCoord[][] = new double[4][3];
@@ -78,10 +96,175 @@ public class Vision extends Subsystem {
 
 
 
+  /*******************************/
+  /* Public Class Interfaces     */
+  /*******************************/
+
+ /**
+   * Method: GetVSN_b_LL_TgtVld - Indication that Valid Target data has
+   * been acquired.
+   * @return: double - boolean (valid = true)
+   */
+  public double GetVSN_b_LL_TgtVld() {
+    return(LL_TgtVld);
+  }
+
+ /**
+   * Method: GetVSN_deg_LL_TgtAngX - Horizontal Offset from CrossHair to
+   * Target (-27 to 27 degrees).
+   * @return: double - degrees
+   */
+  public double GetVSN_deg_LL_TgtAngX() {
+    return(LL_TgtAngX);
+  }
+
+ /**
+   * Method: GetVSN_deg_LL_TgtAngY - Vertical Offset from CrossHair to
+   * Target (-20.5 to 20.5 degrees).
+   * @return: double - degrees
+   */
+  public double GetVSN_deg_LL_TgtAngY() {
+    return(LL_TgtAngY);
+  }
+
+ /**
+   * Method: GetVSN_Pct_LL_TgtArea - Target Area (0% of image to 100% of image).
+   * @return: double - percent
+   */
+  public double GetVSN_Pct_LL_TgtArea() {
+    return(LL_TgtArea);
+  }
+
+// Target Skew or Rotation
+  public double GetVSN_r_LL_TgtSkew() {
+    return(LL_TgtSkew);
+  }
+
+// Sidelength of shortest side of the fitted bounding box (pixels)  
+  public double GetVSN_Pxl_LL_TgtSideShort() {
+    return(LL_TgtSideShort);
+  }
+
+// Sidelength of longest side of the fitted bounding box (pixels)
+  public double GetVSN_Pxl_LL_TgtSideLong() {
+    return(LL_TgtSideLong);
+  }
+
+// Horizontal sidelength of the rough bounding box (0 - 320 pixels)
+  public double GetVSN_Pxl_LL_TgtLngthHort() {
+    return(LL_TgtLngthHort);
+  }
+
+// Vertical sidelength of the rough bounding box (0 - 320 pixels)
+  public double GetVSN_Pxl_LL_TgtLngthVert() {
+    return(LL_TgtLngthVert);
+  }
+
+// Target Corner Coord-X: RH, RL, LL, LH (0 - 320 pixels)
+  public double GetVSN_Pxl_LL_TgtCornX(int LeVSN_i_CellIdx) {
+    return(LL_TgtCornX[LeVSN_i_CellIdx]);
+  }
+
+// Target Corner Coord-Y: RH, RL, LL, LH (0 - 320 pixels)
+  public double GetVSN_Pxl_LL_TgtCornY(int LeVSN_i_CellIdx) {
+    return(LL_TgtCornY[LeVSN_i_CellIdx]);
+  }
+
+  public int GetVSN_Pxl_ImgWidthBtm() {
+     return(VeVSN_Pxl_ImgWidthBtm); 
+  }
+
+  public int GetVSN_Pxl_ImgWidthTop() {
+    return(VeVSN_Pxl_ImgWidthTop); 
+  }
+
+  public int GetVSN_Pxl_ImgHeightLt() {
+    return(VeVSN_Pxl_ImgHeightLt); 
+  }
+
+  public int GetVSN_Pxl_ImgHeightRt() {
+    return(VeVSN_Pxl_ImgHeightRt); 
+  }
+
+  public int GetVSN_Pxl_CamFocalPt() {
+    return(VeVSN_Pxl_CamFocalPt); 
+  }
+
+  public double GetVSN_l_Cam2Tgt2ndry() {
+    return(VeVSN_l_Cam2Tgt2ndry); 
+  }
+
+  public double GetVSN_l_Cam2Tgt() {
+    return(VeVSN_l_Cam2Tgt); 
+  }
+
+  public double GetVSN_l_Rbt2Tgt() {
+    return(VeVSN_l_Rbt2Tgt); 
+  }
+
+  public double GetVSN_deg_Rbt2Tgt() {
+    return(VeVSN_deg_Rbt2Tgt); 
+  }
+
+  public double GetVSN_deg_RbtRot() {
+    return(VeVSN_deg_RbtRot); 
+  }
+
+
 
   /*******************************/
   /* Public Class Methods        */
   /*******************************/
+
+   /**
+    * Method: MngVSN_InitLimeLightNetTbl - Processes the Initialization
+    * of the Network Tables Address Mapping for the Lime Light Camera.
+    */
+    public void MngVSN_InitLimeLightNetTbl() {
+      NetTbl =       NetworkTableInstance.getDefault();
+      LimeLightTbl = NetworkTableInstance.getDefault().getTable("limelight");
+      tv = LimeLightTbl.getEntry("tv");
+      tx = LimeLightTbl.getEntry("tx");
+      ty = LimeLightTbl.getEntry("ty");
+      ta = LimeLightTbl.getEntry("ta");
+      ts = LimeLightTbl.getEntry("ts");
+      tshort = LimeLightTbl.getEntry("tshort");
+      tlong  = LimeLightTbl.getEntry("tlong");
+      thor   = LimeLightTbl.getEntry("thor");
+      tvert  = LimeLightTbl.getEntry("tvert");
+      tcornx = LimeLightTbl.getEntry("tcornx");
+      tcorny = LimeLightTbl.getEntry("tcorny");
+      }  
+
+
+ /**
+    * Method: captureVSN_CamImgData - Capture the Raw Image Data from
+    * the Camera.  Receives the data from the
+    * Network Tables that have been transmitted from the Rpi Controller.
+    */
+    public boolean captureVSN_CamImgData() {
+      boolean LeVSN_b_TgtAcqVld = false;
+
+      //read values periodically
+      LL_TgtVld  = tv.getDouble(0.0);
+      if (LL_TgtVld == 1.0)
+        {
+        LeVSN_b_TgtAcqVld = true;   
+        LL_TgtAngX = tx.getDouble(0.0);
+        LL_TgtAngY = ty.getDouble(0.0);
+        LL_TgtArea = ta.getDouble(0.0);
+        LL_TgtSkew = ts.getDouble(0.0);
+        LL_TgtSideShort = tshort.getDouble(0.0);
+        LL_TgtSideLong  = tlong.getDouble(0.0);
+        LL_TgtLngthHort = thor.getDouble(0.0);
+        LL_TgtLngthVert = tvert.getDouble(0.0);
+        LL_TgtCornX   = tcornx.getDoubleArray(new double[0]);
+        LL_TgtCornY   = tcorny.getDoubleArray(new double[0]);    
+        }
+
+      return(LeVSN_b_TgtAcqVld);
+      }
+
 
    /**
     * Method: MngVSN_InitCamCalibr - Processes the Camera
@@ -100,8 +283,7 @@ public class Vision extends Subsystem {
       RstVSN_CamMats();
       }
 
-
-
+  
    /**
     * Method: RstVSN_CamMats - Resets the persistent Camera Matricies
       by loading them as zero matricies..
@@ -112,7 +294,6 @@ public class Vision extends Subsystem {
       VmVSM_k_Rot.zeros(3,3,CvType.CV_64F);
       VmVSM_k_ImgPlaneZeroWorld.zeros(3,3,CvType.CV_64F);
       }
-
 
 
    /**
@@ -132,37 +313,6 @@ public class Vision extends Subsystem {
   /* Internal Class Methods      */
   /*******************************/   
 
-
- /**
-    * Method: captureVSN_CamImgData - Capture the Raw Image Data from
-    * the Camera.  Receives the data from the
-    * Network Tables that have been transmitted from the Rpi Controller.
-    */
-    private boolean captureVSN_CamImgData() {
-      boolean LeVSN_b_TgtAcqVld = false;
-
-      //read values periodically
-      LL_TgtVld  = tv.getDouble(0.0);
-      if (LL_TgtVld == 1.0)
-        {
-        LeVSN_b_TgtAcqVld = true;   
-        LL_TgtAngX = tx.getDouble(0.0);
-        LL_TgtAngY = ty.getDouble(0.0);
-        LL_TgtArea = ta.getDouble(0.0);
-        LL_TgtSkew = ts.getDouble(0.0);
-        LL_TgtSideShort = tshort.getDouble(0.0);
-        LL_TgtSideLong  = tlong.getDouble(0.0);
-        LL_TgtLngthHort = thor.getDouble(0.0);
-        LL_TgtLngthVert = tvert.getDouble(0.0);
-        LL_TgtCornX[]   = tcornx.getDoubleArray(0.0);
-        LL_TgtCornY[]   = tcorny.getDoubleArray(0.0);    
-        }
-
-      return(LeVSN_b_TgtAcqVld);
-      }
-
-
-
    /**
     * Method: parseVSN_CamImgData - Update the Raw Image Data from
     * the Camera and loading it into the proper arrays for Target
@@ -173,11 +323,10 @@ public class Vision extends Subsystem {
 
       // todo - waiting on Network Table format info from Soren.
       for (i=0;i<NumPts;i++) {
-        VaVSN_Pxl_CamImgCoord[i][Xcell] = 0;
-        VaVSN_Pxl_CamImgCoord[i][Ycell] = 0;
+        VaVSN_Pxl_CamImgCoord[i][Xcell] = (int)LL_TgtCornX[i];
+        VaVSN_Pxl_CamImgCoord[i][Ycell] = (int)LL_TgtCornY[i];
         }
       }
-
 
 
    /**
@@ -230,14 +379,13 @@ public class Vision extends Subsystem {
         RstVSN_CamMats();
         }
 
-      /* free-up memory from the locally martricies */
+      /* free-up memory from the locally matricies */
       LmVSM_k_RotInv.release();
       LmVSM_k_TransVectNeg.release();
       LmVSM_k_ZerosVect.release();
 
       return(Err_PnP);
       }
-
 
 
    /**
@@ -254,7 +402,6 @@ public class Vision extends Subsystem {
   
       /* Calculate the Rhombas Height via calculating the Height of the Eng-Triangles. */
       triHeight = Math.sqrt(Math.pow(K_Vision.KeVSN_l_RefTgtSides,2) - Math.pow(triBase,2));
-    
 
       /*  Determine Point Coordinates: TopLt Point */
       VaVSN_l_RefObjCoord[TopLt][Xcell] = triBase;
@@ -287,7 +434,6 @@ public class Vision extends Subsystem {
       }
 
 
-
    /**
     * Method: calcVSN_RefTgtImgMat - Calculate the coordinates of
     * the target image in the image plane in pixel units and build
@@ -318,7 +464,6 @@ public class Vision extends Subsystem {
         VmVSN_Pxl_RefImg.put(i,Xcell,VaVSN_Pxl_RefImgCoord[i][Xcell]);
         VmVSN_Pxl_RefImg.put(i,Ycell,VaVSN_Pxl_RefImgCoord[i][Ycell]);
         }
-
      }
 
 
@@ -368,7 +513,6 @@ public class Vision extends Subsystem {
       }
 
 
-
    /**
     * Method: calcVSN_CamTgtImgGeometry - Calculate the dimensions
     * of the vision target in pixels, i.e. the length of all the sides.
@@ -380,7 +524,7 @@ public class Vision extends Subsystem {
       VeVSN_Pxl_ImgHeightRt = calcVSN_PxlLengthLineSeg(VaVSN_Pxl_CamImgCoord[BtmRt], VaVSN_Pxl_CamImgCoord[TopRt]);
       }
 
-
+    
    /**
     * Method: calcVSN_PxlLengthLineSeg - Calculate the length of a
     * line segment given the X-Y coordinates of the two end-points
@@ -436,7 +580,6 @@ public class Vision extends Subsystem {
 
 	  VeVSN_Pxl_CamFocalPt = (int)LeVSN_l_FocalPt;          
     }
-
 
 
   /****************************************************/

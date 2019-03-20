@@ -61,6 +61,8 @@ public class OI {
     //When Left Bumper is pressed, extend lift pnumatics
     DriverStick.leftBumper.whenPressed(new CC_LiftChassisWhlCntrl(false));
 
+    DriverStick.startButton.whenPressed(new CC_CamCaptureTgt());
+
     // Autonomous forward
     DriverStick.selectButton.whileHeld(new CA_DrvPstnTgt(0, 140000));
 
