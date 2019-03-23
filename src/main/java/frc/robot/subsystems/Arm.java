@@ -18,6 +18,7 @@ import frc.robot.RobotMap;
 import frc.robot.calibrations.K_Arm;
 import frc.robot.commands.CT_ArmCntrl;
 import frc.robot.models.PositionData;
+import frc.robot.models.GamePieces;
 
 /**
  * Add your docs here.
@@ -38,11 +39,7 @@ public class Arm extends Subsystem {
   private ListIterator<PositionData> currentIterator = K_Arm.ALL_POS_DATA.listIterator(1);
   private PositionData currentPositionData = K_Arm.ALL_POS_DATA.get(0);
 
-  enum GamePieceType {
-    Cargo, Panel, All
-  };
-
-  GamePieceType gamePieceType = GamePieceType.All;
+  GamePieces GamePieces = GamePieces.Cargo;
 
   public Arm() {
     Lift.configMotionCruiseVelocity(11000);
@@ -83,8 +80,8 @@ public class Arm extends Subsystem {
    * @return Returns the new position data
    */
   public PositionData resetToFloorCargoPickup(){
-    if (gamePieceType != GamePieceType.Cargo){
-      gamePieceType = GamePieceType.Cargo;
+    if (GamePieces != GamePieceType.Cargo){
+      GamePieces = GamePieceType.Cargo;
     }
     currentIterator = K_Arm.BALL_POS_DATA.listIterator(0);
     currentPositionData = currentIterator.next();
@@ -92,8 +89,8 @@ public class Arm extends Subsystem {
   }
 
   public PositionData resetToHABPanelPickup(){
-    if (gamePieceType != GamePieceType.Panel){
-      gamePieceType = GamePieceType.Panel;
+    if (GamePieces != GamePieceType.Panel){
+      GamePieces = GamePieceType.Panel;
     }
     currentIterator = K_Arm.PANEL_POS_DATA.listIterator(0);
     currentPositionData = currentIterator.next();
@@ -101,7 +98,7 @@ public class Arm extends Subsystem {
   }
 
   public String getGamePieceType(){
-    return gamePieceType.name();
+    return GamePieces.name();
   }
 
   public PositionData getCurrenPositionData(){
