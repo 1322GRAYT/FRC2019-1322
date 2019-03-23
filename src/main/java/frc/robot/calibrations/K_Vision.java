@@ -19,32 +19,33 @@ public class K_Vision {
 	
 	/** KaVSN_Pxl_CamDim: Dimensions of the Camera Image in Pixels
      * (X-Dim,Y-Dim). */
-    public static final int KaVSN_Pxl_CamDim[] = {640, 480};
+    public static final int KaVSN_Pxl_CamDim[] = {320, 240};
 
 
     /**************************************************/
 	/*  Target Reference Pixel Coordinates            */
 	/**************************************************/	 	
-	
+
+     /** KaVSN_Pxl_RefImgCoordTopRt: Coordinates of the reference target
+     * image camera for the Top Right image point in Pixel Coordinates
+     * (X,Y). */
+    public static final int KaVSN_Pxl_RefImgCoordTopRt[] =  {59, 31};
+
+	/** KaVSN_Pxl_RefImgCoordBtmLt: Coordinates of the reference target
+     * image camera for the Bottom Right image point in Pixel Coordinates
+     * (X,Y). */
+    public static final int KaVSN_Pxl_RefImgCoordBtmRt[] =  {51, 34};
+
+	/** KaVSN_Pxl_RefImgCoordBtmLt: Coordinates of the reference target
+     * image camera for the Bottom Left image point in Pixel Coordinates
+     * (X,Y). */
+    public static final int KaVSN_Pxl_RefImgCoordBtmLt[] =  {48, 24};
+
 	/** KaVSN_Pxl_RefImgCoordTopLt: Coordinates of the reference target
      * image camera for the Top Left image point in Pixel Coordinates
      * (X,Y). */
-    public static final int KaVSN_Pxl_RefImgCoordTopLt[] = {120, 80};
+    public static final int KaVSN_Pxl_RefImgCoordTopLt[] = {58,20};
 
-    /** KaVSN_Pxl_RefImgCoordTopRt: Coordinates of the reference target
-     * image camera for the Top Right image point in Pixel Coordinates
-     * (X,Y). */
-    public static final int KaVSN_Pxl_RefImgCoordTopRt[] =  {300, 80};
-
-	/** KaVSN_Pxl_RefImgCoordTopLt: Coordinates of the reference target
-     * image camera for the Bottom Left image point in Pixel Coordinates
-     * (X,Y). */
-    public static final int KaVSN_Pxl_RefImgCoordBtmLt[] =  {100, 100};
-
-	/** KaVSN_Pxl_RefImgCoordTopLt: Coordinates of the reference target
-     * image camera for the Bottom Right image point in Pixel Coordinates
-     * (X,Y). */
-    public static final int KaVSN_Pxl_RefImgCoordBtmRt[] =  {320, 100};
 
 
     /**************************************************/
@@ -78,7 +79,7 @@ public class K_Vision {
 
   	/** KeVSN_l_RefTgtBtm: Width of the bottom of the target image in
      * measured inches. */
-    public static final double KeVSN_l_RefTgtBtm = 14.1875; // inches
+    public static final double KeVSN_l_RefTgtBtm = 14.75; // inches
 
 	/** KeVSN_l_RefTgtLt: Length of the equal left and right sides of
      * the target image in measured inches. */
@@ -87,6 +88,6 @@ public class K_Vision {
  	/** KeVSN_l_RefTgtToCamDist: Length of the distance between the
      * target and the camera at the camera calibration reference
      * distance in measured inches. */
-    public static final double KeVSN_l_RefTgtToCamDist = 100; // inches
+    public static final double KeVSN_l_RefTgtToCamDist = 30.75; // inches
     
 }

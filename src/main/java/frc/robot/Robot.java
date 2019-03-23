@@ -12,7 +12,6 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import frc.robot.subsystems.*;
-import frc.robot.subsystems.Vision;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -26,12 +25,13 @@ public class Robot extends TimedRobot {
 
   public final static boolean CompBot = false;
   
-  public final static Drives          DRIVES  = new Drives();
-  public final static Claw            CLAW    = new Claw();
-  public final static LEDController   LEDS    = new LEDController();
-  public final static Arm             ARM     = new Arm();
-  public final static Scissor         SCISSOR = new Scissor();
-  public final static Vision          VISION  = new Vision();
+  public final static Drives          DRIVES    = new Drives();
+  public final static Claw            CLAW      = new Claw();
+  public final static LEDController   LEDS      = new LEDController();
+  public final static Dashboard       DASHBOARD = new Dashboard();
+  public final static Arm             ARM       = new Arm();
+  public final static Scissor         SCISSOR   = new Scissor();
+  public final static Vision          VISION    = new Vision();
 
   Command m_autonomousCommand;
   SendableChooser<Command> m_chooser = new SendableChooser<>();

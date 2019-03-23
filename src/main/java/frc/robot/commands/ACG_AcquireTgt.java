@@ -20,15 +20,3 @@ public class ACG_AcquireTgt extends CommandGroup {
   }
 }
 
-
-
-  // Called to Update SmartDash Data for Display
-  /*
-  protected void updateSmartDashData() {
-    SmartDashboard.putNumber("Block Detect Timer : ", blockTimer.get());
-
-
-    
-    System.out.println("Block Detect Timer : " + blockTimer.get());
-  }
-  */

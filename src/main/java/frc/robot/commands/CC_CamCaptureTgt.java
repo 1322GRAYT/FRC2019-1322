@@ -40,6 +40,7 @@ public class CC_CamCaptureTgt extends Command {
   @Override
   protected void end() {
     Robot.VISION.MngVSN_CamImgProc();
+    Robot.DASHBOARD.updateSmartDashCamData();
   }
 
   // Called when another command which requires one or more of the same

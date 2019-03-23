@@ -60,7 +60,7 @@ public class Vision extends Subsystem {
   private double VeVSN_l_Cam2Tgt;
   private double VeVSN_l_Rbt2Tgt;
   private double VeVSN_deg_Rbt2Tgt;
-  private double VeVSN_deg_RbtRot;
+  private double VeVSN_Deg_RbtRot;
 
 
   /* Arrays for building Matricies for Vision Pose Calculations */
@@ -81,8 +81,7 @@ public class Vision extends Subsystem {
   /* Matricies of Camera and Image Data */
   private MatOfPoint3f VmVSN_l_RefObj   = new MatOfPoint3f();
   private MatOfPoint2f VmVSN_Pxl_RefImg = new MatOfPoint2f();
-  private MatOfPoint3f VmVSN_Pxl_Cam    = new MatOfPoint3f();
-  private MatOfDouble VmVSN_k_DistCoeff = new MatOfDouble();
+  private Mat VmVSN_Pxl_Cam     = new Mat();
   private Mat VmVSM_k_RotVect   = new Mat(3,1,CvType.CV_64F);
   private Mat VmVSM_k_TransVect = new Mat(3,1,CvType.CV_64F);
   private Mat VmVSM_k_Rot       = new Mat(3,3,CvType.CV_64F);
@@ -135,79 +134,160 @@ public class Vision extends Subsystem {
     return(LL_TgtArea);
   }
 
-// Target Skew or Rotation
-  public double GetVSN_r_LL_TgtSkew() {
+ /**
+   * Method: GetVSN_Deg_LL_TgtSkew - Target Skew or Rotation
+   * @return: double - degrees
+   */
+  public double GetVSN_Deg_LL_TgtSkew() {
     return(LL_TgtSkew);
   }
 
-// Sidelength of shortest side of the fitted bounding box (pixels)  
-  public double GetVSN_Pxl_LL_TgtSideShort() {
+ /**
+   * Method: GetVSN_Pxl_LL_TgtSideShort - Sidelength of shortest side
+   * of the fitted bounding box (pixels).  
+   * @return: double - pixels
+   */
+public double GetVSN_Pxl_LL_TgtSideShort() {
     return(LL_TgtSideShort);
   }
 
-// Sidelength of longest side of the fitted bounding box (pixels)
+ /**
+   * Method: GetVSN_Pxl_LL_TgtSideLong - Sidelength of longest side
+   * of the fitted bounding box (pixels).  
+   * @return: double - pixels
+   */
   public double GetVSN_Pxl_LL_TgtSideLong() {
     return(LL_TgtSideLong);
   }
 
-// Horizontal sidelength of the rough bounding box (0 - 320 pixels)
+ /**
+   * Method: GetVSN_Pxl_LL_TgtLngthHort - Horizontal sidelength of
+   * the rough bounding box (0 - 320 pixels).
+   * @return: double - pixels
+   */
   public double GetVSN_Pxl_LL_TgtLngthHort() {
     return(LL_TgtLngthHort);
   }
 
-// Vertical sidelength of the rough bounding box (0 - 320 pixels)
+ /**
+   * Method: GetVSN_Pxl_LL_TgtLngthVert - Vertical sidelength of
+   * the rough bounding box (0 - 320 pixels).  
+   * @return: double - pixels
+   */
   public double GetVSN_Pxl_LL_TgtLngthVert() {
     return(LL_TgtLngthVert);
   }
 
-// Target Corner Coord-X: RH, RL, LL, LH (0 - 320 pixels)
+ /**
+   * Method: GetVSN_Pxl_LL_TgtCornX - Target Corner X-Coordinates
+   * RH, RL, LL, LH (0 - 320 pixels).
+   * @param1: int - Xcell index (RH, RL, LL, LH)
+   * @return: double - pixels X Coordinates (RH, RL, LL, LH)
+   */
   public double GetVSN_Pxl_LL_TgtCornX(int LeVSN_i_CellIdx) {
     return(LL_TgtCornX[LeVSN_i_CellIdx]);
   }
 
 // Target Corner Coord-Y: RH, RL, LL, LH (0 - 320 pixels)
+ /**
+   * Method: GetVSN_Pxl_LL_TgtCornY - Target Corner Y-Coordinates
+   * RH, RL, LL, LH (0 - 320 pixels).
+   * @param1: int - Ycell index (RH, RL, LL, LH)
+   * @return: double - pixels Y Coordinates (RH, RL, LL, LH)
+   */
   public double GetVSN_Pxl_LL_TgtCornY(int LeVSN_i_CellIdx) {
     return(LL_TgtCornY[LeVSN_i_CellIdx]);
   }
 
+   /**
+   * Method: GetVSN_Pxl_ImgWidthBtm - Target image width of
+   * bottom horizontal of target rectangle in pixels.  
+   * @return: double - pixels
+   */
   public int GetVSN_Pxl_ImgWidthBtm() {
      return(VeVSN_Pxl_ImgWidthBtm); 
   }
 
+   /**
+   * Method: GetVSN_Pxl_ImgWidthTop - Target image width of
+   * top horizontal of target rectangle in pixels.  
+   * @return: double - pixels
+   */
   public int GetVSN_Pxl_ImgWidthTop() {
     return(VeVSN_Pxl_ImgWidthTop); 
   }
 
+   /**
+   * Method: GetVSN_Pxl_ImgHeightLt - Target image height of
+   * left vertical of target rectangle in pixels.  
+   * @return: double - pixels
+   */
   public int GetVSN_Pxl_ImgHeightLt() {
     return(VeVSN_Pxl_ImgHeightLt); 
   }
 
+   /**
+   * Method: GetVSN_Pxl_ImgHeightRt - Target image height of
+   * right vertical of target rectangle in pixels.  
+   * @return: double - pixels
+   */
   public int GetVSN_Pxl_ImgHeightRt() {
     return(VeVSN_Pxl_ImgHeightRt); 
   }
 
+   /**
+   * Method: GetVSN_Pxl_CamFocalPt - Camera Focal Point/Length
+   * in Pixels (from Camera Calibration Measurements).  
+   * @return: double - pixels
+   */
   public int GetVSN_Pxl_CamFocalPt() {
     return(VeVSN_Pxl_CamFocalPt); 
   }
 
+  /**
+   * Method: GetVSN_l_Cam2Tgt2ndry - Calculated Camera to Target
+   * Distance (Secondary Calculation).  
+   * @return: double - pixels
+   */
   public double GetVSN_l_Cam2Tgt2ndry() {
     return(VeVSN_l_Cam2Tgt2ndry); 
   }
 
+  /**
+   * Method: GetVSN_l_Cam2Tgt - Calculated Camera to Target
+   * Distance (Primary Calculation).  
+   * @return: double - pixels
+   */
   public double GetVSN_l_Cam2Tgt() {
     return(VeVSN_l_Cam2Tgt); 
   }
 
+  /**
+   * Method: VeVSN_l_Rbt2Tgt - Calculated Robot to Target Distance.  
+   * @return: double - inches
+   */
   public double GetVSN_l_Rbt2Tgt() {
     return(VeVSN_l_Rbt2Tgt); 
   }
 
+  /**
+   * Method: VeVSN_deg_Rbt2Tgt - Calculated Angle between the line
+   * perpendicular from the target center and the line from the target
+   * center to the robot.
+   * @return: double - degrees
+   */
   public double GetVSN_deg_Rbt2Tgt() {
     return(VeVSN_deg_Rbt2Tgt); 
   }
 
-  public double GetVSN_deg_RbtRot() {
-    return(VeVSN_deg_RbtRot); 
+  /**
+   * Method: GetVSN_Deg_RbtRot - Calculated Angle of Rotation of the
+   * Robot wrt to the line perpendicular to the camera lens and the and
+   * the line between the robot and center of target.
+   * @return: double - degrees
+   * */
+  public double GetVSN_Deg_RbtRot() {
+    return(VeVSN_Deg_RbtRot); 
   }
 
 
@@ -249,7 +329,6 @@ public class Vision extends Subsystem {
       LL_TgtVld  = tv.getDouble(0.0);
       if (LL_TgtVld == 1.0)
         {
-        LeVSN_b_TgtAcqVld = true;   
         LL_TgtAngX = tx.getDouble(0.0);
         LL_TgtAngY = ty.getDouble(0.0);
         LL_TgtArea = ta.getDouble(0.0);
@@ -260,10 +339,15 @@ public class Vision extends Subsystem {
         LL_TgtLngthVert = tvert.getDouble(0.0);
         LL_TgtCornX   = tcornx.getDoubleArray(new double[0]);
         LL_TgtCornY   = tcorny.getDoubleArray(new double[0]);    
-        }
-
-      return(LeVSN_b_TgtAcqVld);
       }
+
+      if ((LL_TgtVld == 1.0) &&
+          (LL_TgtCornX.length == 4) &&
+          (LL_TgtCornY.length == 4)) {
+        LeVSN_b_TgtAcqVld = true;            
+      }
+      return(LeVSN_b_TgtAcqVld);
+    }
 
 
    /**
@@ -279,7 +363,6 @@ public class Vision extends Subsystem {
       calcVSN_RefTgtImgMat();
       calcVSN_CamFocalPt();
       calcVSN_CamMat();
-      VmVSN_k_DistCoeff.zeros(4,1,CvType.CV_64F);
       RstVSN_CamMats();
       }
 
@@ -321,12 +404,14 @@ public class Vision extends Subsystem {
     private void parseVSN_CamImgData() {
       int i;
 
-      // todo - waiting on Network Table format info from Soren.
+      System.out.println("LL_TgtCornX size : " + LL_TgtCornX.length);
+      System.out.println("LL_TgtCornY size : " + LL_TgtCornY.length);
+
       for (i=0;i<NumPts;i++) {
         VaVSN_Pxl_CamImgCoord[i][Xcell] = (int)LL_TgtCornX[i];
         VaVSN_Pxl_CamImgCoord[i][Ycell] = (int)LL_TgtCornY[i];
-        }
       }
+    }
 
 
    /**
@@ -342,9 +427,13 @@ public class Vision extends Subsystem {
       Mat LmVSM_k_TransVectNeg = new Mat(1,3,CvType.CV_64F);
       Mat LmVSM_k_ZerosVect    = new Mat(3,1,CvType.CV_64F);
 
+      System.out.println("RefObj Matrix : " + VmVSN_l_RefObj);
+      System.out.println("RefImg Matrix : " + VmVSN_Pxl_RefImg);
+      System.out.println("Camera Matrix : " + VmVSN_Pxl_Cam);
+
       /* Calculate the Rotation Matrix and Translation Vector */
       Err_PnP = Calib3d.solvePnP(VmVSN_l_RefObj, VmVSN_Pxl_RefImg, VmVSN_Pxl_Cam,
-                                 VmVSN_k_DistCoeff, VmVSM_k_RotVect, VmVSM_k_TransVect);
+                                 new MatOfDouble(), VmVSM_k_RotVect, VmVSM_k_TransVect);
   
       if (Err_PnP == false)
         {
@@ -371,7 +460,7 @@ public class Vision extends Subsystem {
         Core.multiply(LmVSM_k_RotInv, LmVSM_k_TransVectNeg, VmVSM_k_ImgPlaneZeroWorld);
         x = VmVSM_k_ImgPlaneZeroWorld.get(0,0);
         z = VmVSM_k_ImgPlaneZeroWorld.get(2,0);
-        VeVSN_deg_RbtRot = Math.atan2(x[0], z[0]);
+        VeVSN_Deg_RbtRot = (double)Math.atan2(x[0], z[0]);
         }
       else /* (Err_PnP == true) */
         {
@@ -442,21 +531,21 @@ public class Vision extends Subsystem {
     private void calcVSN_RefTgtImgMat() {
       int i;
 
-      /*  Determine Point Coordinates: TopLt Point */
-      VaVSN_Pxl_RefImgCoord[TopLt][Xcell] = K_Vision.KaVSN_Pxl_RefImgCoordTopLt[Xcell];
-      VaVSN_Pxl_RefImgCoord[TopLt][Ycell] = K_Vision.KaVSN_Pxl_RefImgCoordTopLt[Ycell];
-
-      /*  Determine Point Coordinates: BtmLt Point */
-      VaVSN_Pxl_RefImgCoord[BtmLt][Xcell] = K_Vision.KaVSN_Pxl_RefImgCoordBtmLt[Xcell];
-      VaVSN_Pxl_RefImgCoord[BtmLt][Ycell] = K_Vision.KaVSN_Pxl_RefImgCoordBtmLt[Ycell];
+      /*  Determine Point Coordinates: TopRt Point */            
+      VaVSN_Pxl_RefImgCoord[TopRt][Xcell] = K_Vision.KaVSN_Pxl_RefImgCoordTopRt[Xcell];
+      VaVSN_Pxl_RefImgCoord[TopRt][Ycell] = K_Vision.KaVSN_Pxl_RefImgCoordTopRt[Ycell];
 
       /*  Determine Point Coordinates: BtmRt Point */      
       VaVSN_Pxl_RefImgCoord[BtmRt][Xcell] = K_Vision.KaVSN_Pxl_RefImgCoordBtmRt[Xcell];
       VaVSN_Pxl_RefImgCoord[BtmRt][Ycell] = K_Vision.KaVSN_Pxl_RefImgCoordBtmRt[Ycell];
 
-      /*  Determine Point Coordinates: TopRt Point */            
-      VaVSN_Pxl_RefImgCoord[TopRt][Xcell] = K_Vision.KaVSN_Pxl_RefImgCoordTopRt[Xcell];
-      VaVSN_Pxl_RefImgCoord[TopRt][Ycell] = K_Vision.KaVSN_Pxl_RefImgCoordTopRt[Ycell];
+      /*  Determine Point Coordinates: BtmLt Point */
+      VaVSN_Pxl_RefImgCoord[BtmLt][Xcell] = K_Vision.KaVSN_Pxl_RefImgCoordBtmLt[Xcell];
+      VaVSN_Pxl_RefImgCoord[BtmLt][Ycell] = K_Vision.KaVSN_Pxl_RefImgCoordBtmLt[Ycell];
+
+      /*  Determine Point Coordinates: TopLt Point */
+      VaVSN_Pxl_RefImgCoord[TopLt][Xcell] = K_Vision.KaVSN_Pxl_RefImgCoordTopLt[Xcell];
+      VaVSN_Pxl_RefImgCoord[TopLt][Ycell] = K_Vision.KaVSN_Pxl_RefImgCoordTopLt[Ycell];
 
 
       /* Build Object Matrix from Array */
