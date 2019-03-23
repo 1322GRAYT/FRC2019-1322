@@ -39,7 +39,7 @@ public class Arm extends Subsystem {
   private ListIterator<PositionData> currentIterator = K_Arm.ALL_POS_DATA.listIterator(1);
   private PositionData currentPositionData = K_Arm.ALL_POS_DATA.get(0);
 
-  GamePieces GamePieces = GamePieces.Cargo;
+  GamePieces gamePieces = GamePieces.Cargo;
 
   public Arm() {
     Lift.configMotionCruiseVelocity(11000);
@@ -80,8 +80,8 @@ public class Arm extends Subsystem {
    * @return Returns the new position data
    */
   public PositionData resetToFloorCargoPickup(){
-    if (GamePieces != GamePieceType.Cargo){
-      GamePieces = GamePieceType.Cargo;
+    if (gamePieces != GamePieces.Cargo) {
+      gamePieces = GamePieces.Cargo;
     }
     currentIterator = K_Arm.BALL_POS_DATA.listIterator(0);
     currentPositionData = currentIterator.next();
@@ -89,16 +89,16 @@ public class Arm extends Subsystem {
   }
 
   public PositionData resetToHABPanelPickup(){
-    if (GamePieces != GamePieceType.Panel){
-      GamePieces = GamePieceType.Panel;
+    if (gamePieces != GamePieces.HatchPanel){
+      gamePieces = GamePieces.HatchPanel;
     }
     currentIterator = K_Arm.PANEL_POS_DATA.listIterator(0);
     currentPositionData = currentIterator.next();
     return currentPositionData;
   }
 
-  public String getGamePieceType(){
-    return GamePieces.name();
+  public GamePieces getGamePieceType(){
+    return gamePieces;
   }
 
   public PositionData getCurrenPositionData(){

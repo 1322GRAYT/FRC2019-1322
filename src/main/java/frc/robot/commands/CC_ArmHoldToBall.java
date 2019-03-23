@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
+import frc.robot.models.GamePieces;
 
 public class CC_ArmHoldToBall extends Command {
   Button refButton;
@@ -34,7 +35,7 @@ public class CC_ArmHoldToBall extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    if (buttonTimer.get() > 0.5 && refButton.get() || Robot.ARM.getGamePieceType() == "Panel") {
+    if (buttonTimer.get() > 0.5 && refButton.get() || Robot.ARM.getGamePieceType() == GamePieces.HatchPanel) {
       Robot.ARM.resetToFloorCargoPickup();
       Robot.ARM.MMArm(Robot.ARM.getCurrenPositionData().location);
 

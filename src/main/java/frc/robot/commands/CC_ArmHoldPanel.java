@@ -8,58 +8,37 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.Robot;
-import frc.robot.calibrations.K_Arm;
-import frc.robot.models.GamePieces;
 
-public class CC_ArmPstnRaiseNxtBallLvl extends Command {
-
-  public CC_ArmPstnRaiseNxtBallLvl() {
-    requires(Robot.ARM);
+public class CC_ArmHoldPanel extends Command {
+  public CC_ArmHoldPanel() {
+    // Use requires() here to declare subsystem dependencies
+    // eg. requires(chassis);
   }
 
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-    if (Robot.ARM.getGamePieceType() == GamePieces.Cargo) {
-      Robot.ARM.incrementPosition();
-    }
-    else{
-      Robot.ARM.resetToFloorCargoPickup();
-    }
-    SmartDashboard.putString("Arm Level", Robot.ARM.getCurrenPositionData().name + " " + Robot.ARM.getCurrenPositionData().type);
-    Robot.ARM.MMArm(Robot.ARM.getCurrenPositionData().location);
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    toSDBoard("Arm Data", Robot.ARM.liftRawPosition(), Robot.ARM.liftRawVelocity(), Robot.ARM.getCurrenPositionData().location,
-        Robot.ARM.armVoltage(), Robot.ARM.armError());
-
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return Math.abs(Robot.ARM.liftRawPosition() - Robot.ARM.getCurrenPositionData().location) < K_Arm.TOLERANCE;
+    return false;
   }
 
   // Called once after isFinished returns true
   @Override
   protected void end() {
-    Robot.ARM.armSafety(true);
   }
 
   // Called when another command which requires one or more of the same
   // subsystems is scheduled to run
   @Override
   protected void interrupted() {
-    end();
-  }
-
-  public void toSDBoard(String Name, double... toSDB) {
-    SmartDashboard.putNumberArray(Name, toSDB);
   }
 }

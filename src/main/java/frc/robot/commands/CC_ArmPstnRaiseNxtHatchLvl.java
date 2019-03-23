@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
 import frc.robot.calibrations.K_Arm;
+import frc.robot.models.GamePieces;
 
 public class CC_ArmPstnRaiseNxtHatchLvl extends Command {
 
@@ -21,7 +22,7 @@ public class CC_ArmPstnRaiseNxtHatchLvl extends Command {
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-    if (Robot.ARM.getGamePieceType() == "Panel") {
+    if (Robot.ARM.getGamePieceType() == GamePieces.HatchPanel) {
       Robot.ARM.incrementPosition();
     }
     else{
