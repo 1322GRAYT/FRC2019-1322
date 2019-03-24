@@ -40,27 +40,6 @@ public class K_Vision {
 
 
     /**************************************************/
-	/*  Target Reference Pixel Measurements           */
-	/**************************************************/	 	
-	
-	/** KeVSN_Cnt_PxlTgtTop: Width of the top of the target image in
-     * camera pixels at the camera calibration reference distance. */
-    public static final int KeVSN_Cnt_PxlTgtTop = 70;  // pixels
-
-  	/** KeVSN_Cnt_PxlTgtBtm: Width of the bottom of the target image in
-     * camera pixels at the camera calibration reference distance. */
-    public static final int KeVSN_Cnt_PxlTgtBtm = 50; // pixels
-
-	/** KeVSN_Cnt_PxlTgtLt: Length of the left side of the target image in
-     * camera pixels at the camera calibration reference distance. */
-    public static final int KeVSN_Cnt_PxlTgtLt = 40; // pixels
-
-  	/** KeVSN_Cnt_PxlTgtRt: Length of the left side of the target image in
-     * camera pixels at the camera calibration reference distance. */
-    public static final int KeVSN_Cnt_PxlTgtRt = 40; // pixels
-
-
-    /**************************************************/
 	/*  Target Reference Physical Measurements        */
 	/**************************************************/	 	
 	

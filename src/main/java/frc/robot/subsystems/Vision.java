@@ -644,7 +644,7 @@ public double GetVSN_Pxl_LL_TgtSideShort() {
       LeVSN_l_RefTgtBtm = 1;
     }
       
-    LeVSN_l_FocalPt = ((double)K_Vision.KeVSN_Cnt_PxlTgtBtm * K_Vision.KeVSN_l_RefTgtToCamDist)/
+    LeVSN_l_FocalPt = (VeVSN_Pxl_ImgWidthBtm * K_Vision.KeVSN_l_RefTgtToCamDist)/
                       (LeVSN_l_RefTgtBtm);
 
 	  VeVSN_Pxl_CamFocalPt = (int)LeVSN_l_FocalPt;          
