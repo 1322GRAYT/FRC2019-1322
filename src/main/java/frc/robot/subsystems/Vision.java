@@ -23,37 +23,37 @@ import frc.robot.calibrations.K_Vision;
  */
 public class Vision extends Subsystem {
 
-    NetworkTableInstance NetTbl;
-    NetworkTable LimeLightTbl;
-    NetworkTableEntry tv;
-    NetworkTableEntry tx;
-    NetworkTableEntry ty;
-    NetworkTableEntry ta;
-    NetworkTableEntry ts;
-    NetworkTableEntry tshort;
-    NetworkTableEntry tlong;
-    NetworkTableEntry thor;
-    NetworkTableEntry tvert;
-    NetworkTableEntry tcornx;
-    NetworkTableEntry tcorny;
+  NetworkTableInstance NetTbl;
+  NetworkTable LimeLightTbl;
+  NetworkTableEntry tv;
+  NetworkTableEntry tx;
+  NetworkTableEntry ty;
+  NetworkTableEntry ta;
+  NetworkTableEntry ts;
+  NetworkTableEntry tshort;
+  NetworkTableEntry tlong;
+  NetworkTableEntry thor;
+  NetworkTableEntry tvert;
+  NetworkTableEntry tcornx;
+  NetworkTableEntry tcorny;
 
-    private double LL_TgtVld;        // Valid Target Acquired
-    private double LL_TgtAngX;       // Horizontal Offset from CrossHair to Target (-27 to 27 Degrees)
-    private double LL_TgtAngY;       // Vertical Offset from CrossHair to Target (-20.5 degrees to 20.5 degrees)
-    private double LL_TgtArea;       // Target Area (0% of image to 100% of image)
-    private double LL_TgtSkew;       // Target Skew or Rotation
-    private double LL_TgtSideShort;  // Sidelength of shortest side of the fitted bounding box (pixels)  
-    private double LL_TgtSideLong;   // Sidelength of longest side of the fitted bounding box (pixels)
-    private double LL_TgtLngthHort;  // Horizontal sidelength of the rough bounding box (0 - 320 pixels)
-    private double LL_TgtLngthVert;  // Vertical sidelength of the rough bounding box (0 - 320 pixels)
-    private double LL_TgtCornX[] = new double[4];  // Target Corner Coord-X: RH, RL, LL, LH
-    private double LL_TgtCornY[] = new double[4];  // Target Corner Coord-Y: RH, RL, LL, LH
+  private double LL_TgtVld;        // Valid Target Acquired
+  private double LL_TgtAngX;       // Horizontal Offset from CrossHair to Target (-27 to 27 Degrees)
+  private double LL_TgtAngY;       // Vertical Offset from CrossHair to Target (-20.5 degrees to 20.5 degrees)
+  private double LL_TgtArea;       // Target Area (0% of image to 100% of image)
+  private double LL_TgtSkew;       // Target Skew or Rotation
+  private double LL_TgtSideShort;  // Sidelength of shortest side of the fitted bounding box (pixels)  
+  private double LL_TgtSideLong;   // Sidelength of longest side of the fitted bounding box (pixels)
+  private double LL_TgtLngthHort;  // Horizontal sidelength of the rough bounding box (0 - 320 pixels)
+  private double LL_TgtLngthVert;  // Vertical sidelength of the rough bounding box (0 - 320 pixels)
+  private double LL_TgtCornX[] = new double[4];  // Target Corner Coord-X: RH, RL, LL, LH
+  private double LL_TgtCornY[] = new double[4];  // Target Corner Coord-Y: RH, RL, LL, LH
 
 
-  private int VeVSN_Pxl_ImgWidthBtm;
-  private int VeVSN_Pxl_ImgWidthTop;
-  private int VeVSN_Pxl_ImgHeightLt;
-  private int VeVSN_Pxl_ImgHeightRt;
+  private double VeVSN_Pxl_ImgWidthBtm;
+  private double VeVSN_Pxl_ImgWidthTop;
+  private double VeVSN_Pxl_ImgHeightLt;
+  private double VeVSN_Pxl_ImgHeightRt;
 
   private int VeVSN_Pxl_CamFocalPt;
   private double VeVSN_l_Cam2Tgt2ndry;
@@ -63,15 +63,15 @@ public class Vision extends Subsystem {
   private double VeVSN_Deg_RbtRot;
 
 
-  /* Arrays for building Matricies for Vision Pose Calculations */
+  /* Array Indexes for building Matricies for Vision Pose Calculations */
   private static final int Xcell  = 0; // X-Cell for array Indexing;
   private static final int Ycell  = 1; // Y-Cell for array Indexing;
   private static final int Zcell  = 2; // Z-Cell for array Indexing;
 
-  private static final int TopRt  = 0;  // Top Right Cell for array Indexing;
-  private static final int BtmRt  = 1;  // Bottom Right Cell for array Indexing;
-  private static final int BtmLt  = 2;  // Bottom Left Cell for array Indexing;
-  private static final int TopLt  = 3;  // Top Left Cell for array Indexing;
+  private static final int RtUpr  = 0;  // Top Right Cell for array Indexing;
+  private static final int RtLwr  = 1;  // Bottom Right Cell for array Indexing;
+  private static final int LtLwr  = 2;  // Bottom Left Cell for array Indexing;
+  private static final int LtUpr  = 3;  // Top Left Cell for array Indexing;
   private static final int NumPts = 4;  // Total Number of Data Points;
 
   /**********************************************/
@@ -82,6 +82,7 @@ public class Vision extends Subsystem {
   private MatOfPoint3f VmVSN_l_RefObj   = new MatOfPoint3f();
   private MatOfPoint2f VmVSN_Pxl_RefImg = new MatOfPoint2f();
   private Mat VmVSN_Pxl_Cam     = new Mat();
+  private MatOfDouble VmVSN_k_DistCoeff = new MatOfDouble();
   private Mat VmVSM_k_RotVect   = new Mat(3,1,CvType.CV_64F);
   private Mat VmVSM_k_TransVect = new Mat(3,1,CvType.CV_64F);
   private Mat VmVSM_k_Rot       = new Mat(3,3,CvType.CV_64F);
@@ -204,7 +205,7 @@ public double GetVSN_Pxl_LL_TgtSideShort() {
    * bottom horizontal of target rectangle in pixels.  
    * @return: double - pixels
    */
-  public int GetVSN_Pxl_ImgWidthBtm() {
+  public double GetVSN_Pxl_ImgWidthBtm() {
      return(VeVSN_Pxl_ImgWidthBtm); 
   }
 
@@ -213,7 +214,7 @@ public double GetVSN_Pxl_LL_TgtSideShort() {
    * top horizontal of target rectangle in pixels.  
    * @return: double - pixels
    */
-  public int GetVSN_Pxl_ImgWidthTop() {
+  public double GetVSN_Pxl_ImgWidthTop() {
     return(VeVSN_Pxl_ImgWidthTop); 
   }
 
@@ -222,7 +223,7 @@ public double GetVSN_Pxl_LL_TgtSideShort() {
    * left vertical of target rectangle in pixels.  
    * @return: double - pixels
    */
-  public int GetVSN_Pxl_ImgHeightLt() {
+  public double GetVSN_Pxl_ImgHeightLt() {
     return(VeVSN_Pxl_ImgHeightLt); 
   }
 
@@ -231,7 +232,7 @@ public double GetVSN_Pxl_LL_TgtSideShort() {
    * right vertical of target rectangle in pixels.  
    * @return: double - pixels
    */
-  public int GetVSN_Pxl_ImgHeightRt() {
+  public double GetVSN_Pxl_ImgHeightRt() {
     return(VeVSN_Pxl_ImgHeightRt); 
   }
 
@@ -314,7 +315,7 @@ public double GetVSN_Pxl_LL_TgtSideShort() {
       tvert  = LimeLightTbl.getEntry("tvert");
       tcornx = LimeLightTbl.getEntry("tcornx");
       tcorny = LimeLightTbl.getEntry("tcorny");
-      }  
+    }  
 
 
  /**
@@ -327,8 +328,7 @@ public double GetVSN_Pxl_LL_TgtSideShort() {
 
       //read values periodically
       LL_TgtVld  = tv.getDouble(0.0);
-      if (LL_TgtVld == 1.0)
-        {
+      if (LL_TgtVld == 1.0) {
         LL_TgtAngX = tx.getDouble(0.0);
         LL_TgtAngY = ty.getDouble(0.0);
         LL_TgtArea = ta.getDouble(0.0);
@@ -363,8 +363,9 @@ public double GetVSN_Pxl_LL_TgtSideShort() {
       calcVSN_RefTgtImgMat();
       calcVSN_CamFocalPt();
       calcVSN_CamMat();
+      VmVSN_k_DistCoeff.zeros(4,1,CvType.CV_64F);
       RstVSN_CamMats();
-      }
+    }
 
   
    /**
@@ -376,7 +377,7 @@ public double GetVSN_Pxl_LL_TgtSideShort() {
       VmVSM_k_TransVect.zeros(3,1,CvType.CV_64F);
       VmVSM_k_Rot.zeros(3,3,CvType.CV_64F);
       VmVSM_k_ImgPlaneZeroWorld.zeros(3,3,CvType.CV_64F);
-      }
+    }
 
 
    /**
@@ -388,7 +389,7 @@ public double GetVSN_Pxl_LL_TgtSideShort() {
       calcVSN_CamTgtImgGeometry();
       calcVSN_TgtDist();
       calcVSN_TgtData();
-      }
+    }
 
 
 
@@ -433,10 +434,9 @@ public double GetVSN_Pxl_LL_TgtSideShort() {
 
       /* Calculate the Rotation Matrix and Translation Vector */
       Err_PnP = Calib3d.solvePnP(VmVSN_l_RefObj, VmVSN_Pxl_RefImg, VmVSN_Pxl_Cam,
-                                 new MatOfDouble(), VmVSM_k_RotVect, VmVSM_k_TransVect);
+                                 VmVSN_k_DistCoeff, VmVSM_k_RotVect, VmVSM_k_TransVect);
   
-      if (Err_PnP == false)
-        {
+      if (Err_PnP == false) {
         /* Calculate Distance between Target and Camera/Robot */
         x = VmVSM_k_TransVect.get(Xcell,0);
         z = VmVSM_k_TransVect.get(Zcell,0);
@@ -461,12 +461,11 @@ public double GetVSN_Pxl_LL_TgtSideShort() {
         x = VmVSM_k_ImgPlaneZeroWorld.get(0,0);
         z = VmVSM_k_ImgPlaneZeroWorld.get(2,0);
         VeVSN_Deg_RbtRot = (double)Math.atan2(x[0], z[0]);
-        }
-      else /* (Err_PnP == true) */
-        {
+      }
+      else /* (Err_PnP == true) */ {
         /* Failed to calculated proper PnP values - Clear out Peristant Matrices and Variables */
         RstVSN_CamMats();
-        }
+      }
 
       /* free-up memory from the locally matricies */
       LmVSM_k_RotInv.release();
@@ -474,7 +473,7 @@ public double GetVSN_Pxl_LL_TgtSideShort() {
       LmVSM_k_ZerosVect.release();
 
       return(Err_PnP);
-      }
+    }
 
 
    /**
@@ -492,25 +491,25 @@ public double GetVSN_Pxl_LL_TgtSideShort() {
       /* Calculate the Rhombas Height via calculating the Height of the Eng-Triangles. */
       triHeight = Math.sqrt(Math.pow(K_Vision.KeVSN_l_RefTgtSides,2) - Math.pow(triBase,2));
 
-      /*  Determine Point Coordinates: TopLt Point */
-      VaVSN_l_RefObjCoord[TopLt][Xcell] = triBase;
-      VaVSN_l_RefObjCoord[TopLt][Ycell] = triHeight;
-      VaVSN_l_RefObjCoord[TopLt][Zcell] = 0.0;
+      /*  Determine Point Coordinates: RtUpr Point */
+      VaVSN_l_RefObjCoord[RtUpr][Xcell] = K_Vision.KeVSN_l_RefTgtTop;
+      VaVSN_l_RefObjCoord[RtUpr][Ycell] = triHeight;
+      VaVSN_l_RefObjCoord[RtUpr][Zcell] = 0.0;
 
-      /*  Determine Point Coordinates: BtmLt Point */
-      VaVSN_l_RefObjCoord[BtmLt][Xcell] = 0.0;
-      VaVSN_l_RefObjCoord[BtmLt][Ycell] = 0.0;
-      VaVSN_l_RefObjCoord[BtmLt][Zcell] = 0.0;
+      /*  Determine Point Coordinates: RtLwr Point */
+      VaVSN_l_RefObjCoord[RtLwr][Xcell] = K_Vision.KeVSN_l_RefTgtBtm;
+      VaVSN_l_RefObjCoord[RtLwr][Ycell] = 0.0;
+      VaVSN_l_RefObjCoord[RtLwr][Zcell] = 0.0;
+    
+      /*  Determine Point Coordinates: LtLwr Point */
+      VaVSN_l_RefObjCoord[LtLwr][Xcell] = 0.0;
+      VaVSN_l_RefObjCoord[LtLwr][Ycell] = 0.0;
+      VaVSN_l_RefObjCoord[LtLwr][Zcell] = 0.0;
 
-      /*  Determine Point Coordinates: BtmRt Point */
-      VaVSN_l_RefObjCoord[BtmRt][Xcell] = K_Vision.KeVSN_l_RefTgtBtm;
-      VaVSN_l_RefObjCoord[BtmRt][Ycell] = 0.0;
-      VaVSN_l_RefObjCoord[BtmRt][Zcell] = 0.0;
-
-      /*  Determine Point Coordinates: TopRt Point */
-      VaVSN_l_RefObjCoord[TopRt][Xcell] = K_Vision.KeVSN_l_RefTgtTop;
-      VaVSN_l_RefObjCoord[TopRt][Ycell] = triHeight;
-      VaVSN_l_RefObjCoord[TopRt][Zcell] = 0.0;
+      /*  Determine Point Coordinates: LtUpr Point */
+      VaVSN_l_RefObjCoord[LtUpr][Xcell] = triBase;
+      VaVSN_l_RefObjCoord[LtUpr][Ycell] = triHeight;
+      VaVSN_l_RefObjCoord[LtUpr][Zcell] = 0.0;
 
 
       /* Build Object Matrix from Array */
@@ -518,42 +517,24 @@ public double GetVSN_Pxl_LL_TgtSideShort() {
         VmVSN_l_RefObj.put(i,Xcell,VaVSN_l_RefObjCoord[i][Xcell]);
         VmVSN_l_RefObj.put(i,Ycell,VaVSN_l_RefObjCoord[i][Ycell]);
         VmVSN_l_RefObj.put(i,Zcell,VaVSN_l_RefObjCoord[i][Zcell]);
-        }
-
       }
+    }
 
 
    /**
-    * Method: calcVSN_RefTgtImgMat - Calculate the coordinates of
-    * the target image in the image plane in pixel units and build
+    * Method: calcVSN_RefTgtImgMat - Load the coordinates of the target
+    * image in the image plane in pixel units from calibrations and build
     * the Reference Target Image Matrix.
     */
     private void calcVSN_RefTgtImgMat() {
       int i;
 
-      /*  Determine Point Coordinates: TopRt Point */            
-      VaVSN_Pxl_RefImgCoord[TopRt][Xcell] = K_Vision.KaVSN_Pxl_RefImgCoordTopRt[Xcell];
-      VaVSN_Pxl_RefImgCoord[TopRt][Ycell] = K_Vision.KaVSN_Pxl_RefImgCoordTopRt[Ycell];
-
-      /*  Determine Point Coordinates: BtmRt Point */      
-      VaVSN_Pxl_RefImgCoord[BtmRt][Xcell] = K_Vision.KaVSN_Pxl_RefImgCoordBtmRt[Xcell];
-      VaVSN_Pxl_RefImgCoord[BtmRt][Ycell] = K_Vision.KaVSN_Pxl_RefImgCoordBtmRt[Ycell];
-
-      /*  Determine Point Coordinates: BtmLt Point */
-      VaVSN_Pxl_RefImgCoord[BtmLt][Xcell] = K_Vision.KaVSN_Pxl_RefImgCoordBtmLt[Xcell];
-      VaVSN_Pxl_RefImgCoord[BtmLt][Ycell] = K_Vision.KaVSN_Pxl_RefImgCoordBtmLt[Ycell];
-
-      /*  Determine Point Coordinates: TopLt Point */
-      VaVSN_Pxl_RefImgCoord[TopLt][Xcell] = K_Vision.KaVSN_Pxl_RefImgCoordTopLt[Xcell];
-      VaVSN_Pxl_RefImgCoord[TopLt][Ycell] = K_Vision.KaVSN_Pxl_RefImgCoordTopLt[Ycell];
-
-
       /* Build Object Matrix from Array */
       for (i=0;i<NumPts;i++) {
-        VmVSN_Pxl_RefImg.put(i,Xcell,VaVSN_Pxl_RefImgCoord[i][Xcell]);
-        VmVSN_Pxl_RefImg.put(i,Ycell,VaVSN_Pxl_RefImgCoord[i][Ycell]);
-        }
-     }
+        VmVSN_Pxl_RefImg.put(i,Xcell,K_Vision.KaVSN_Pxl_RefImgCoord[i][Xcell]);
+        VmVSN_Pxl_RefImg.put(i,Ycell,K_Vision.KaVSN_Pxl_RefImgCoord[i][Ycell]);
+      }
+    }
 
 
 
@@ -597,9 +578,9 @@ public double GetVSN_Pxl_LL_TgtSideShort() {
         VmVSN_Pxl_Cam.put(i,0,VaVSN_Pxl_CamMatrix[i][0]);
         VmVSN_Pxl_Cam.put(i,1,VaVSN_Pxl_CamMatrix[i][1]);
         VmVSN_Pxl_Cam.put(i,2,VaVSN_Pxl_CamMatrix[i][2]);
-        }
-
       }
+
+    }  
 
 
    /**
@@ -607,11 +588,11 @@ public double GetVSN_Pxl_LL_TgtSideShort() {
     * of the vision target in pixels, i.e. the length of all the sides.
     */
     private void calcVSN_CamTgtImgGeometry() {
-      VeVSN_Pxl_ImgWidthTop = calcVSN_PxlLengthLineSeg(VaVSN_Pxl_CamImgCoord[TopRt], VaVSN_Pxl_CamImgCoord[TopLt]);
-      VeVSN_Pxl_ImgWidthBtm = calcVSN_PxlLengthLineSeg(VaVSN_Pxl_CamImgCoord[BtmRt], VaVSN_Pxl_CamImgCoord[BtmLt]);
-      VeVSN_Pxl_ImgHeightLt = calcVSN_PxlLengthLineSeg(VaVSN_Pxl_CamImgCoord[BtmLt], VaVSN_Pxl_CamImgCoord[TopLt]);
-      VeVSN_Pxl_ImgHeightRt = calcVSN_PxlLengthLineSeg(VaVSN_Pxl_CamImgCoord[BtmRt], VaVSN_Pxl_CamImgCoord[TopRt]);
-      }
+      VeVSN_Pxl_ImgWidthTop = calcVSN_PxlLengthLineSeg(VaVSN_Pxl_CamImgCoord[RtUpr], VaVSN_Pxl_CamImgCoord[LtUpr]);
+      VeVSN_Pxl_ImgWidthBtm = calcVSN_PxlLengthLineSeg(VaVSN_Pxl_CamImgCoord[RtLwr], VaVSN_Pxl_CamImgCoord[LtLwr]);
+      VeVSN_Pxl_ImgHeightLt = calcVSN_PxlLengthLineSeg(VaVSN_Pxl_CamImgCoord[LtLwr], VaVSN_Pxl_CamImgCoord[LtUpr]);
+      VeVSN_Pxl_ImgHeightRt = calcVSN_PxlLengthLineSeg(VaVSN_Pxl_CamImgCoord[RtLwr], VaVSN_Pxl_CamImgCoord[RtUpr]);
+    }
 
     
    /**
@@ -620,10 +601,9 @@ public double GetVSN_Pxl_LL_TgtSideShort() {
     * of the line.  Uses the Pythagorean Theorem.
     * @param1: Array of Cartesian Coordinates of Line Segment PointA (int)
     * @param2: Array of Cartesian Coordinates of Line Segment PointB (int)
-    * @return: Length of Line Segment in Camera Pixels (int)
-
+    * @return: Length of Line Segment in Camera Pixels (double)
     */
-    private int calcVSN_PxlLengthLineSeg(int LeVSN_Pxl_PntA[], int LeVSN_Pxl_PntB[]) {
+    private double calcVSN_PxlLengthLineSeg(int LeVSN_Pxl_PntA[], int LeVSN_Pxl_PntB[]) {
       double diffX, diffY, hyp2;
       double length;
   
@@ -637,8 +617,8 @@ public double GetVSN_Pxl_LL_TgtSideShort() {
       hyp2 = (Math.pow(diffX,2)) + (Math.pow(diffY,2));
       length = Math.sqrt((double)hyp2);
 
-      return ((int)length);
-      }
+      return (length);
+    }
   
 
   /*****************************************************/
@@ -662,13 +642,13 @@ public double GetVSN_Pxl_LL_TgtSideShort() {
     LeVSN_l_RefTgtBtm = K_Vision.KeVSN_l_RefTgtBtm;
     if (LeVSN_l_RefTgtBtm <= 1) {
       LeVSN_l_RefTgtBtm = 1;
-      }
+    }
       
     LeVSN_l_FocalPt = ((double)K_Vision.KeVSN_Cnt_PxlTgtBtm * K_Vision.KeVSN_l_RefTgtToCamDist)/
                       (LeVSN_l_RefTgtBtm);
 
 	  VeVSN_Pxl_CamFocalPt = (int)LeVSN_l_FocalPt;          
-    }
+  }
 
 
   /****************************************************/
@@ -686,7 +666,7 @@ public double GetVSN_Pxl_LL_TgtSideShort() {
    * present reading of target width in pixels.
    */
    private void calcVSN_TgtDist() {
-     int LeVSN_Pxl_In;
+     double LeVSN_Pxl_In;
      double LeVSN_Pxl_Cam2Tgt;
 
      LeVSN_Pxl_In = VeVSN_Pxl_ImgWidthBtm;
@@ -694,13 +674,13 @@ public double GetVSN_Pxl_LL_TgtSideShort() {
      /* To protect against a divide by zero error */
      if (LeVSN_Pxl_In < 1) { 
          LeVSN_Pxl_In = 1;
-       }
+      }
         
      LeVSN_Pxl_Cam2Tgt = (K_Vision.KeVSN_l_RefTgtBtm * VeVSN_Pxl_CamFocalPt)/
                           LeVSN_Pxl_In;
 
      VeVSN_l_Cam2Tgt2ndry = LeVSN_Pxl_Cam2Tgt;
-     }
+    }
 
 
 

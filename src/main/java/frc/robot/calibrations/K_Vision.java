@@ -26,26 +26,17 @@ public class K_Vision {
 	/*  Target Reference Pixel Coordinates            */
 	/**************************************************/	 	
 
-     /** KaVSN_Pxl_RefImgCoordTopRt: Coordinates of the reference target
-     * image camera for the Top Right image point in Pixel Coordinates
-     * (X,Y). */
-    public static final int KaVSN_Pxl_RefImgCoordTopRt[] =  {59, 31};
-
-	/** KaVSN_Pxl_RefImgCoordBtmLt: Coordinates of the reference target
-     * image camera for the Bottom Right image point in Pixel Coordinates
-     * (X,Y). */
-    public static final int KaVSN_Pxl_RefImgCoordBtmRt[] =  {51, 34};
-
-	/** KaVSN_Pxl_RefImgCoordBtmLt: Coordinates of the reference target
-     * image camera for the Bottom Left image point in Pixel Coordinates
-     * (X,Y). */
-    public static final int KaVSN_Pxl_RefImgCoordBtmLt[] =  {48, 24};
-
-	/** KaVSN_Pxl_RefImgCoordTopLt: Coordinates of the reference target
-     * image camera for the Top Left image point in Pixel Coordinates
-     * (X,Y). */
-    public static final int KaVSN_Pxl_RefImgCoordTopLt[] = {58,20};
-
+    /** KaVSN_Pxl_RefImgCoord: Array of X,Y Coordinates of the reference
+     * target camera image. 
+     * Rows:    (RtUpper, RtLower, LtLower, LtUpper)
+     * Columns: (X,Y) */
+    public static final int KaVSN_Pxl_RefImgCoord[][] = 
+      {/*  X ,  Y */ 
+        { 59,  31}, /* RtUpper Corner */
+        { 51,  34}, /* RtLower Corner */
+        { 48,  24}, /* LtLower Corner */
+        { 58,  20}  /* LtUpper Corner */
+      };
 
 
     /**************************************************/
