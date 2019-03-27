@@ -54,5 +54,54 @@ public class K_Arm {
 
     // This is the tolerance for all the arm position commands:
     public final static int TOLERANCE = 1000;
-    
+
+
+    /**************************************************/
+    /*  Arm System Feed-Forward Term                */
+ 	/**************************************************/	 	
+
+	/** KARM_dPct_VelFeedFwdTerm: Arm System Velocity Control
+     * Feed Forward Term for Motion Magic Control in units of
+     * 1023 * duty-cycle / encoder-counter-per-100ms.
+     */
+    public static final double KARM_dPct_VelFeedFwdTerm = 0.11;
+
+
+    /**************************************************/
+    /*  Arm System PID Gains                       */
+ 	/**************************************************/	 	
+
+	/** KARM_k_VelPropGx: Arm System Velocity Control
+     * Proportional Gain.
+     */
+    public static final double KARM_k_VelPropGx = 0.13;
+     
+	/** KARM_k_VelIntglGx: Arm System Velocity Control
+     * Integral Gain.
+     */
+    public static final double KARM_k_VelIntglGx = 0.00007;
+
+	/** KARM_k_VelDerivGx: Arm System Velocity Control
+     * Derivative Gain.
+     */
+    public static final double KARM_k_VelDerivGx = 0.0013;
+
+   
+    /**************************************************/
+    /*  Arm System Motion Speed Profile Settings    */
+    /**************************************************/	 	
+
+	/** KARM_n_MM_CruiseVel: Arm System Motion Magic
+     * Speed Profiling Cruise Velocity in units of encoder
+     * counts per 100ms.
+     */
+    public static final int KARM_n_MM_CruiseVel = 11000;
+     
+	/** KARM_a_MM_MaxAccel: Arm System Motion Magic
+     * Speed Profiling Maximum Acceleration in units of
+     * encoder counts per 100ms per sec.
+     */
+    public static final int KARM_a_MM_MaxAccel = 12000;
+
+
 }

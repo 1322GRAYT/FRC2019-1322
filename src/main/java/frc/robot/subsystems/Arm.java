@@ -35,13 +35,13 @@ public class Arm extends Subsystem {
   
 
   public Arm() {
-    Lift.configMotionCruiseVelocity(11000);
-    Lift.configMotionAcceleration(12000);
+    Lift.configMotionCruiseVelocity(K_Arm.KARM_n_MM_CruiseVel);
+    Lift.configMotionAcceleration(K_Arm.KARM_a_MM_MaxAccel);
     Lift.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
-    Lift.config_kF(0, 0.11);
-    Lift.config_kP(0, 0.13);
-    Lift.config_kI(0, 0.0001);
-    Lift.config_kD(0, 0.0);
+    Lift.config_kF(0, K_Arm.KARM_dPct_VelFeedFwdTerm);
+    Lift.config_kP(0, K_Arm.KARM_k_VelPropGx);
+    Lift.config_kI(0, K_Arm.KARM_k_VelIntglGx);
+    Lift.config_kD(0, K_Arm.KARM_k_VelDerivGx);
     Lift.configForwardSoftLimitThreshold(K_Arm.ARM_POS_DATA[K_Arm.MAX_ARM_POSITION].location); //ARMLEVELS[ARMLEVELS.length-1]);
     Lift.configForwardSoftLimitEnable(true);
   }

@@ -11,7 +11,11 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.*;
+import frc.robot.commands.*;
+import frc.robot.models.*;
+
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -23,7 +27,7 @@ import frc.robot.subsystems.*;
 public class Robot extends TimedRobot {
   public static OI m_oi;
 
-  public final static boolean CompBot = false;
+  public final static boolean         CompBot   = false;
   
   public final static Drives          DRIVES    = new Drives();
   public final static Claw            CLAW      = new Claw();
@@ -46,6 +50,10 @@ public class Robot extends TimedRobot {
     VISION.MngVSN_InitCamCalibr();
   
     m_oi = new OI();
+
+		m_chooser.addDefault("Driver Control Only", new CA_RevertToTele());
+		m_chooser.addObject("Auto Drive Forward", new CA_DrvPstnTgt(0, /*cvrtDistToCnts(251.32)*/ 140000));
+		SmartDashboard.putData("Auto Mode:", m_chooser);
   }
 
   /**
@@ -58,7 +66,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
-  
+  Robot.DRIVES.updateDrvEncdrData();
   }
 
   /**
@@ -88,7 +96,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousInit() {
- 
+
     m_autonomousCommand = m_chooser.getSelected();
 
     /*

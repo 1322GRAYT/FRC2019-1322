@@ -405,9 +405,6 @@ public double GetVSN_Pxl_LL_TgtSideShort() {
     private void parseVSN_CamImgData() {
       int i;
 
-      System.out.println("LL_TgtCornX size : " + LL_TgtCornX.length);
-      System.out.println("LL_TgtCornY size : " + LL_TgtCornY.length);
-
       for (i=0;i<NumPts;i++) {
         VaVSN_Pxl_CamImgCoord[i][Xcell] = (int)LL_TgtCornX[i];
         VaVSN_Pxl_CamImgCoord[i][Ycell] = (int)LL_TgtCornY[i];
@@ -428,6 +425,8 @@ public double GetVSN_Pxl_LL_TgtSideShort() {
       Mat LmVSM_k_TransVectNeg = new Mat(1,3,CvType.CV_64F);
       Mat LmVSM_k_ZerosVect    = new Mat(3,1,CvType.CV_64F);
 
+      System.out.println("LL_TgtCornX size : " + LL_TgtCornX.length);
+      System.out.println("LL_TgtCornY size : " + LL_TgtCornY.length);
       System.out.println("RefObj Matrix : " + VmVSN_l_RefObj);
       System.out.println("RefImg Matrix : " + VmVSN_Pxl_RefImg);
       System.out.println("Camera Matrix : " + VmVSN_Pxl_Cam);
