@@ -11,12 +11,14 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
+import frc.robot.calibrations.K_Arm;
 import frc.robot.models.GamePieces;
 
 public class CC_ArmHoldPanel extends Command {
 
   Timer buttonTimer = new Timer();
   private Button buttonRef;
+  private boolean tFlag;
 
   public CC_ArmHoldPanel(Button buttonRef) {
     // Use requires() here to declare subsystem dependencies
@@ -30,16 +32,20 @@ public class CC_ArmHoldPanel extends Command {
   protected void initialize() {
     buttonTimer.reset();
     buttonTimer.start();
+    tFlag = false;
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    if ((buttonTimer.get() > 0.5) || (Robot.ARM.getGamePieceType() != GamePieces.HatchPanel)){
+    if ((buttonTimer.get() > K_Arm.BUTTON_TIMEOUT) || (Robot.ARM.getGamePieceType() != GamePieces.HatchPanel)){
       Robot.ARM.resetToHABPanelPickup();
+      Robot.ARM.MMArm(Robot.ARM.getCurrenPositionData().location);
+      tFlag = true;
     } else if (!buttonRef.get()) {
       Robot.ARM.incrementPosition();
-
+      Robot.ARM.MMArm(Robot.ARM.getCurrenPositionData().location);
+      tFlag = true;
     }
   }
 

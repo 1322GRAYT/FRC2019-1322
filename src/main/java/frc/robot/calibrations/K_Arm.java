@@ -18,6 +18,11 @@ import frc.robot.models.GamePieces;
  */
 public class K_Arm {
 
+        /*************
+         * 
+         */
+        public static final double BUTTON_TIMEOUT = 0.5;
+
         /********************************************/
         /* Arm Position Encoder Count Definitions */
         /********************************************/
