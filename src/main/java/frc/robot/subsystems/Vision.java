@@ -101,165 +101,165 @@ public class Vision extends Subsystem {
   /*******************************/
 
  /**
-   * Method: GetVSN_b_LL_TgtVld - Indication that Valid Target data has
+   * Method: getVSN_b_LL_TgtVld - Indication that Valid Target data has
    * been acquired.
    * @return: double - boolean (valid = true)
    */
-  public double GetVSN_b_LL_TgtVld() {
+  public double getVSN_b_LL_TgtVld() {
     return(LL_TgtVld);
   }
 
  /**
-   * Method: GetVSN_deg_LL_TgtAngX - Horizontal Offset from CrossHair to
+   * Method: getVSN_deg_LL_TgtAngX - Horizontal Offset from CrossHair to
    * Target (-27 to 27 degrees).
    * @return: double - degrees
    */
-  public double GetVSN_deg_LL_TgtAngX() {
+  public double getVSN_deg_LL_TgtAngX() {
     return(LL_TgtAngX);
   }
 
  /**
-   * Method: GetVSN_deg_LL_TgtAngY - Vertical Offset from CrossHair to
+   * Method: getVSN_deg_LL_TgtAngY - Vertical Offset from CrossHair to
    * Target (-20.5 to 20.5 degrees).
    * @return: double - degrees
    */
-  public double GetVSN_deg_LL_TgtAngY() {
+  public double getVSN_deg_LL_TgtAngY() {
     return(LL_TgtAngY);
   }
 
  /**
-   * Method: GetVSN_Pct_LL_TgtArea - Target Area (0% of image to 100% of image).
+   * Method: getVSN_Pct_LL_TgtArea - Target Area (0% of image to 100% of image).
    * @return: double - percent
    */
-  public double GetVSN_Pct_LL_TgtArea() {
+  public double getVSN_Pct_LL_TgtArea() {
     return(LL_TgtArea);
   }
 
  /**
-   * Method: GetVSN_Deg_LL_TgtSkew - Target Skew or Rotation
+   * Method: getVSN_Deg_LL_TgtSkew - Target Skew or Rotation
    * @return: double - degrees
    */
-  public double GetVSN_Deg_LL_TgtSkew() {
+  public double getVSN_Deg_LL_TgtSkew() {
     return(LL_TgtSkew);
   }
 
  /**
-   * Method: GetVSN_Pxl_LL_TgtSideShort - Sidelength of shortest side
+   * Method: getVSN_Pxl_LL_TgtSideShort - Sidelength of shortest side
    * of the fitted bounding box (pixels).  
    * @return: double - pixels
    */
-public double GetVSN_Pxl_LL_TgtSideShort() {
+public double getVSN_Pxl_LL_TgtSideShort() {
     return(LL_TgtSideShort);
   }
 
  /**
-   * Method: GetVSN_Pxl_LL_TgtSideLong - Sidelength of longest side
+   * Method: getVSN_Pxl_LL_TgtSideLong - Sidelength of longest side
    * of the fitted bounding box (pixels).  
    * @return: double - pixels
    */
-  public double GetVSN_Pxl_LL_TgtSideLong() {
+  public double getVSN_Pxl_LL_TgtSideLong() {
     return(LL_TgtSideLong);
   }
 
  /**
-   * Method: GetVSN_Pxl_LL_TgtLngthHort - Horizontal sidelength of
+   * Method: getVSN_Pxl_LL_TgtLngthHort - Horizontal sidelength of
    * the rough bounding box (0 - 320 pixels).
    * @return: double - pixels
    */
-  public double GetVSN_Pxl_LL_TgtLngthHort() {
+  public double getVSN_Pxl_LL_TgtLngthHort() {
     return(LL_TgtLngthHort);
   }
 
  /**
-   * Method: GetVSN_Pxl_LL_TgtLngthVert - Vertical sidelength of
+   * Method: getVSN_Pxl_LL_TgtLngthVert - Vertical sidelength of
    * the rough bounding box (0 - 320 pixels).  
    * @return: double - pixels
    */
-  public double GetVSN_Pxl_LL_TgtLngthVert() {
+  public double getVSN_Pxl_LL_TgtLngthVert() {
     return(LL_TgtLngthVert);
   }
 
  /**
-   * Method: GetVSN_Pxl_LL_TgtCornX - Target Corner X-Coordinates
+   * Method: getVSN_Pxl_LL_TgtCornX - Target Corner X-Coordinates
    * RH, RL, LL, LH (0 - 320 pixels).
    * @param1: int - Xcell index (RH, RL, LL, LH)
    * @return: double - pixels X Coordinates (RH, RL, LL, LH)
    */
-  public double GetVSN_Pxl_LL_TgtCornX(int LeVSN_i_CellIdx) {
+  public double getVSN_Pxl_LL_TgtCornX(int LeVSN_i_CellIdx) {
     return(LL_TgtCornX[LeVSN_i_CellIdx]);
   }
 
 // Target Corner Coord-Y: RH, RL, LL, LH (0 - 320 pixels)
  /**
-   * Method: GetVSN_Pxl_LL_TgtCornY - Target Corner Y-Coordinates
+   * Method: getVSN_Pxl_LL_TgtCornY - Target Corner Y-Coordinates
    * RH, RL, LL, LH (0 - 320 pixels).
    * @param1: int - Ycell index (RH, RL, LL, LH)
    * @return: double - pixels Y Coordinates (RH, RL, LL, LH)
    */
-  public double GetVSN_Pxl_LL_TgtCornY(int LeVSN_i_CellIdx) {
+  public double getVSN_Pxl_LL_TgtCornY(int LeVSN_i_CellIdx) {
     return(LL_TgtCornY[LeVSN_i_CellIdx]);
   }
 
    /**
-   * Method: GetVSN_Pxl_ImgWidthBtm - Target image width of
+   * Method: getVSN_Pxl_ImgWidthBtm - Target image width of
    * bottom horizontal of target rectangle in pixels.  
    * @return: double - pixels
    */
-  public double GetVSN_Pxl_ImgWidthBtm() {
+  public double getVSN_Pxl_ImgWidthBtm() {
      return(VeVSN_Pxl_ImgWidthBtm); 
   }
 
    /**
-   * Method: GetVSN_Pxl_ImgWidthTop - Target image width of
+   * Method: getVSN_Pxl_ImgWidthTop - Target image width of
    * top horizontal of target rectangle in pixels.  
    * @return: double - pixels
    */
-  public double GetVSN_Pxl_ImgWidthTop() {
+  public double getVSN_Pxl_ImgWidthTop() {
     return(VeVSN_Pxl_ImgWidthTop); 
   }
 
    /**
-   * Method: GetVSN_Pxl_ImgHeightLt - Target image height of
+   * Method: getVSN_Pxl_ImgHeightLt - Target image height of
    * left vertical of target rectangle in pixels.  
    * @return: double - pixels
    */
-  public double GetVSN_Pxl_ImgHeightLt() {
+  public double getVSN_Pxl_ImgHeightLt() {
     return(VeVSN_Pxl_ImgHeightLt); 
   }
 
    /**
-   * Method: GetVSN_Pxl_ImgHeightRt - Target image height of
+   * Method: getVSN_Pxl_ImgHeightRt - Target image height of
    * right vertical of target rectangle in pixels.  
    * @return: double - pixels
    */
-  public double GetVSN_Pxl_ImgHeightRt() {
+  public double getVSN_Pxl_ImgHeightRt() {
     return(VeVSN_Pxl_ImgHeightRt); 
   }
 
    /**
-   * Method: GetVSN_Pxl_CamFocalPt - Camera Focal Point/Length
+   * Method: getVSN_Pxl_CamFocalPt - Camera Focal Point/Length
    * in Pixels (from Camera Calibration Measurements).  
    * @return: double - pixels
    */
-  public int GetVSN_Pxl_CamFocalPt() {
+  public int getVSN_Pxl_CamFocalPt() {
     return(VeVSN_Pxl_CamFocalPt); 
   }
 
   /**
-   * Method: GetVSN_l_Cam2Tgt2ndry - Calculated Camera to Target
+   * Method: getVSN_l_Cam2Tgt2ndry - Calculated Camera to Target
    * Distance (Secondary Calculation).  
    * @return: double - pixels
    */
-  public double GetVSN_l_Cam2Tgt2ndry() {
+  public double getVSN_l_Cam2Tgt2ndry() {
     return(VeVSN_l_Cam2Tgt2ndry); 
   }
 
   /**
-   * Method: GetVSN_l_Cam2Tgt - Calculated Camera to Target
+   * Method: getVSN_l_Cam2Tgt - Calculated Camera to Target
    * Distance (Primary Calculation).  
    * @return: double - pixels
    */
-  public double GetVSN_l_Cam2Tgt() {
+  public double getVSN_l_Cam2Tgt() {
     return(VeVSN_l_Cam2Tgt); 
   }
 
@@ -267,7 +267,7 @@ public double GetVSN_Pxl_LL_TgtSideShort() {
    * Method: VeVSN_l_Rbt2Tgt - Calculated Robot to Target Distance.  
    * @return: double - inches
    */
-  public double GetVSN_l_Rbt2Tgt() {
+  public double getVSN_l_Rbt2Tgt() {
     return(VeVSN_l_Rbt2Tgt); 
   }
 
@@ -277,17 +277,17 @@ public double GetVSN_Pxl_LL_TgtSideShort() {
    * center to the robot.
    * @return: double - degrees
    */
-  public double GetVSN_deg_Rbt2Tgt() {
+  public double getVSN_deg_Rbt2Tgt() {
     return(VeVSN_deg_Rbt2Tgt); 
   }
 
   /**
-   * Method: GetVSN_Deg_RbtRot - Calculated Angle of Rotation of the
+   * Method: getVSN_Deg_RbtRot - Calculated Angle of Rotation of the
    * Robot wrt to the line perpendicular to the camera lens and the and
    * the line between the robot and center of target.
    * @return: double - degrees
    * */
-  public double GetVSN_Deg_RbtRot() {
+  public double getVSN_Deg_RbtRot() {
     return(VeVSN_Deg_RbtRot); 
   }
 
@@ -364,15 +364,15 @@ public double GetVSN_Pxl_LL_TgtSideShort() {
       calcVSN_CamFocalPt();
       calcVSN_CamMat();
       VmVSN_k_DistCoeff.zeros(4,1,CvType.CV_64F);
-      RstVSN_CamMats();
+      RstVSN_ImgVects();
     }
 
   
    /**
-    * Method: RstVSN_CamMats - Resets the persistent Camera Matricies
+    * Method: RstVSN_ImgVects - Resets the persistent Camera Matricies
       by loading them as zero matricies..
     */
-    public void RstVSN_CamMats() {
+    public void RstVSN_ImgVects() {
       VmVSM_k_RotVect.zeros(3,1,CvType.CV_64F);
       VmVSM_k_TransVect.zeros(3,1,CvType.CV_64F);
       VmVSM_k_Rot.zeros(3,3,CvType.CV_64F);
@@ -463,7 +463,7 @@ public double GetVSN_Pxl_LL_TgtSideShort() {
       }
       else /* (Err_PnP == true) */ {
         /* Failed to calculated proper PnP values - Clear out Peristant Matrices and Variables */
-        RstVSN_CamMats();
+        RstVSN_ImgVects();
       }
 
       /* free-up memory from the locally matricies */

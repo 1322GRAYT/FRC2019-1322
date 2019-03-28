@@ -5,8 +5,10 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import frc.robot.commands.*;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import frc.robot.Robot;
 import frc.robot.RobotMap;
 import frc.robot.calibrations.K_Drive;
+import frc.robot.calibrations.K_System;
 
 enum DrivePosition {
   FrontLeft, FrontRight, RearLeft, RearRight
@@ -86,6 +88,12 @@ public class Drives extends Subsystem {
     }
   }
 
+
+  /**************************************
+   ** Motion Magic Drive Control       **
+   **                                  **
+   **************************************/
+  
   /****************************************************************
    * Drive Functions
    * Includes all functions required to drive the robot
@@ -163,6 +171,76 @@ public class Drives extends Subsystem {
 
 
 
+
+  /******************************************
+   ** Drive Encoder and Speed Calculations **
+   **                                      **
+   ******************************************/
+
+  /************************************
+   * Encoder Public Interfaces        *
+   ************************************/
+
+  /**
+   * Method: getDRV_cnt_EncdrCnt - Drive Motor Encoder Counts
+   * @param: int - encoder index: 0-3 (FL, FR, RL, RR)  
+   * @return: double - counts
+   */
+  public double getDRV_cnt_EncdrCnt(int idx)  {
+    return VaDRV_cnt_EncdrCnt[idx];   
+  }
+
+  /**
+   * Method: getDRV_f_EncdrVelRaw - Drive Motor Encoder Raw Velocity
+   * @param: int - encoder index: 0-3 (FL, FR, RL, RR)  
+   * @return: double - counts/100ms
+   */
+  public double getDRV_f_EncdrVelRaw(int idx)  {
+    return VaDRV_f_EncdrVelRaw[idx];   
+  }
+
+  /**
+   * Method: getDRV_f_EncdrVel - Drive Motor Encoder Velocity
+   * @param: int - encoder index: 0-3 (FL, FR, RL, RR)  
+   * @return: double - counts/sec
+   */
+  public double getDRV_f_EncdrVel(int idx)  {
+    return VaDRV_f_EncdrVel[idx];   
+  }
+
+  /**
+   * Method: getDRV_n_EncdrRPM - Drive Motor Encoder Angular Velocity
+   * @param: int - encoder index: 0-3 (FL, FR, RL, RR)  
+   * @return: double - rpm
+   */
+  public double getDRV_n_EncdrRPM(int idx)  {
+    return VaDRV_n_EncdrRPM[idx];   
+  }
+
+
+  /**
+   * Method: getDRV_n_WhlRPM - Drive Wheel Angular Velocity
+   * @param: int - encoder index: 0-3 (FL, FR, RL, RR)  
+   * @return: double - rpm
+   */
+  public double getDRV_n_WhlRPM(int idx)  {
+    return VaDRV_n_WhlRPM[idx];   
+  }
+
+  /**
+   * Method: getDRV_v_WhlVel - Drive Wheel Lineal Velocity
+   * @param: int - encoder index: 0-3 (FL, FR, RL, RR)  
+   * @return: double - inches/sec
+   */
+  public double getDRV_v_WhlVel(int idx)  {
+    return VaDRV_v_WhlVel[idx];   
+  }
+
+
+  /************************************
+   * Public SubSystem Methods         *
+   ************************************/
+
   /** Method: updateDrvEncdrData - Updates the derived Drive Encoder data at
    *  a periodic rate so that only one set of Talon Calls for Sensor Positions
    *  and Velocity per loop is done to minimize throughput.  Each Call to
@@ -181,8 +259,62 @@ public class Drives extends Subsystem {
       VaDRV_n_EncdrRPM[idx]    = (VaDRV_f_EncdrVel[idx]/K_Drive.KDRV_Cnt_PlsPerRevEncdr)*(60); // rpm  (1 rpm = 600 rev/100 rpm)
       VaDRV_n_WhlRPM[idx]      = VaDRV_n_EncdrRPM[idx]/K_Drive.KDRV_r_EncdrToWhl;              // rpm
       VaDRV_v_WhlVel[idx]      = (VaDRV_n_WhlRPM[idx]*K_Drive.KDRV_l_DistPerRevWhl)/60;        // inches/sec
-    }        
+    }
+
+    if (K_System.KCMD_b_DebugEnbl == true) {
+      Robot.DASHBOARD.updateSmartDashDrvData();
+    }
+
   }
+
+
+  /** Method: cvrtAngToLinSpd - Calculates the Linear 
+   *  Speed of the Robot from the Angular Wheel Speed
+   *  when moving directly forward or rearward.
+   *  @param: Wheel Angular Speed (rpm)
+   *  @return: Robot Linear Speed (inch/sec) */	
+   public static float cvrtAngToLinSpd(float SpdWhl) {
+    return ((float)((K_Drive.KDRV_l_DistPerRevWhl * SpdWhl)/(float)60));
+  }
+  
+
+  /** Method: cvrtDistToCnts - Calculates the nominal number 
+   *  of Drive encoder counts (cnts) that would be registered if
+   *  the the Drive Wheel traveled forward/backward the
+   *  desired distance given (inches).
+   *  @param: Desired Distance (inches)
+   *  @return: Encoder Counts (cnts) */
+  public static double cvrtDistToCnts(float DistInch) {
+    double WhlRevs;
+    double EncdrRevs;
+    double EncdrCnts;
+   
+    WhlRevs   = (double)(DistInch / K_Drive.KDRV_l_DistPerRevWhl);	 
+    EncdrRevs = WhlRevs * (double)K_Drive.KDRV_r_EncdrToWhl;	 
+    EncdrCnts = EncdrRevs * (double)K_Drive.KDRV_Cnt_PlsPerRevEncdr;
+   
+    return EncdrCnts;
+  }
+
+
+  /** Method: cvrtCntsToDist - Calculates the nominal distance
+   *  that would be/was travelled in inches based on the number
+   *  of encoder counts that were registered by the the Drive Wheel
+   *  encoder (cnts).
+   *  @param: Encoder Counts (cnts) 
+   *  @return: Desired Distance (inches) */
+  public static double cvrtCntsToDist(int EncdrCnts) {
+    double EncdrRevs;
+    double WhlRevs;
+    double DistInch;
+
+    EncdrRevs = (double)EncdrCnts / (double)K_Drive.KDRV_Cnt_PlsPerRevEncdr;
+    WhlRevs   = EncdrRevs / (double)K_Drive.KDRV_r_EncdrToWhl;	 
+    DistInch  = WhlRevs * (double)K_Drive.KDRV_l_DistPerRevWhl;	 
+  
+    return DistInch;
+  }
+
 
 
   @Override
