@@ -7,14 +7,19 @@
 
 package frc.robot.subsystems;
 
+import java.util.ListIterator;
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotMap;
-import frc.robot.commands.*;
 import frc.robot.calibrations.K_Arm;
+import frc.robot.commands.CT_ArmCntrl;
+import frc.robot.models.PositionData;
+import frc.robot.models.GamePieces;
 
 /**
  * Add your docs here.
@@ -25,14 +30,17 @@ public class Arm extends Subsystem {
 
   WPI_TalonSRX Lift = new WPI_TalonSRX(RobotMap.LiftMotorAddress);
   /************************************************
-   * Section depreciated of ARMLEVELS, use K_Arm.ARM_POS_LEVEL to replace this variable
-   * Reason for this is to provide a better model for how 
-  */
+   * Section depreciated of ARMLEVELS, use K_Arm.ARM_POS_LEVEL to replace this
+   * variable Reason for this is to provide a better model for how
+   */
   private int setPoint = 0;
   public int ballPoint = 0;
   public int panelPoint = 0;
   public boolean AUTOMATIC_ACTIVE = false;
-  
+  private ListIterator<PositionData> currentIterator = K_Arm.ALL_POS_DATA.listIterator(1);
+  private PositionData currentPositionData = K_Arm.ALL_POS_DATA.get(0);
+
+  GamePieces gamePieces = GamePieces.Cargo;
 
   public Arm() {
     Lift.configMotionCruiseVelocity(K_Arm.KARM_n_MM_CruiseVel);
@@ -42,29 +50,73 @@ public class Arm extends Subsystem {
     Lift.config_kP(0, K_Arm.KARM_k_VelPropGx);
     Lift.config_kI(0, K_Arm.KARM_k_VelIntglGx);
     Lift.config_kD(0, K_Arm.KARM_k_VelDerivGx);
-    Lift.configForwardSoftLimitThreshold(K_Arm.ARM_POS_DATA[K_Arm.MAX_ARM_POSITION].location); //ARMLEVELS[ARMLEVELS.length-1]);
+    Lift.configForwardSoftLimitThreshold(K_Arm.ALL_POS_DATA.get(K_Arm.ALL_POS_DATA.size() - 1).location);  //ARMLEVELS[ARMLEVELS.length-1]);
     Lift.configForwardSoftLimitEnable(true);
   }
 
   /**
-   * @return the balllevels
+   * Increments current List Position regardless of List being used
+   * 
+   * @return Returns the new position data
    */
-  public static int getBalllevels(int level) {
-    return K_Arm.BALL_POSITIONS[level];
+  public PositionData incrementPosition() {
+    if (currentIterator.hasNext()) {
+      currentPositionData = currentIterator.next();
+    }
+    return currentPositionData;
   }
 
   /**
-   * @return the panellevels
+   * Decrements current List Position regardless of List being used
+   * 
+   * @return Returns the new position data
    */
-  public static int getPanellevels(int level) {
-    return K_Arm.PANEL_POSITIONS[level];
+  public PositionData decrementPosition() {
+    if (currentIterator.hasPrevious()) {
+      currentPositionData = currentIterator.previous();
+    }
+    return currentPositionData;
   }
 
   /**
-   * @return the setPoint
+   * Sets the Arm to floor cargo pickup
+   * 
+   * @return Returns the new position data
    */
-  public int getSetPoint() {
-    return setPoint;
+  public PositionData resetToFloorCargoPickup() {
+    if (gamePieces != GamePieces.Cargo) {
+      gamePieces = GamePieces.Cargo;
+    }
+    currentIterator = K_Arm.BALL_POS_DATA.listIterator(0);
+    currentPositionData = currentIterator.next();
+    return currentPositionData;
+  }
+
+  public PositionData resetToHABPanelPickup() {
+    if (gamePieces != GamePieces.HatchPanel) {
+      gamePieces = GamePieces.HatchPanel;
+    }
+    currentIterator = K_Arm.PANEL_POS_DATA.listIterator(0);
+    currentPositionData = currentIterator.next();
+    return currentPositionData;
+  }
+
+  public GamePieces getGamePieceType() {
+    return gamePieces;
+  }
+
+  public PositionData getCurrenPositionData() {
+    return currentPositionData;
+  }
+
+  public void placeLocationTexttoSDB() {
+    SmartDashboard.putString("Arm Level", getCurrenPositionData().name + " " + getCurrenPositionData().type);
+  }
+
+  public void placeArmDatatoSDB() {
+    double[] input = { (double) liftRawPosition(), (double) liftRawVelocity(),
+        (double) getCurrenPositionData().location, (double) armVoltage(), (double) armError() };
+    SmartDashboard.putNumberArray("Arm Data", input);
   }
 
   /**
@@ -78,31 +130,40 @@ public class Arm extends Subsystem {
     return Lift.getSelectedSensorPosition();
   }
 
-  public int liftRawVelocity(){
+  public int liftRawVelocity() {
     return Lift.getSelectedSensorVelocity();
   }
 
-  public void LiftByVoltage(double Power){
+  public void LiftByVoltage(double Power) {
     Lift.set(ControlMode.PercentOutput, Power);
   }
 
-  public void MMArm(int Pos){
-    Lift.set(ControlMode.MotionMagic, Pos);
-  }
-
-  public void VelArm(int Vel){
+  public void VelArm(int Vel) {
     Lift.set(ControlMode.Velocity, Vel);
   }
 
-  public void armSafety(boolean safety){
-    Lift.setSafetyEnabled(safety);
-  }
-
-  public double armVoltage(){
+  public double armVoltage() {
     return Lift.getMotorOutputVoltage();
   }
 
-  public int armError(){
+  /*
+   * Section for specifically controlling the arm
+   */
+
+  /************
+   * Sets Motion Magic for the controller
+   * 
+   * @param Pos Enter the encoder Ticks you wish the arm to travel too
+   */
+  public void MMArm(int Pos) {
+    Lift.set(ControlMode.MotionMagic, Pos);
+  }
+
+  public void armSafety(boolean safety) {
+    Lift.setSafetyEnabled(safety);
+  }
+
+  public int armError() {
     return Lift.getClosedLoopError();
   }
 

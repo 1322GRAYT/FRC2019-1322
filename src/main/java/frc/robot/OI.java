@@ -39,23 +39,18 @@ public class OI {
 
   public OI() {
     //When "A" Button is pressed, eject Hatch Panel, When Released, Retract pnuematics
-    AuxStick.aButton.whenPressed (new CC_ClawHatchCntrl(false));
+    AuxStick.aButton.whenPressed(new CC_ClawHatchCntrl(false));
     AuxStick.bButton.whenPressed(new CC_ClawHatchCntrl(true));
     //When Right Bumper is pressed, push claw out, when Left bumper is pressed, pull claw in
-    AuxStick.rightBumper.whenPressed(new CC_ClawBallCntrl(true));
-    AuxStick.leftBumper.whenPressed(new CC_ClawBallCntrl(false));
+    AuxStick.rightBumper.whenPressed(new CC_ClawBallCntrl());
     //When A Button is pressed, extend Lift
-    DriverStick.aButton.whenPressed(new CC_LiftHorizSpdTgt(1));
-    DriverStick.aButton.whenReleased(new CC_LiftHorizSpdTgt(0));
+    DriverStick.aButton.whileHeld(new CC_LiftHorizSpdTgt(1));
     //When B Button is pressed, retract lift
-    DriverStick.bButton.whenPressed(new CC_LiftHorizSpdTgt(-1));
-    DriverStick.bButton.whenReleased(new CC_LiftHorizSpdTgt(0));
+    DriverStick.bButton.whileHeld(new CC_LiftHorizSpdTgt(-1));
     //When Right Trigger is pressed, lift bot
     DriverStick.rightTriggerButton.whenPressed(new CC_LiftVertSpdTgt(1));
-    DriverStick.rightTriggerButton.whenReleased(new CC_LiftVertSpdTgt(0));
     //When Left Trigger is pressed, lower bot
-    DriverStick.leftTriggerButton.whenPressed(new CC_LiftVertSpdTgt(-1.0));
-    DriverStick.leftTriggerButton.whenReleased(new CC_LiftVertSpdTgt(0));
+    DriverStick.leftTriggerButton.whenPressed(new CC_LiftVertSpdTgt(-1));
     //When Right Bumper is pressed, retract lift pnumatics
     DriverStick.rightBumper.whenPressed(new CC_LiftChassisWhlCntrl(true));
     //When Left Bumper is pressed, extend lift pnumatics
@@ -67,10 +62,8 @@ public class OI {
     DriverStick.selectButton.whileHeld(new CA_DrvPstnTgt(0, 140000));
 
     // Arm Controls
-    AuxStick.xButton.whenPressed(new CC_ArmPstnRaiseNxtBallLvl());
-    AuxStick.yButton.whenPressed(new CC_ArmPstnRaiseNxtHatchLvl());
-    AuxStick.selectButton.whenPressed(new CC_ArmPstnPickupBall());
-    AuxStick.startButton.whenPressed(new CC_ArmPstnPickupHatch());
+    AuxStick.yButton.whenPressed(new CC_ArmHoldPanel(AuxStick.yButton));
+    AuxStick.xButton.whenPressed(new CC_ArmHoldToBall(AuxStick.xButton));
   }
 
 }
