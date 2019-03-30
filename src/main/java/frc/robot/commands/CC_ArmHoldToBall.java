@@ -48,12 +48,9 @@ public class CC_ArmHoldToBall extends Command {
         Robot.ARM.MMArm(Robot.ARM.getCurrenPositionData().location);
         tFlag = true;
       }
-
-      if (tFlag){
-        Robot.ARM.placeLocationTexttoSDB();
-      }
     }
     Robot.ARM.placeArmDatatoSDB();
+    Robot.ARM.placeLocationTexttoSDB();
   }
 
   // Make this return true when this Command no longer needs to run execute()

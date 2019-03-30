@@ -52,6 +52,7 @@ public class CC_ArmHoldPanel extends Command {
       }
     }
     Robot.ARM.placeArmDatatoSDB();
+    Robot.ARM.placeLocationTexttoSDB();
   }
 
   // Make this return true when this Command no longer needs to run execute()
