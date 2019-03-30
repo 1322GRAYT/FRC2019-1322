@@ -78,9 +78,9 @@ public class Drives extends Subsystem {
    * Includes all functions required to drive the robot
    */
   public void DriveInVoltage(double F, double L, double R) {
-    var y = deadzone(F);
-    var x = deadzone(L);
-    var r = deadzone(R);
+    var y = deadzone(F, 0.2);
+    var x = deadzone(L, 0.4);
+    var r = deadzone(R, 0.2);
 
     double wheelSpeeds[] = { y + x + r, y - x - r, y - x + r, y + x - r };
     wheelSpeeds = normalize(scale(wheelSpeeds, 1.0));
@@ -111,8 +111,11 @@ public class Drives extends Subsystem {
     return wheelSpeeds;
   }
 
-  private double deadzone(double power) {
-    return Math.abs(power) > 0.2 ? power : 0.0;
+  /************************************
+   * Deadzone for using joysticks, if tolerance is within range
+   */
+  private double deadzone(double power , double tol) {
+    return Math.abs(power) - tol > 0 ? power : 0.0;
   }
 
   /****************************
