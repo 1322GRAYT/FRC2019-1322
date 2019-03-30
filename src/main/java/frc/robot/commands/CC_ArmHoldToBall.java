@@ -10,66 +10,74 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.command.Command;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
 import frc.robot.calibrations.K_Arm;
 import frc.robot.models.GamePieces;
 
 public class CC_ArmHoldToBall extends Command {
-  /**
-   *
-   */
 
-  
-  Button refButton;
-  private boolean tFlag;
   final static Timer buttonTimer = new Timer();
+  private Button buttonRef;
+  private boolean tFlag;
 
-  public CC_ArmHoldToBall(Button refButton) {
-    // Use requires() here to declare subsystem dependencies
-    // eg. requires(chassis);
+  public CC_ArmHoldToBall(Button buttonRef) {
     requires(Robot.ARM);
-    this.refButton = refButton;
+    this.buttonRef = buttonRef;
   }
 
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
+    Robot.ARM.armSafety(false);
     buttonTimer.reset();
     buttonTimer.start();
-    tFlag = false;
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
     if (!tFlag) {
-      if (buttonTimer.get() > K_Arm.BUTTON_TIMEOUT && refButton.get() || Robot.ARM.getGamePieceType() == GamePieces.HatchPanel) {
+      System.out.println("Waiting!");
+      if (((buttonTimer.get() > K_Arm.BUTTON_TIMEOUT) || (Robot.ARM.getGamePieceType() != GamePieces.Cargo))
+          && !tFlag) {
         Robot.ARM.resetToFloorCargoPickup();
         Robot.ARM.MMArm(Robot.ARM.getCurrenPositionData().location);
         tFlag = true;
-      } else if (!refButton.get()) {
+      } else if (!buttonRef.get() && !tFlag) {
         Robot.ARM.incrementPosition();
         Robot.ARM.MMArm(Robot.ARM.getCurrenPositionData().location);
         tFlag = true;
       }
+
+      if (tFlag){
+        Robot.ARM.placeLocationTexttoSDB();
+      }
     }
+    Robot.ARM.placeArmDatatoSDB();
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return (Math.abs(Robot.ARM.liftRawPosition() - Robot.ARM.getCurrenPositionData().location) < K_Arm.TOLERANCE) && tFlag;
+    return (Math.abs(Robot.ARM.liftRawPosition() - Robot.ARM.getCurrenPositionData().location) < K_Arm.TOLERANCE)
+        && tFlag;
   }
 
   // Called once after isFinished returns true
   @Override
   protected void end() {
+    Robot.ARM.armSafety(true);
+    System.out.println(Robot.ARM.getGamePieceType().name() + "  " + Robot.ARM.getCurrenPositionData().name);
+    System.out.println("Complete!");
+    tFlag = false;
+    buttonTimer.stop();
+    buttonTimer.reset();
   }
 
   // Called when another command which requires one or more of the same
   // subsystems is scheduled to run
   @Override
   protected void interrupted() {
+    end();
   }
 }

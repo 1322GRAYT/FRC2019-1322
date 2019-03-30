@@ -14,6 +14,7 @@ import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotMap;
 import frc.robot.calibrations.K_Arm;
 import frc.robot.commands.CT_ArmCntrl;
@@ -49,12 +50,13 @@ public class Arm extends Subsystem {
     Lift.config_kP(0, 0.13);
     Lift.config_kI(0, 0.0001);
     Lift.config_kD(0, 0.0);
-    Lift.configForwardSoftLimitThreshold(K_Arm.ARM_POS_DATA[K_Arm.MAX_ARM_POSITION].location); // ARMLEVELS[ARMLEVELS.length-1]);
+    Lift.configForwardSoftLimitThreshold(K_Arm.ALL_POS_DATA.get(K_Arm.ALL_POS_DATA.size() - 1).location);
     Lift.configForwardSoftLimitEnable(true);
   }
 
   /**
    * Increments current List Position regardless of List being used
+   * 
    * @return Returns the new position data
    */
   public PositionData incrementPosition() {
@@ -66,9 +68,10 @@ public class Arm extends Subsystem {
 
   /**
    * Decrements current List Position regardless of List being used
+   * 
    * @return Returns the new position data
    */
-  public PositionData decrementPosition(){
+  public PositionData decrementPosition() {
     if (currentIterator.hasPrevious()) {
       currentPositionData = currentIterator.previous();
     }
@@ -77,9 +80,10 @@ public class Arm extends Subsystem {
 
   /**
    * Sets the Arm to floor cargo pickup
+   * 
    * @return Returns the new position data
    */
-  public PositionData resetToFloorCargoPickup(){
+  public PositionData resetToFloorCargoPickup() {
     if (gamePieces != GamePieces.Cargo) {
       gamePieces = GamePieces.Cargo;
     }
@@ -88,8 +92,8 @@ public class Arm extends Subsystem {
     return currentPositionData;
   }
 
-  public PositionData resetToHABPanelPickup(){
-    if (gamePieces != GamePieces.HatchPanel){
+  public PositionData resetToHABPanelPickup() {
+    if (gamePieces != GamePieces.HatchPanel) {
       gamePieces = GamePieces.HatchPanel;
     }
     currentIterator = K_Arm.PANEL_POS_DATA.listIterator(0);
@@ -97,33 +101,23 @@ public class Arm extends Subsystem {
     return currentPositionData;
   }
 
-  public GamePieces getGamePieceType(){
+  public GamePieces getGamePieceType() {
     return gamePieces;
   }
 
-  public PositionData getCurrenPositionData(){
+  public PositionData getCurrenPositionData() {
     return currentPositionData;
   }
 
-  
-
-  // SECTION MAY BE OBSOLETE
-
-  /**
-   * @return the balllevels
-   */
-  public static int getBalllevels(int level) {
-    return K_Arm.BALL_POSITIONS[level];
+  public void placeLocationTexttoSDB() {
+    SmartDashboard.putString("Arm Level", getCurrenPositionData().name + " " + getCurrenPositionData().type);
   }
 
-  /**
-   * @return the panellevels
-   */
-  public static int getPanellevels(int level) {
-    return K_Arm.PANEL_POSITIONS[level];
+  public void placeArmDatatoSDB() {
+    double[] input = { (double) liftRawPosition(), (double) liftRawVelocity(),
+        (double) getCurrenPositionData().location, (double) armVoltage(), (double) armError() };
+    SmartDashboard.putNumberArray("Arm Data", input);
   }
-
-  
 
   /**
    * @param setPoint the setPoint to set
