@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 
 public class CC_ClawBallCntrl extends Command {
-  private boolean out;
+  private boolean out = false;
   /**
    * 
    * @param out Pushes out the claw if true
@@ -24,6 +24,7 @@ public class CC_ClawBallCntrl extends Command {
   @Override
   protected void initialize() {
     Robot.CLAW.controlClaw(true);
+    Robot.CLAW.intakePower(-1);
   }
 
   // Called repeatedly when this Command is scheduled to run
@@ -34,13 +35,14 @@ public class CC_ClawBallCntrl extends Command {
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return true;
+    return !Robot.CLAW.getClaw();
   }
 
   // Called once after isFinished returns true
   @Override
   protected void end() {
     Robot.CLAW.controlClaw(false);
+    Robot.CLAW.intakePower(0);
   }
 
   // Called when another command which requires one or more of the same

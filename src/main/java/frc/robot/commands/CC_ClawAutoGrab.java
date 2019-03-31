@@ -30,6 +30,10 @@ public class CC_ClawAutoGrab extends Command {
     if(!Robot.CLAW.getDisk() && !Robot.m_oi.AuxStick.bButton.get()) {
       Robot.CLAW.diskGrabber(false);
     }
+
+      Robot.CLAW.intakePower(Robot.m_oi.AuxStick.getRightStickY());
+    
+    
   }
 
   // Make this return true when this Command no longer needs to run execute()

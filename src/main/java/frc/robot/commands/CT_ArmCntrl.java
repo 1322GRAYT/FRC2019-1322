@@ -10,6 +10,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
+import frc.robot.calibrations.K_Arm;
 
 public class CT_ArmCntrl extends Command {
 
@@ -20,20 +21,34 @@ public class CT_ArmCntrl extends Command {
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
+    Robot.ARM.placeLocationTexttoSDB();
+    if (Robot.ARM.AUTOMATIC_ACTIVE) {
+      Robot.ARM.armSafety(false);
+      Robot.ARM.MMArm(Robot.ARM.getCurrenPositionData().location);
+    }
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    Robot.ARM.LiftByVoltage(Robot.m_oi.AuxStick.getLeftStickY());
-    
-    if(!Robot.CLAW.getBallClawStatus()){
-      Robot.CLAW.intakePower(-1);
+    if (JoystickOveride() || withinTol()) {
+      Robot.ARM.AUTOMATIC_ACTIVE = false;
+      Robot.ARM.armSafety(true);
     }
-    else{
-      Robot.CLAW.intakePower(Robot.m_oi.AuxStick.getRightStickY());
+
+    if (!Robot.ARM.AUTOMATIC_ACTIVE) {
+      Robot.ARM.LiftByVoltage(Robot.m_oi.AuxStick.getLeftStickY());
     }
+
     Robot.ARM.placeArmDatatoSDB();
+  }
+
+  private boolean withinTol() {
+    return Math.abs(Robot.ARM.liftRawPosition() - Robot.ARM.getCurrenPositionData().location) < K_Arm.TOLERANCE;
+  }
+
+  private boolean JoystickOveride() {
+    return Math.abs(Robot.m_oi.AuxStick.getLeftStickY()) - 0.3 > 0;
   }
 
   // Make this return true when this Command no longer needs to run execute()

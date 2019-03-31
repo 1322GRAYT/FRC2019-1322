@@ -29,13 +29,6 @@ public class Arm extends Subsystem {
   // here. Call these from Commands.
 
   WPI_TalonSRX Lift = new WPI_TalonSRX(RobotMap.LiftMotorAddress);
-  /************************************************
-   * Section depreciated of ARMLEVELS, use K_Arm.ARM_POS_LEVEL to replace this
-   * variable Reason for this is to provide a better model for how
-   */
-  private int setPoint = 0;
-  public int ballPoint = 0;
-  public int panelPoint = 0;
   public boolean AUTOMATIC_ACTIVE = false;
   private ListIterator<PositionData> currentIterator = K_Arm.ALL_POS_DATA.listIterator(1);
   private PositionData currentPositionData = K_Arm.ALL_POS_DATA.get(0);
@@ -48,7 +41,7 @@ public class Arm extends Subsystem {
     Lift.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
     Lift.config_kF(0, 0.11);
     Lift.config_kP(0, 0.13);
-    Lift.config_kI(0, 0.0001);
+    // Lift.config_kI(0, 0.0001);
     Lift.config_kD(0, 0.0);
     Lift.configForwardSoftLimitThreshold(K_Arm.ALL_POS_DATA.get(K_Arm.ALL_POS_DATA.size() - 1).location);
     Lift.configForwardSoftLimitEnable(true);
@@ -109,6 +102,9 @@ public class Arm extends Subsystem {
     return currentPositionData;
   }
 
+  /*
+  Smart Dashboard Methods
+  */
   public void placeLocationTexttoSDB() {
     SmartDashboard.putString("Arm Level", getCurrenPositionData().name + " " + getCurrenPositionData().type);
   }
@@ -119,13 +115,9 @@ public class Arm extends Subsystem {
     SmartDashboard.putNumberArray("Arm Data", input);
   }
 
-  /**
-   * @param setPoint the setPoint to set
-   */
-  public void setSetPoint(int setPoint) {
-    this.setPoint = setPoint;
-  }
-
+  /*
+  Sensor Methods
+  */
   public int liftRawPosition() {
     return Lift.getSelectedSensorPosition();
   }
@@ -159,6 +151,10 @@ public class Arm extends Subsystem {
     Lift.set(ControlMode.MotionMagic, Pos);
   }
 
+  /************
+   * Set arm safety to handle watchdog exceptions
+   * @param safety True for Safety on. False for Safety Off
+   */
   public void armSafety(boolean safety) {
     Lift.setSafetyEnabled(safety);
   }
