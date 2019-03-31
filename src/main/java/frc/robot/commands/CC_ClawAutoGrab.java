@@ -23,7 +23,7 @@ public class CC_ClawAutoGrab extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    if(!Robot.CLAW.getClaw()) {
+    if(!Robot.CLAW.getClaw() && Robot.CompBot) {
       Robot.CLAW.controlClaw(false);
     }
 
@@ -31,9 +31,9 @@ public class CC_ClawAutoGrab extends Command {
       Robot.CLAW.diskGrabber(false);
     }
 
-      Robot.CLAW.intakePower(Robot.m_oi.AuxStick.getRightStickY());
+    Robot.CLAW.intakePower(Robot.m_oi.AuxStick.getRightStickY());
     
-    
+  
   }
 
   // Make this return true when this Command no longer needs to run execute()
