@@ -31,13 +31,9 @@ public class CC_ClawAutoGrab extends Command {
       Robot.CLAW.diskGrabber(false);
     }
 
-    if(!Robot.CompBot) {
-      if(Robot.CLAW.getPressureSwitch()) {
-        Robot.CLAW.controlCompressor(false);
-      } else {
-        Robot.CLAW.controlCompressor(true);
-      }
-    }
+    Robot.CLAW.intakePower(Robot.m_oi.AuxStick.getRightStickY());
+    
+  
   }
 
   // Make this return true when this Command no longer needs to run execute()
