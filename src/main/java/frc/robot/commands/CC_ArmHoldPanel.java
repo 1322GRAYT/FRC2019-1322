@@ -46,7 +46,7 @@ public class CC_ArmHoldPanel extends Command {
         // System.out.println("To Panel Pickup");
       } else if (!buttonRef.get() && !tFlag) {
         Robot.ARM.incrementPosition();
-        Robot.ARM.MMArm(Robot.ARM.getCurrenPositionData().location);
+        
         tFlag = true;
         // System.out.println("To Next Location");
       }
@@ -58,8 +58,7 @@ public class CC_ArmHoldPanel extends Command {
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
-    return (Math.abs(Robot.ARM.liftRawPosition() - Robot.ARM.getCurrenPositionData().location) < K_Arm.TOLERANCE)
-        && tFlag;
+    return tFlag;
   }
 
   // Called once after isFinished returns true
@@ -71,6 +70,7 @@ public class CC_ArmHoldPanel extends Command {
     tFlag = false;
     buttonTimer.stop();
     buttonTimer.reset();
+    Robot.ARM.AUTOMATIC_ACTIVE = true;
   }
 
   // Called when another command which requires one or more of the same

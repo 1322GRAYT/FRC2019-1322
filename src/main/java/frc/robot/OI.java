@@ -38,11 +38,7 @@ public class OI {
   // button.whenReleased(new ExampleCommand());
 
   public OI() {
-    //When "A" Button is pressed, eject Hatch Panel, When Released, Retract pnuematics
-    AuxStick.aButton.whenPressed(new CC_ClawHatchCntrl(false));
-    AuxStick.bButton.whenPressed(new CC_ClawHatchCntrl(true));
-    //When Right Bumper is pressed, push claw out, when Left bumper is pressed, pull claw in
-    AuxStick.rightBumper.whenPressed(new CC_ClawBallCntrl());
+    
     //When A Button is pressed, extend Lift
     DriverStick.aButton.whileHeld(new CC_LiftHorizSpdTgt(1));
     //When B Button is pressed, retract lift
@@ -64,6 +60,12 @@ public class OI {
     // Arm Controls
     AuxStick.yButton.whenPressed(new CC_ArmHoldPanel(AuxStick.yButton));
     AuxStick.xButton.whenPressed(new CC_ArmHoldToBall(AuxStick.xButton));
+
+    //When "A" Button is pressed, eject Hatch Panel, When Released, Retract pnuematics
+    AuxStick.aButton.whenPressed(new CC_ClawHatchCntrl(false));
+    AuxStick.bButton.whenPressed(new CC_ClawHatchCntrl(true));
+    //When Right Bumper is pressed, push claw out, when Left bumper is pressed, pull claw in
+    AuxStick.rightBumper.toggleWhenPressed(new CC_ClawBallCntrl());
   }
 
 }
