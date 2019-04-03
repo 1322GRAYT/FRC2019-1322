@@ -9,6 +9,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
+import frc.robot.calibrations.*;
 
 public class CC_ClawAutoGrab extends Command {
   public CC_ClawAutoGrab() {
@@ -23,7 +24,7 @@ public class CC_ClawAutoGrab extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    if(!Robot.CLAW.getClaw() && Robot.CompBot) {
+    if(!Robot.CLAW.getClaw() && !K_System.KeSYS_b_PracticeBot) {
       Robot.CLAW.controlClaw(false);
     }
 
@@ -31,7 +32,7 @@ public class CC_ClawAutoGrab extends Command {
       Robot.CLAW.diskGrabber(false);
     }
 
-    if(!Robot.CompBot) {
+    if(K_System.KeSYS_b_PracticeBot) {
       if(Robot.CLAW.getPressureSwitch()) {
         Robot.CLAW.controlCompressor(false);
       } else {

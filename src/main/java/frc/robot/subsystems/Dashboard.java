@@ -104,6 +104,7 @@ public class Dashboard extends Subsystem {
     SmartDashboard.putNumber("Wheel Vel RL : ", Robot.DRIVES.getDRV_v_WhlVel(2));
     SmartDashboard.putNumber("Wheel Vel RR : ", Robot.DRIVES.getDRV_v_WhlVel(3));
 
+/*    
     System.out.println("Encoder Cnts FL : " + Robot.DRIVES.getDRV_cnt_EncdrCnt(0));
     System.out.println("Encoder Cnts FR : " + Robot.DRIVES.getDRV_cnt_EncdrCnt(1));
     System.out.println("Encoder Cnts RL : " + Robot.DRIVES.getDRV_cnt_EncdrCnt(2));
@@ -128,6 +129,7 @@ public class Dashboard extends Subsystem {
     System.out.println("Wheel Vel FR : " + Robot.DRIVES.getDRV_v_WhlVel(1));
     System.out.println("Wheel Vel RL : " + Robot.DRIVES.getDRV_v_WhlVel(2));
     System.out.println("Wheel Vel RR : " + Robot.DRIVES.getDRV_v_WhlVel(3));
+*/
   }
 
 

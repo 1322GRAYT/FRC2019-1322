@@ -9,6 +9,7 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
 import java.util.*;
+import java.lang.Object;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -50,6 +51,7 @@ public class Vision extends Subsystem {
   private double LL_TgtCornY[] = new double[4];  // Target Corner Coord-Y: RH, RL, LL, LH
 
 
+  private int    VeVSN_Cnt_TgtCornAqrd;
   private double VeVSN_Pxl_ImgWidthBtm;
   private double VeVSN_Pxl_ImgWidthTop;
   private double VeVSN_Pxl_ImgHeightLt;
@@ -81,12 +83,11 @@ public class Vision extends Subsystem {
   /* Matricies of Camera and Image Data */
   private MatOfPoint3f VmVSN_l_RefObj   = new MatOfPoint3f();
   private MatOfPoint2f VmVSN_Pxl_RefImg = new MatOfPoint2f();
-  private Mat VmVSN_Pxl_Cam     = new Mat();
-  private MatOfDouble VmVSN_k_DistCoeff = new MatOfDouble();
-  private Mat VmVSM_k_RotVect   = new Mat(3,1,CvType.CV_64F);
-  private Mat VmVSM_k_TransVect = new Mat(3,1,CvType.CV_64F);
-  private Mat VmVSM_k_Rot       = new Mat(3,3,CvType.CV_64F);
-  private Mat VmVSM_k_ImgPlaneZeroWorld = new Mat(3,3,CvType.CV_64F);
+  private Mat VmVSN_Pxl_Cam     = new Mat(3,3,CvType.CV_32F);
+  private Mat VmVSM_k_RotVect   = new Mat(3,1,CvType.CV_32F);
+  private Mat VmVSM_k_TransVect = new Mat(3,1,CvType.CV_32F);
+  private Mat VmVSM_k_Rot       = new Mat(3,3,CvType.CV_32F);
+  private Mat VmVSM_k_ImgPlaneZeroWorld = new Mat(3,3,CvType.CV_32F);
 
   /* Arrays of the Matrix Data for viewing via Instrumentation */
   private int VaVSN_Pxl_RefImgCoord[][] = new int[4][2];
@@ -342,10 +343,17 @@ public double getVSN_Pxl_LL_TgtSideShort() {
       }
 
       if ((LL_TgtVld == 1.0) &&
-          (LL_TgtCornX.length == 4) &&
-          (LL_TgtCornY.length == 4)) {
-        LeVSN_b_TgtAcqVld = true;            
+          (LL_TgtCornX.length >= K_Vision.KeVSN_Cnt_CamTgtCornMin) &&
+          (LL_TgtCornY.length >= K_Vision.KeVSN_Cnt_CamTgtCornMin)) {
+        LeVSN_b_TgtAcqVld = true;
+        VeVSN_Cnt_TgtCornAqrd = LL_TgtCornX.length;
+        System.out.println("VeVSN_Cnt_TgtCornAqrd : " + VeVSN_Cnt_TgtCornAqrd);
       }
+      else {
+        System.out.println("Waiting for Valid 3+ Corner data-image ... ");
+      }
+        
+
       return(LeVSN_b_TgtAcqVld);
     }
 
@@ -359,12 +367,17 @@ public double getVSN_Pxl_LL_TgtSideShort() {
     * at the beginning of the Match.
     */
     public void MngVSN_InitCamCalibr() {
+      System.out.println("start calcVSN_RefTgtObjMat(). ");
       calcVSN_RefTgtObjMat();
+      System.out.println("start calcVSN_RefTgtImgMat(). ");
       calcVSN_RefTgtImgMat();
+      System.out.println("start calcVSN_CamFocalPt(). ");
       calcVSN_CamFocalPt();
+      System.out.println("start calcVSN_CamMat(). ");
       calcVSN_CamMat();
-      VmVSN_k_DistCoeff.zeros(4,1,CvType.CV_64F);
+      System.out.println("start RstVSN_ImgVects(). ");
       RstVSN_ImgVects();
+      System.out.println("Camera Initialization Complete. ");
     }
 
   
@@ -373,10 +386,10 @@ public double getVSN_Pxl_LL_TgtSideShort() {
       by loading them as zero matricies..
     */
     public void RstVSN_ImgVects() {
-      VmVSM_k_RotVect.zeros(3,1,CvType.CV_64F);
-      VmVSM_k_TransVect.zeros(3,1,CvType.CV_64F);
-      VmVSM_k_Rot.zeros(3,3,CvType.CV_64F);
-      VmVSM_k_ImgPlaneZeroWorld.zeros(3,3,CvType.CV_64F);
+      VmVSM_k_RotVect.zeros(3,1,CvType.CV_32F);
+      VmVSM_k_TransVect.zeros(3,1,CvType.CV_32F);
+      VmVSM_k_Rot.zeros(3,3,CvType.CV_32F);
+      VmVSM_k_ImgPlaneZeroWorld.zeros(3,3,CvType.CV_32F);
     }
 
 
@@ -385,10 +398,15 @@ public double getVSN_Pxl_LL_TgtSideShort() {
     * of the vision target in pixels, i.e. the length of all the sides.
     */
     public void MngVSN_CamImgProc() {
+      System.out.println("start parseVSN_CamImgData(). ");
       parseVSN_CamImgData();
+      System.out.println("start calcVSN_CamTgtImgGeometry(). ");
       calcVSN_CamTgtImgGeometry();
+      System.out.println("start calcVSN_TgtDist(). ");
       calcVSN_TgtDist();
+      System.out.println("start calcVSN_TgtData(). ");
       calcVSN_TgtData();
+      System.out.println("Calculate Target Data Complete. ");
     }
 
 
@@ -419,23 +437,20 @@ public double getVSN_Pxl_LL_TgtSideShort() {
     *  @return:  Indication that the PnP Calculation is has failed.
     */
     private boolean calcVSN_TgtData() {
-      boolean Err_PnP;
+      boolean PnP_Vld;
       double x[], z[];
-      Mat LmVSM_k_RotInv       = new Mat(3,3,CvType.CV_64F);
-      Mat LmVSM_k_TransVectNeg = new Mat(1,3,CvType.CV_64F);
-      Mat LmVSM_k_ZerosVect    = new Mat(3,1,CvType.CV_64F);
+      Mat LmVSM_k_RotInv       = new Mat(3,3,CvType.CV_32F);
+      Mat LmVSM_k_TransVectNeg = new Mat(1,3,CvType.CV_32F);
+      Mat LmVSM_k_ZerosVect    = new Mat(3,1,CvType.CV_32F);
 
       System.out.println("LL_TgtCornX size : " + LL_TgtCornX.length);
-      System.out.println("LL_TgtCornY size : " + LL_TgtCornY.length);
-      System.out.println("RefObj Matrix : " + VmVSN_l_RefObj);
-      System.out.println("RefImg Matrix : " + VmVSN_Pxl_RefImg);
-      System.out.println("Camera Matrix : " + VmVSN_Pxl_Cam);
+      System.out.println("LL_TgtCornY size : " + LL_TgtCornY.length);      
 
       /* Calculate the Rotation Matrix and Translation Vector */
-      Err_PnP = Calib3d.solvePnP(VmVSN_l_RefObj, VmVSN_Pxl_RefImg, VmVSN_Pxl_Cam,
-                                 VmVSN_k_DistCoeff, VmVSM_k_RotVect, VmVSM_k_TransVect);
+      PnP_Vld = Calib3d.solvePnP(VmVSN_l_RefObj, VmVSN_Pxl_RefImg, VmVSN_Pxl_Cam,
+                                 new MatOfDouble(), VmVSM_k_RotVect, VmVSM_k_TransVect);
   
-      if (Err_PnP == false) {
+      if (PnP_Vld == true) {
         /* Calculate Distance between Target and Camera/Robot */
         x = VmVSM_k_TransVect.get(Xcell,0);
         z = VmVSM_k_TransVect.get(Zcell,0);
@@ -448,9 +463,9 @@ public double getVSN_Pxl_LL_TgtSideShort() {
 
         
         /* Initialize Local Matricies for prior to Angle2 calculation */
-        LmVSM_k_RotInv.zeros(3,3,CvType.CV_64F);
-        LmVSM_k_TransVectNeg.zeros(1,3,CvType.CV_64F);
-        LmVSM_k_ZerosVect.zeros(3,1,CvType.CV_64F);
+        LmVSM_k_RotInv.zeros(3,3,CvType.CV_32F);
+        LmVSM_k_TransVectNeg.zeros(1,3,CvType.CV_32F);
+        LmVSM_k_ZerosVect.zeros(3,1,CvType.CV_32F);
 
         /* Angle2: Calculate horiz angle between the target perpendicular and the robot-target line */
         Calib3d.Rodrigues(VmVSM_k_RotVect, VmVSM_k_Rot);
@@ -461,7 +476,7 @@ public double getVSN_Pxl_LL_TgtSideShort() {
         z = VmVSM_k_ImgPlaneZeroWorld.get(2,0);
         VeVSN_Deg_RbtRot = (double)Math.atan2(x[0], z[0]);
       }
-      else /* (Err_PnP == true) */ {
+      else /* (PnP_Vld == false) */ {
         /* Failed to calculated proper PnP values - Clear out Peristant Matrices and Variables */
         RstVSN_ImgVects();
       }
@@ -471,7 +486,7 @@ public double getVSN_Pxl_LL_TgtSideShort() {
       LmVSM_k_TransVectNeg.release();
       LmVSM_k_ZerosVect.release();
 
-      return(Err_PnP);
+      return(PnP_Vld);
     }
 
 
@@ -483,7 +498,9 @@ public double getVSN_Pxl_LL_TgtSideShort() {
     private void calcVSN_RefTgtObjMat() {
       double triBase, triHeight;
       int i;
-     
+      float x, y, z;
+      List<Point3> LaVSN_l_RefImgDim = new ArrayList<Point3>();
+
       /* Calculate the Equal-Angular Rhombas End-Triangle Base Lengths */ 
       triBase = (Math.abs(K_Vision.KeVSN_l_RefTgtBtm - K_Vision.KeVSN_l_RefTgtTop))/2;
   
@@ -510,13 +527,15 @@ public double getVSN_Pxl_LL_TgtSideShort() {
       VaVSN_l_RefObjCoord[LtUpr][Ycell] = triHeight;
       VaVSN_l_RefObjCoord[LtUpr][Zcell] = 0.0;
 
-
       /* Build Object Matrix from Array */
       for (i=0;i<NumPts;i++) {
-        VmVSN_l_RefObj.put(i,Xcell,VaVSN_l_RefObjCoord[i][Xcell]);
-        VmVSN_l_RefObj.put(i,Ycell,VaVSN_l_RefObjCoord[i][Ycell]);
-        VmVSN_l_RefObj.put(i,Zcell,VaVSN_l_RefObjCoord[i][Zcell]);
+        x = (float) VaVSN_l_RefObjCoord[i][Xcell];
+        y = (float) VaVSN_l_RefObjCoord[i][Ycell];
+        z = (float) VaVSN_l_RefObjCoord[i][Zcell];
+        LaVSN_l_RefImgDim.add(new Point3(x, y, z));
       }
+
+      VmVSN_l_RefObj.fromList(LaVSN_l_RefImgDim);
     }
 
 
@@ -527,12 +546,17 @@ public double getVSN_Pxl_LL_TgtSideShort() {
     */
     private void calcVSN_RefTgtImgMat() {
       int i;
+      float x, y;
+      List<Point> LaVSN_Pxl_RefImgCoord = new ArrayList<Point>();
 
       /* Build Object Matrix from Array */
       for (i=0;i<NumPts;i++) {
-        VmVSN_Pxl_RefImg.put(i,Xcell,K_Vision.KaVSN_Pxl_RefImgCoord[i][Xcell]);
-        VmVSN_Pxl_RefImg.put(i,Ycell,K_Vision.KaVSN_Pxl_RefImgCoord[i][Ycell]);
+        x = (float) K_Vision.KaVSN_Pxl_RefImgCoord[i][Xcell];
+        y = (float) K_Vision.KaVSN_Pxl_RefImgCoord[i][Ycell];
+        LaVSN_Pxl_RefImgCoord.add(new Point(x, y));
       }
+
+	  VmVSN_Pxl_RefImg.fromList(LaVSN_Pxl_RefImgCoord);
     }
 
 
@@ -548,7 +572,7 @@ public double getVSN_Pxl_LL_TgtSideShort() {
     private void calcVSN_CamMat() {
       double triBase, triHeight;
       int i;
-     
+
       /* Calculate the Equal-Angular Rhombas End-Triangle Base Lengths */ 
       triBase = (Math.abs(K_Vision.KeVSN_l_RefTgtBtm - K_Vision.KeVSN_l_RefTgtTop))/2;
   
@@ -574,9 +598,9 @@ public double getVSN_Pxl_LL_TgtSideShort() {
 
       /* Build Object Matrix from Array */
       for (i=0;i<3;i++) {
-        VmVSN_Pxl_Cam.put(i,0,VaVSN_Pxl_CamMatrix[i][0]);
-        VmVSN_Pxl_Cam.put(i,1,VaVSN_Pxl_CamMatrix[i][1]);
-        VmVSN_Pxl_Cam.put(i,2,VaVSN_Pxl_CamMatrix[i][2]);
+        VmVSN_Pxl_Cam.put(i,0,(float) VaVSN_Pxl_CamMatrix[i][0]);
+        VmVSN_Pxl_Cam.put(i,1,(float) VaVSN_Pxl_CamMatrix[i][1]);
+        VmVSN_Pxl_Cam.put(i,2,(float) VaVSN_Pxl_CamMatrix[i][2]);
       }
 
     }  
@@ -643,8 +667,12 @@ public double getVSN_Pxl_LL_TgtSideShort() {
       LeVSN_l_RefTgtBtm = 1;
     }
       
-    LeVSN_l_FocalPt = (VeVSN_Pxl_ImgWidthBtm * K_Vision.KeVSN_l_RefTgtToCamDist)/
-                      (LeVSN_l_RefTgtBtm);
+/*  LeVSN_l_FocalPt = (VeVSN_Pxl_ImgWidthBtm * K_Vision.KeVSN_l_RefTgtToCamDist)/
+                      (LeVSN_l_RefTgtBtm);  */
+
+    LeVSN_l_FocalPt = (LL_TgtLngthHort * K_Vision.KeVSN_l_RefTgtToCamDist)/
+                      (LeVSN_l_RefTgtBtm);  // todo
+
 
 	  VeVSN_Pxl_CamFocalPt = (int)LeVSN_l_FocalPt;          
   }
@@ -668,7 +696,8 @@ public double getVSN_Pxl_LL_TgtSideShort() {
      double LeVSN_Pxl_In;
      double LeVSN_Pxl_Cam2Tgt;
 
-     LeVSN_Pxl_In = VeVSN_Pxl_ImgWidthBtm;
+/*   LeVSN_Pxl_In = VeVSN_Pxl_ImgWidthBtm;  */
+     LeVSN_Pxl_In = LL_TgtLngthHort;  // todo
 
      /* To protect against a divide by zero error */
      if (LeVSN_Pxl_In < 1) { 

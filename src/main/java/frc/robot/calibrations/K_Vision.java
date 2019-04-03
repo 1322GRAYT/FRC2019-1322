@@ -14,10 +14,15 @@ public class K_Vision {
 
 
   /**************************************************/
-	/*  Camera Image Resolution Settings              */
+	/*  Camera System Settings              */
 	/**************************************************/	 	
+
+  /** KeVSN_Cnt_CamTgtCornMin: Minimum number of target corners
+    * required to be detected before the target image is considered a
+      valid image. */
+   public static final int KeVSN_Cnt_CamTgtCornMin = 4;
 	
-	/** KaVSN_Pxl_CamDim: Dimensions of the Camera Image in Pixels
+	/** KaVSN_Pxl_Ca0mDim: Dimensions of the Camera Image in Pixels
     * (X-Dim,Y-Dim). */
    public static final int KaVSN_Pxl_CamDim[] = {320, 240};
 

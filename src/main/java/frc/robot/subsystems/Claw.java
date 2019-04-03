@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.robot.Robot;
 import frc.robot.RobotMap;
+import frc.robot.calibrations.K_System;
 import frc.robot.commands.CC_ClawAutoGrab;
 
 /**
@@ -42,7 +43,7 @@ public class Claw extends Subsystem {
     clawIn.set(false);
     clawOut.set(true);
     
-    if(!Robot.CompBot) {
+    if(K_System.KeSYS_b_PracticeBot) {
       testBotCompressor = new Relay(1); //Look, I know this should be in the robot map
     }
     

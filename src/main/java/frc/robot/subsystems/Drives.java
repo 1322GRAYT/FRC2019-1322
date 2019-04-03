@@ -264,7 +264,7 @@ public class Drives extends Subsystem {
       VaDRV_v_WhlVel[idx]      = (VaDRV_n_WhlRPM[idx]*K_Drive.KDRV_l_DistPerRevWhl)/60;        // inches/sec
     }
 
-    if (K_System.KCMD_b_DebugEnbl == true) {
+    if (K_System.KeSYS_b_DebugEnblDrv == true) {
       Robot.DASHBOARD.updateSmartDashDrvData();
     }
 

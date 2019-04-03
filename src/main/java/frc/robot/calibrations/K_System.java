@@ -15,15 +15,26 @@ public class K_System {
     /****************************************/
 	/*   General System Configuration   */
 	/****************************************/	 	
-	
-	/** KSYS_b_DebugEnbl: If True the Debug Smart Dash Display Variables
+
+	/** KeSYS_b_PracticeBot: If True it indicates that the software
+	 * is running on the Practice Robot which does not have the
+	 * full complement of actuators and sensors so certain
+	 * functionality in software should be disabled. */
+    public static final boolean KeSYS_b_PracticeBot = true;	
+
+	/** KeSYS_b_DebugEnblVsn: If True the Debug Smart Dash Display Variables
 	 * Are Broadcast and Updated, if False they are turned off to maximize
-	 * thru-put for controls. */
-    public static final boolean KCMD_b_DebugEnbl = false;
-	 
-	/** KCMD_t_LoopRt: Execution Loop Rate Period for the Autonomous
+	 * thru-put for controls. For the Vision System. */
+    public static final boolean KeSYS_b_DebugEnblVsn = true;
+
+	/** KeSYS_b_DebugEnblDrv: If True the Debug Smart Dash Display Variables
+	 * Are Broadcast and Updated, if False they are turned off to maximize
+	 * thru-put for controls.  For the Drive System.  */
+    public static final boolean KeSYS_b_DebugEnblDrv = false;
+
+	/** KeSYS_t_LoopRt: Execution Loop Rate Period for the Autonomous
 	 * Command Group Controls (sec). */
-	 public static final float KCMD_t_LoopRt = (float)0.020; // sec 
+	 public static final float KeSYS_t_LoopRt = (float)0.020; // sec 
 	 	
 	    
 }

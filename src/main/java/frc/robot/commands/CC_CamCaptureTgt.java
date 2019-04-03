@@ -23,12 +23,15 @@ public class CC_CamCaptureTgt extends Command {
   @Override
   protected void initialize() {
     LeVSN_b_ImgCaptureVld = false;
+    System.out.println("Cam Capture Target Initialize. ");
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
+    System.out.println("Cam Capture Target Begin Execute. ");
     LeVSN_b_ImgCaptureVld = Robot.VISION.captureVSN_CamImgData();
+    System.out.println("Cam Capture Target Complete Execute. ");
   }
 
   // Make this return true when this Command no longer needs to run execute()
@@ -40,8 +43,9 @@ public class CC_CamCaptureTgt extends Command {
   // Called once after isFinished returns true
   @Override
   protected void end() {
+    System.out.println("Cam Capture Target Begin Processing. ");
     Robot.VISION.MngVSN_CamImgProc();
-    if (K_System.KCMD_b_DebugEnbl == true) {
+    if (K_System.KeSYS_b_DebugEnblVsn == true) {
       Robot.DASHBOARD.updateSmartDashCamData();
     }
   }
