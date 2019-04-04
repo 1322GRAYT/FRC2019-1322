@@ -16,67 +16,6 @@ import frc.robot.Robot;
  */
 public class Dashboard extends Subsystem {
 
-
-  /* Called to Update SmartDash Data for Display of Vision Data */
-  public void updateSmartDashCamData() {
-    SmartDashboard.putNumber("LL Tgt Vld : ", Robot.VISION.getVSN_b_LL_TgtVld());
-    SmartDashboard.putNumber("LL Tgt Ang-X : ", Robot.VISION.getVSN_deg_LL_TgtAngX());
-    SmartDashboard.putNumber("LL Tgt Ang-Y : ", Robot.VISION.getVSN_deg_LL_TgtAngY());
-    SmartDashboard.putNumber("LL Tgt Area : ", Robot.VISION.getVSN_Pct_LL_TgtArea());
-    SmartDashboard.putNumber("LL Tgt Skew : ", Robot.VISION.getVSN_Deg_LL_TgtSkew());
-    SmartDashboard.putNumber("LL Tgt Side Short : ", Robot.VISION.getVSN_Pxl_LL_TgtSideShort());
-    SmartDashboard.putNumber("LL Tgt Side Long : ", Robot.VISION.getVSN_Pxl_LL_TgtSideLong());
-    SmartDashboard.putNumber("LL Tgt Lngth Hort : ", Robot.VISION.getVSN_Pxl_LL_TgtLngthHort());
-    SmartDashboard.putNumber("LL Tgt Lngth Vert : ", Robot.VISION.getVSN_Pxl_LL_TgtLngthVert());
-    SmartDashboard.putNumber("LL Corner RtU X : ", Robot.VISION.getVSN_Pxl_LL_TgtCornX(0));
-    SmartDashboard.putNumber("LL Corner RtU Y : ", Robot.VISION.getVSN_Pxl_LL_TgtCornY(0));
-    SmartDashboard.putNumber("LL Corner RtL X : ", Robot.VISION.getVSN_Pxl_LL_TgtCornX(1));
-    SmartDashboard.putNumber("LL Corner RtL Y : ", Robot.VISION.getVSN_Pxl_LL_TgtCornY(1));
-    SmartDashboard.putNumber("LL Corner LtL X : ", Robot.VISION.getVSN_Pxl_LL_TgtCornX(2));
-    SmartDashboard.putNumber("LL Corner LtL Y : ", Robot.VISION.getVSN_Pxl_LL_TgtCornY(2));
-    SmartDashboard.putNumber("LL Corner LtR X : ", Robot.VISION.getVSN_Pxl_LL_TgtCornX(3));
-    SmartDashboard.putNumber("LL Corner LtR Y : ", Robot.VISION.getVSN_Pxl_LL_TgtCornY(3));
-    SmartDashboard.putNumber("Cam Img Width Btm (pixels) : ", Robot.VISION.getVSN_Pxl_ImgWidthBtm());
-    SmartDashboard.putNumber("Cam Img Width Top (pixels) : ", Robot.VISION.getVSN_Pxl_ImgWidthTop());
-    SmartDashboard.putNumber("Cam Img Height Lt (pixels) : ", Robot.VISION.getVSN_Pxl_ImgHeightLt());
-    SmartDashboard.putNumber("Cam Img Height Rt (pixels) : ", Robot.VISION.getVSN_Pxl_ImgHeightRt());
-    SmartDashboard.putNumber("Cam Focal Length (pixels) : ", Robot.VISION.getVSN_Pxl_CamFocalPt());
-    SmartDashboard.putNumber("Tgt Cam Dist :    ", Robot.VISION.getVSN_l_Cam2Tgt());
-    SmartDashboard.putNumber("Tgt Cam Dist2 :   ", Robot.VISION.getVSN_l_Cam2Tgt2ndry());
-    SmartDashboard.putNumber("Tgt Rbt Dist :    ", Robot.VISION.getVSN_l_Rbt2Tgt());
-    SmartDashboard.putNumber("Tgt Rbt2Tgt Ang : ", Robot.VISION.getVSN_deg_Rbt2Tgt());
-    SmartDashboard.putNumber("Tgt Rbt2Tgt Rot : ", Robot.VISION.getVSN_Deg_RbtRot());
-
-    System.out.println("LL Tgt Vld : " + Robot.VISION.getVSN_b_LL_TgtVld());
-    System.out.println("LL Tgt Ang-X : " + Robot.VISION.getVSN_deg_LL_TgtAngX());
-    System.out.println("LL Tgt Ang-Y : " + Robot.VISION.getVSN_deg_LL_TgtAngY());
-    System.out.println("LL Tgt Area : " + Robot.VISION.getVSN_Pct_LL_TgtArea());
-    System.out.println("LL Tgt Skew : " + Robot.VISION.getVSN_Deg_LL_TgtSkew());
-    System.out.println("LL Tgt Side Short : " + Robot.VISION.getVSN_Pxl_LL_TgtSideShort());
-    System.out.println("LL Tgt Side Long : " + Robot.VISION.getVSN_Pxl_LL_TgtSideLong());
-    System.out.println("LL Tgt Lngth Hort : " + Robot.VISION.getVSN_Pxl_LL_TgtLngthHort());
-    System.out.println("LL Tgt Lngth Vert : " + Robot.VISION.getVSN_Pxl_LL_TgtLngthVert());
-    System.out.println("LL Corner RtU X : " + Robot.VISION.getVSN_Pxl_LL_TgtCornX(0));
-    System.out.println("LL Corner RtU Y : " + Robot.VISION.getVSN_Pxl_LL_TgtCornY(0));
-    System.out.println("LL Corner RtL X : " + Robot.VISION.getVSN_Pxl_LL_TgtCornX(1));
-    System.out.println("LL Corner RtL Y : " + Robot.VISION.getVSN_Pxl_LL_TgtCornY(1));
-    System.out.println("LL Corner LtL X : " + Robot.VISION.getVSN_Pxl_LL_TgtCornX(2));
-    System.out.println("LL Corner LtL Y : " + Robot.VISION.getVSN_Pxl_LL_TgtCornY(2));
-    System.out.println("LL Corner LtU X : " + Robot.VISION.getVSN_Pxl_LL_TgtCornX(3));
-    System.out.println("LL Corner LtU Y : " + Robot.VISION.getVSN_Pxl_LL_TgtCornY(3));
-    System.out.println("Cam Img Width Btm (pixels) : " + Robot.VISION.getVSN_Pxl_ImgWidthBtm());
-    System.out.println("Cam Img Width Top (pixels) : " + Robot.VISION.getVSN_Pxl_ImgWidthTop());
-    System.out.println("Cam Img Height Lt (pixels) : " + Robot.VISION.getVSN_Pxl_ImgHeightLt());
-    System.out.println("Cam Img Height Rt (pixels) : " + Robot.VISION.getVSN_Pxl_ImgHeightRt());
-    System.out.println("Cam Focal Length (pixels) :  " + Robot.VISION.getVSN_Pxl_CamFocalPt());
-    System.out.println("Tgt Cam Dist :    " + Robot.VISION.getVSN_l_Cam2Tgt());
-    System.out.println("Tgt Cam Dist2 :   " + Robot.VISION.getVSN_l_Cam2Tgt2ndry());
-    System.out.println("Tgt Rbt Dist :    " + Robot.VISION.getVSN_l_Rbt2Tgt());
-    System.out.println("Tgt Rbt2Tgt Ang : " + Robot.VISION.getVSN_deg_Rbt2Tgt());
-    System.out.println("Tgt Rbt2Tgt Rot : " + Robot.VISION.getVSN_Deg_RbtRot());
-  }
-
-
   /* Called to Update SmartDash Data for Display of Drive Data */
   public void updateSmartDashDrvData() {
     SmartDashboard.putNumber("Encoder Cnts FL : ", Robot.DRIVES.getDRV_cnt_EncdrCnt(0));
@@ -131,6 +70,79 @@ public class Dashboard extends Subsystem {
     System.out.println("Wheel Vel RR : " + Robot.DRIVES.getDRV_v_WhlVel(3));
 */
   }
+
+
+  /* Called to Update SmartDash Data for Display of Vision Camera Calibration Data */
+  public void updateSmartDashCamCalData() {
+    SmartDashboard.putNumber("Cam Focal Length (pixels) : ", Robot.VISION.getVSN_Pxl_CamFocalPt());
+
+    System.out.println("Cam Focal Length (pixels) :  " + Robot.VISION.getVSN_Pxl_CamFocalPt());
+  }
+
+
+  /* Called to Update SmartDash Data for Display of Camera Lime Light Data */
+  public void updateSmartDashCamLLData() {
+    SmartDashboard.putNumber("LL Tgt Vld : ", Robot.VISION.getVSN_b_LL_TgtVld());
+    SmartDashboard.putNumber("LL Tgt Ang-X : ", Robot.VISION.getVSN_deg_LL_TgtAngX());
+    SmartDashboard.putNumber("LL Tgt Ang-Y : ", Robot.VISION.getVSN_deg_LL_TgtAngY());
+    SmartDashboard.putNumber("LL Tgt Area : ", Robot.VISION.getVSN_Pct_LL_TgtArea());
+    SmartDashboard.putNumber("LL Tgt Skew : ", Robot.VISION.getVSN_Deg_LL_TgtSkew());
+    SmartDashboard.putNumber("LL Tgt Side Short : ", Robot.VISION.getVSN_Pxl_LL_TgtSideShort());
+    SmartDashboard.putNumber("LL Tgt Side Long : ", Robot.VISION.getVSN_Pxl_LL_TgtSideLong());
+    SmartDashboard.putNumber("LL Tgt Lngth Hort : ", Robot.VISION.getVSN_Pxl_LL_TgtLngthHort());
+    SmartDashboard.putNumber("LL Tgt Lngth Vert : ", Robot.VISION.getVSN_Pxl_LL_TgtLngthVert());
+    SmartDashboard.putNumber("LL Corner RtU X : ", Robot.VISION.getVSN_Pxl_LL_TgtCornX(0));
+    SmartDashboard.putNumber("LL Corner RtU Y : ", Robot.VISION.getVSN_Pxl_LL_TgtCornY(0));
+    SmartDashboard.putNumber("LL Corner RtL X : ", Robot.VISION.getVSN_Pxl_LL_TgtCornX(1));
+    SmartDashboard.putNumber("LL Corner RtL Y : ", Robot.VISION.getVSN_Pxl_LL_TgtCornY(1));
+    SmartDashboard.putNumber("LL Corner LtL X : ", Robot.VISION.getVSN_Pxl_LL_TgtCornX(2));
+    SmartDashboard.putNumber("LL Corner LtL Y : ", Robot.VISION.getVSN_Pxl_LL_TgtCornY(2));
+    SmartDashboard.putNumber("LL Corner LtR X : ", Robot.VISION.getVSN_Pxl_LL_TgtCornX(3));
+    SmartDashboard.putNumber("LL Corner LtR Y : ", Robot.VISION.getVSN_Pxl_LL_TgtCornY(3));
+
+    System.out.println("LL Tgt Vld : " + Robot.VISION.getVSN_b_LL_TgtVld());
+    System.out.println("LL Tgt Ang-X : " + Robot.VISION.getVSN_deg_LL_TgtAngX());
+    System.out.println("LL Tgt Ang-Y : " + Robot.VISION.getVSN_deg_LL_TgtAngY());
+    System.out.println("LL Tgt Area : " + Robot.VISION.getVSN_Pct_LL_TgtArea());
+    System.out.println("LL Tgt Skew : " + Robot.VISION.getVSN_Deg_LL_TgtSkew());
+    System.out.println("LL Tgt Side Short : " + Robot.VISION.getVSN_Pxl_LL_TgtSideShort());
+    System.out.println("LL Tgt Side Long : " + Robot.VISION.getVSN_Pxl_LL_TgtSideLong());
+    System.out.println("LL Tgt Lngth Hort : " + Robot.VISION.getVSN_Pxl_LL_TgtLngthHort());
+    System.out.println("LL Tgt Lngth Vert : " + Robot.VISION.getVSN_Pxl_LL_TgtLngthVert());
+    System.out.println("LL Corner RtU X : " + Robot.VISION.getVSN_Pxl_LL_TgtCornX(0));
+    System.out.println("LL Corner RtU Y : " + Robot.VISION.getVSN_Pxl_LL_TgtCornY(0));
+    System.out.println("LL Corner RtL X : " + Robot.VISION.getVSN_Pxl_LL_TgtCornX(1));
+    System.out.println("LL Corner RtL Y : " + Robot.VISION.getVSN_Pxl_LL_TgtCornY(1));
+    System.out.println("LL Corner LtL X : " + Robot.VISION.getVSN_Pxl_LL_TgtCornX(2));
+    System.out.println("LL Corner LtL Y : " + Robot.VISION.getVSN_Pxl_LL_TgtCornY(2));
+    System.out.println("LL Corner LtU X : " + Robot.VISION.getVSN_Pxl_LL_TgtCornX(3));
+    System.out.println("LL Corner LtU Y : " + Robot.VISION.getVSN_Pxl_LL_TgtCornY(3));
+  }
+
+
+  /* Called to Update SmartDash Data for Display of Vision Camera Image Data */
+  public void updateSmartDashCamImgData() {
+    SmartDashboard.putNumber("Cam Img Width Btm (pixels) : ", Robot.VISION.getVSN_Pxl_ImgWidthBtm());
+    SmartDashboard.putNumber("Cam Img Width Top (pixels) : ", Robot.VISION.getVSN_Pxl_ImgWidthTop());
+    SmartDashboard.putNumber("Cam Img Height Lt (pixels) : ", Robot.VISION.getVSN_Pxl_ImgHeightLt());
+    SmartDashboard.putNumber("Cam Img Height Rt (pixels) : ", Robot.VISION.getVSN_Pxl_ImgHeightRt());
+    SmartDashboard.putNumber("Tgt Cam Dist :    ", Robot.VISION.getVSN_l_Cam2Tgt());
+    SmartDashboard.putNumber("Tgt Cam Dist2 :   ", Robot.VISION.getVSN_l_Cam2Tgt2ndry());
+    SmartDashboard.putNumber("Tgt Rbt Dist :    ", Robot.VISION.getVSN_l_Rbt2Tgt());
+    SmartDashboard.putNumber("Tgt Rbt2Tgt Ang : ", Robot.VISION.getVSN_deg_Rbt2Tgt());
+    SmartDashboard.putNumber("Tgt Rbt2Tgt Rot : ", Robot.VISION.getVSN_Deg_RbtRot());
+
+    System.out.println("Cam Img Width Btm (pixels) : " + Robot.VISION.getVSN_Pxl_ImgWidthBtm());
+    System.out.println("Cam Img Width Top (pixels) : " + Robot.VISION.getVSN_Pxl_ImgWidthTop());
+    System.out.println("Cam Img Height Lt (pixels) : " + Robot.VISION.getVSN_Pxl_ImgHeightLt());
+    System.out.println("Cam Img Height Rt (pixels) : " + Robot.VISION.getVSN_Pxl_ImgHeightRt());
+    System.out.println("Tgt Cam Dist :    " + Robot.VISION.getVSN_l_Cam2Tgt());
+    System.out.println("Tgt Cam Dist2 :   " + Robot.VISION.getVSN_l_Cam2Tgt2ndry());
+    System.out.println("Tgt Rbt Dist :    " + Robot.VISION.getVSN_l_Rbt2Tgt());
+    System.out.println("Tgt Rbt2Tgt Ang : " + Robot.VISION.getVSN_deg_Rbt2Tgt());
+    System.out.println("Tgt Rbt2Tgt Rot : " + Robot.VISION.getVSN_Deg_RbtRot());
+  }
+
 
 
 

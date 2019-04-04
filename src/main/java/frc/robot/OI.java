@@ -10,6 +10,8 @@ package frc.robot;
 import frc.robot.commands.*;
 import frc.robot.models.CustomXbox;
 import frc.robot.models.EncoderConversions;
+import frc.robot.calibrations.K_System;
+
 
 /**
  * This class is the glue that binds the controls on the physical operator
@@ -52,7 +54,11 @@ public class OI {
     //When Left Bumper is pressed, extend lift pnumatics
     DriverStick.leftBumper.whenPressed(new CC_LiftChassisWhlCntrl(false));
 
-    DriverStick.startButton.whenPressed(new CC_CamCaptureTgt());
+
+    // Camera: Target Image Capture - Testing
+    if (K_System.KeSYS_b_DebugEnblVsn == true) {
+      DriverStick.startButton.whenPressed(new CC_CamCaptureTgt());
+    }    
 
     // Autonomous forward
     DriverStick.selectButton.whileHeld(new CA_DrvPstnTgt(0, 140000));

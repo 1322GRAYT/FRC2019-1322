@@ -20,12 +20,12 @@ public class K_System {
 	 * is running on the Practice Robot which does not have the
 	 * full complement of actuators and sensors so certain
 	 * functionality in software should be disabled. */
-    public static final boolean KeSYS_b_PracticeBot = true;	
+    public static final boolean KeSYS_b_PracticeBot = false;	
 
 	/** KeSYS_b_DebugEnblVsn: If True the Debug Smart Dash Display Variables
 	 * Are Broadcast and Updated, if False they are turned off to maximize
 	 * thru-put for controls. For the Vision System. */
-    public static final boolean KeSYS_b_DebugEnblVsn = true;
+    public static final boolean KeSYS_b_DebugEnblVsn = false;
 
 	/** KeSYS_b_DebugEnblDrv: If True the Debug Smart Dash Display Variables
 	 * Are Broadcast and Updated, if False they are turned off to maximize

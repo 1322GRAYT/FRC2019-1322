@@ -15,6 +15,8 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import org.opencv.core.*;
 import org.opencv.calib3d.*;
+import frc.robot.Robot;
+import frc.robot.calibrations.K_System;
 import frc.robot.calibrations.K_Vision;
 
 /**
@@ -83,11 +85,11 @@ public class Vision extends Subsystem {
   /* Matricies of Camera and Image Data */
   private MatOfPoint3f VmVSN_l_RefObj   = new MatOfPoint3f();
   private MatOfPoint2f VmVSN_Pxl_RefImg = new MatOfPoint2f();
-  private Mat VmVSN_Pxl_Cam     = new Mat(3,3,CvType.CV_32F);
-  private Mat VmVSM_k_RotVect   = new Mat(3,1,CvType.CV_32F);
-  private Mat VmVSM_k_TransVect = new Mat(3,1,CvType.CV_32F);
-  private Mat VmVSM_k_Rot       = new Mat(3,3,CvType.CV_32F);
-  private Mat VmVSM_k_ImgPlaneZeroWorld = new Mat(3,3,CvType.CV_32F);
+  private Mat VmVSN_Pxl_Cam     = new Mat(3,3,CvType.CV_64F);
+  private Mat VmVSM_k_RotVect   = new Mat(3,1,CvType.CV_64F);
+  private Mat VmVSM_k_TransVect = new Mat(3,1,CvType.CV_64F);
+  private Mat VmVSM_k_Rot       = new Mat(3,3,CvType.CV_64F);
+  private Mat VmVSM_k_ImgPlaneZeroWorld = new Mat(3,3,CvType.CV_64F);
 
   /* Arrays of the Matrix Data for viewing via Instrumentation */
   private int VaVSN_Pxl_RefImgCoord[][] = new int[4][2];
@@ -348,6 +350,9 @@ public double getVSN_Pxl_LL_TgtSideShort() {
         LeVSN_b_TgtAcqVld = true;
         VeVSN_Cnt_TgtCornAqrd = LL_TgtCornX.length;
         System.out.println("VeVSN_Cnt_TgtCornAqrd : " + VeVSN_Cnt_TgtCornAqrd);
+        if (K_System.KeSYS_b_DebugEnblVsn == true) {
+          Robot.DASHBOARD.updateSmartDashCamLLData();
+        }  
       }
       else {
         System.out.println("Waiting for Valid 3+ Corner data-image ... ");
@@ -367,17 +372,15 @@ public double getVSN_Pxl_LL_TgtSideShort() {
     * at the beginning of the Match.
     */
     public void MngVSN_InitCamCalibr() {
-      System.out.println("start calcVSN_RefTgtObjMat(). ");
       calcVSN_RefTgtObjMat();
-      System.out.println("start calcVSN_RefTgtImgMat(). ");
       calcVSN_RefTgtImgMat();
-      System.out.println("start calcVSN_CamFocalPt(). ");
       calcVSN_CamFocalPt();
-      System.out.println("start calcVSN_CamMat(). ");
       calcVSN_CamMat();
-      System.out.println("start RstVSN_ImgVects(). ");
       RstVSN_ImgVects();
-      System.out.println("Camera Initialization Complete. ");
+      System.out.println("Init Cam Calibration Complete. ");
+      if (K_System.KeSYS_b_DebugEnblVsn == true) {
+        Robot.DASHBOARD.updateSmartDashCamCalData();
+      } 
     }
 
   
@@ -386,10 +389,10 @@ public double getVSN_Pxl_LL_TgtSideShort() {
       by loading them as zero matricies..
     */
     public void RstVSN_ImgVects() {
-      VmVSM_k_RotVect.zeros(3,1,CvType.CV_32F);
-      VmVSM_k_TransVect.zeros(3,1,CvType.CV_32F);
-      VmVSM_k_Rot.zeros(3,3,CvType.CV_32F);
-      VmVSM_k_ImgPlaneZeroWorld.zeros(3,3,CvType.CV_32F);
+      VmVSM_k_RotVect.zeros(3,1,CvType.CV_64F);
+      VmVSM_k_TransVect.zeros(3,1,CvType.CV_64F);
+      VmVSM_k_Rot.zeros(3,3,CvType.CV_64F);
+      VmVSM_k_ImgPlaneZeroWorld.zeros(3,3,CvType.CV_64F);
     }
 
 
@@ -439,12 +442,9 @@ public double getVSN_Pxl_LL_TgtSideShort() {
     private boolean calcVSN_TgtData() {
       boolean PnP_Vld;
       double x[], z[];
-      Mat LmVSM_k_RotInv       = new Mat(3,3,CvType.CV_32F);
-      Mat LmVSM_k_TransVectNeg = new Mat(1,3,CvType.CV_32F);
-      Mat LmVSM_k_ZerosVect    = new Mat(3,1,CvType.CV_32F);
-
-      System.out.println("LL_TgtCornX size : " + LL_TgtCornX.length);
-      System.out.println("LL_TgtCornY size : " + LL_TgtCornY.length);      
+      Mat LmVSM_k_RotInv       = new Mat(3,3,CvType.CV_64F);
+      Mat LmVSM_k_TransVectNeg = new Mat(3,1,CvType.CV_64F);
+      Mat LmVSM_k_ZerosVect    = new Mat(3,1,CvType.CV_64F);
 
       /* Calculate the Rotation Matrix and Translation Vector */
       PnP_Vld = Calib3d.solvePnP(VmVSN_l_RefObj, VmVSN_Pxl_RefImg, VmVSN_Pxl_Cam,
@@ -463,14 +463,20 @@ public double getVSN_Pxl_LL_TgtSideShort() {
 
         
         /* Initialize Local Matricies for prior to Angle2 calculation */
-        LmVSM_k_RotInv.zeros(3,3,CvType.CV_32F);
-        LmVSM_k_TransVectNeg.zeros(1,3,CvType.CV_32F);
-        LmVSM_k_ZerosVect.zeros(3,1,CvType.CV_32F);
+        LmVSM_k_RotInv.zeros(3,3,CvType.CV_64F);
+        LmVSM_k_TransVectNeg.zeros(1,3,CvType.CV_64F);
+        LmVSM_k_ZerosVect.zeros(3,1,CvType.CV_64F);
 
         /* Angle2: Calculate horiz angle between the target perpendicular and the robot-target line */
         Calib3d.Rodrigues(VmVSM_k_RotVect, VmVSM_k_Rot);
         Core.transpose(VmVSM_k_Rot,LmVSM_k_RotInv);
+        System.out.println("VmVSM_k_TransVect :    " + VmVSM_k_TransVect.type());
+        System.out.println("LmVSM_k_ZerosVect :    " + LmVSM_k_ZerosVect.type());
+        System.out.println("LmVSM_k_TransVectNeg : " + LmVSM_k_TransVectNeg.type());
         Core.scaleAdd(VmVSM_k_TransVect, -1.0, LmVSM_k_ZerosVect, LmVSM_k_TransVectNeg);
+        System.out.println("LmVSM_k_RotInv : " + LmVSM_k_RotInv.type());
+        System.out.println("LmVSM_k_TransVectNeg : " + LmVSM_k_TransVectNeg.type());
+        System.out.println("VmVSM_k_ImgPlaneZeroWorld : " + VmVSM_k_ImgPlaneZeroWorld.type());
         Core.multiply(LmVSM_k_RotInv, LmVSM_k_TransVectNeg, VmVSM_k_ImgPlaneZeroWorld);
         x = VmVSM_k_ImgPlaneZeroWorld.get(0,0);
         z = VmVSM_k_ImgPlaneZeroWorld.get(2,0);

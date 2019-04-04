@@ -50,7 +50,7 @@ public class Robot extends TimedRobot {
     m_oi = new OI();
 
 		m_chooser.addDefault("Driver Control Only", new CA_RevertToTele());
-		m_chooser.addObject("Auto Drive Forward", new CA_DrvPstnTgt(0, /*cvrtDistToCnts(251.32)*/ 140000));
+		m_chooser.addObject("Auto Drive Forward", new CA_DrvPstnTgt(0, /*cvrtDistToCnts(252")*/ 140000));
 		SmartDashboard.putData("Auto Mode:", m_chooser);
   }
 
