@@ -33,13 +33,13 @@ public class K_Arm {
      ***********************************************************/
     public static final List<PositionData> ALL_POS_DATA = Arrays.asList(
                     new PositionData(0, "Floor Pickup", GamePieces.Cargo),
-                    new PositionData(24312, "Rocket Level 1", GamePieces.HatchPanel),
+                    new PositionData(8307, "Rocket Level 1", GamePieces.HatchPanel),
                     new PositionData(114800, "Rocket Level 1", GamePieces.Cargo),
                     // new PositionData(173133, "Human Feed", GamePieces.Cargo),
-                    new PositionData(185000, "Rocket Level 2", GamePieces.HatchPanel),
+                    new PositionData(172700, "Rocket Level 2", GamePieces.HatchPanel),
                     new PositionData(197000, "Cargo Ship", GamePieces.Cargo),
                     new PositionData(254185, "Rocket Level 2", GamePieces.Cargo),
-                    new PositionData(312056, "Rocket Level 3", GamePieces.HatchPanel),
+                    new PositionData(287900, "Rocket Level 3", GamePieces.HatchPanel),
                     new PositionData(402000, "Rocket Level 3", GamePieces.Cargo));
 
     public static final List<PositionData> BALL_POS_DATA = ALL_POS_DATA.stream()

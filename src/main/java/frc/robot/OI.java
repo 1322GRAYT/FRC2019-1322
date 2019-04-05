@@ -45,10 +45,15 @@ public class OI {
     DriverStick.aButton.whileHeld(new CC_LiftHorizSpdTgt(1));
     //When B Button is pressed, retract lift
     DriverStick.bButton.whileHeld(new CC_LiftHorizSpdTgt(-1));
+    //We Can't Use WhileHeld here because then only that button can be pressed
     //When Right Trigger is pressed, lift bot
-    DriverStick.rightTriggerButton.whileHeld(new CC_LiftVertSpdTgt(1));
+    DriverStick.rightTriggerButton.whenPressed(new CC_LiftVertSpdTgt(1));
     //When Left Trigger is pressed, lower bot
-    DriverStick.leftTriggerButton.whileHeld(new CC_LiftVertSpdTgt(-1));
+    DriverStick.leftTriggerButton.whenPressed(new CC_LiftVertSpdTgt(-1));
+    //When Right Trigger is released, stop lift bot
+    DriverStick.rightTriggerButton.whenReleased(new CC_LiftVertSpdTgt(0));
+    //When Left Trigger is released, stop lower bot
+    DriverStick.leftTriggerButton.whenReleased(new CC_LiftVertSpdTgt(0));
     //When Right Bumper is pressed, retract lift pnumatics
     DriverStick.rightBumper.whenPressed(new CC_LiftChassisWhlCntrl(true));
     //When Left Bumper is pressed, extend lift pnumatics
