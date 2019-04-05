@@ -113,6 +113,7 @@ public class Arm extends Subsystem {
     double[] input = { (double) liftRawPosition(), (double) liftRawVelocity(),
         (double) getCurrenPositionData().location, (double) armVoltage(), (double) armError() };
     SmartDashboard.putNumberArray("Arm Data", input);
+    // System.out.println("Arm Data: " + input[0]);
   }
 
   /*
