@@ -244,12 +244,12 @@ public class Drives extends Subsystem {
    * Public SubSystem Methods         *
    ************************************/
 
-  /** Method: updateDrvEncdrData - Updates the derived Drive Encoder data at
+  /** Method: updDRV_EncdrData - Updates the derived Drive Encoder data at
    *  a periodic rate so that only one set of Talon Calls for Sensor Positions
    *  and Velocity per loop is done to minimize throughput.  Each Call to
    *  EncodedDrives requires a CAN Request and Response.
    */
-  public void updateDrvEncdrData() {
+  public void updDRV_EncdrData() {
     int idx;
       
     /* Drive Speed Inputs */    

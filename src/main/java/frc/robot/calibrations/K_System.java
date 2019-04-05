@@ -16,6 +16,13 @@ public class K_System {
 	/*   General System Configuration   */
 	/****************************************/	 	
 
+	/** KeSYS_b_CL_TgtEnbl: Enable Closed-Loop Vision Targeting Control. */
+    public static final boolean KeSYS_b_CL_TgtEnbl = false;
+
+	/** KeSYS_t_LoopRt: Execution Loop Rate Period for the Autonomous
+	 * Command Group Controls (sec). */
+	public static final float KeSYS_t_LoopRt = (float)0.020; // sec 
+	 	
 	/** KeSYS_b_PracticeBot: If True it indicates that the software
 	 * is running on the Practice Robot which does not have the
 	 * full complement of actuators and sensors so certain
@@ -32,9 +39,5 @@ public class K_System {
 	 * thru-put for controls.  For the Drive System.  */
     public static final boolean KeSYS_b_DebugEnblDrv = false;
 
-	/** KeSYS_t_LoopRt: Execution Loop Rate Period for the Autonomous
-	 * Command Group Controls (sec). */
-	 public static final float KeSYS_t_LoopRt = (float)0.020; // sec 
-	 	
 	    
 }

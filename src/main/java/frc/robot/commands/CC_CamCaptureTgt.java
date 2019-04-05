@@ -28,22 +28,40 @@ public class CC_CamCaptureTgt extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    System.out.println("Cam Capture Target Begin Execute. ");
-    LeVSN_b_ImgCaptureVld = Robot.VISION.captureVSN_CamImgData();
-    System.out.println("Cam Capture Target Complete Execute. ");
+
+    // Camera: Target Image Capture - Testing
+    if (K_System.KeSYS_b_DebugEnblVsn == true) {
+      System.out.println("Cam Capture Target Begin Execute. ");
+      LeVSN_b_ImgCaptureVld = Robot.VISION.dtrmnVSN_CamVldData();
+      System.out.println("Cam Capture Target Complete Execute. ");
+    }
   }
 
   // Make this return true when this Command no longer needs to run execute()
   @Override
   protected boolean isFinished() {
+    boolean CmndCmpt = false;
+
+    if (K_System.KeSYS_b_DebugEnblVsn == true) {
+      CmndCmpt = LeVSN_b_ImgCaptureVld; 
+    }
+    else {
+      CmndCmpt = true;
+    }
+
     return LeVSN_b_ImgCaptureVld;
   }
 
   // Called once after isFinished returns true
   @Override
   protected void end() {
+    Robot.DASHBOARD.updateSmartDashCamCLData();
+
     System.out.println("Cam Capture Target Begin Processing. ");
-    Robot.VISION.MngVSN_CamImgProc();
+    
+    if (K_System.KeSYS_b_DebugEnblVsn == true) {
+      Robot.VISION.MngVSN_CamImgProc();
+    }
     if (K_System.KeSYS_b_DebugEnblVsn == true) {
       Robot.DASHBOARD.updateSmartDashCamImgData();
     }

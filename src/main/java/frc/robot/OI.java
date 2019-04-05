@@ -54,13 +54,10 @@ public class OI {
     //When Left Bumper is pressed, extend lift pnumatics
     DriverStick.leftBumper.whenPressed(new CC_LiftChassisWhlCntrl(false));
     //When X Button is pressed, switch Cameras
-    DriverStick.xButton.whenPressed(new CC_SwitchCam());
+    DriverStick.xButton.whenPressed(new CC_CamSwitch());
 
-
-    // Camera: Target Image Capture - Testing
-    if (K_System.KeSYS_b_DebugEnblVsn == true) {
-      DriverStick.startButton.whenPressed(new CC_CamCaptureTgt());
-    }    
+    // Vision System Camera
+    DriverStick.startButton.whenPressed(new CC_CamCaptureTgt());    
 
     // Autonomous forward
     DriverStick.selectButton.whileHeld(new CA_DrvPstnTgt(0, 140000));

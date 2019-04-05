@@ -63,7 +63,7 @@ public class Vision extends Subsystem {
   private double VeVSN_l_Cam2Tgt2ndry;
   private double VeVSN_l_Cam2Tgt;
   private double VeVSN_l_Rbt2Tgt;
-  private double VeVSN_deg_Rbt2Tgt;
+  private double VeVSN_Deg_Rbt2Tgt;
   private double VeVSN_Deg_RbtRot;
 
 
@@ -78,9 +78,22 @@ public class Vision extends Subsystem {
   private static final int LtUpr  = 3;  // Top Left Cell for array Indexing;
   private static final int NumPts = 4;  // Total Number of Data Points;
 
+
+
+  /**********************************************/
+  /* Vision Closed Loop Error Variables         */
+  /**********************************************/
+
+  private double VeVSN_Deg_PstnErr;           // (degrees)
+  private boolean VeVSN_b_PstnErrInDB;        // (boolean)
+  private double VeVSN_Deg_PstnErrAccum;      // (degrees)
+
+
+
   /**********************************************/
   /* Matricies for Object Dimensions and Images */
   /**********************************************/
+
 
   /* Matricies of Camera and Image Data */
   private MatOfPoint3f VmVSN_l_RefObj   = new MatOfPoint3f();
@@ -115,20 +128,20 @@ public class Vision extends Subsystem {
   }
 
  /**
-   * Method: getVSN_deg_LL_TgtAngX - Horizontal Offset from CrossHair to
+   * Method: getVSN_Deg_LL_TgtAngX - Horizontal Offset from CrossHair to
    * Target (-27 to 27 degrees).
    * @return: double - degrees
    */
-  public double getVSN_deg_LL_TgtAngX() {
+  public double getVSN_Deg_LL_TgtAngX() {
     return(LL_TgtAngX);
   }
 
  /**
-   * Method: getVSN_deg_LL_TgtAngY - Vertical Offset from CrossHair to
+   * Method: getVSN_Deg_LL_TgtAngY - Vertical Offset from CrossHair to
    * Target (-20.5 to 20.5 degrees).
    * @return: double - degrees
    */
-  public double getVSN_deg_LL_TgtAngY() {
+  public double getVSN_Deg_LL_TgtAngY() {
     return(LL_TgtAngY);
   }
 
@@ -277,13 +290,13 @@ public double getVSN_Pxl_LL_TgtSideShort() {
   }
 
   /**
-   * Method: VeVSN_deg_Rbt2Tgt - Calculated Angle between the line
+   * Method: VeVSN_Deg_Rbt2Tgt - Calculated Angle between the line
    * perpendicular from the target center and the line from the target
    * center to the robot.
    * @return: double - degrees
    */
-  public double getVSN_deg_Rbt2Tgt() {
-    return(VeVSN_deg_Rbt2Tgt); 
+  public double getVSN_Deg_Rbt2Tgt() {
+    return(VeVSN_Deg_Rbt2Tgt); 
   }
 
   /**
@@ -294,6 +307,36 @@ public double getVSN_Pxl_LL_TgtSideShort() {
    * */
   public double getVSN_Deg_RbtRot() {
     return(VeVSN_Deg_RbtRot); 
+  }
+
+
+
+  /**
+   * Method: getVSN_Deg_PstnErr - Vision System Closed-Loop
+   * Target Error in X-Axis angular degrees.
+   * @return: double - degrees
+   * */
+  public double getVSN_Deg_PstnErr() {
+    return(VeVSN_Deg_PstnErr); 
+  }
+
+  /**
+   * Method: getVSN_b_PstnErrInDB - Calculated Angle of Rotation of the
+   * Robot wrt to the line perpendicular to the camera lens and the and
+   * the line between the robot and center of target.
+   * @return: double - degrees
+   * */
+  public boolean getVSN_b_PstnErrInDB() {
+    return(VeVSN_b_PstnErrInDB); 
+  }
+
+  /**
+   * Method: getVSN_Deg_PstnErrAccum - Vision System Closed-Loop
+   * Accumulated Target Error in X-Axis angular degrees.
+   * @return: double - degrees
+   * */
+  public double getVSN_Deg_PstnErrAccum() {
+    return(VeVSN_Deg_PstnErrAccum); 
   }
 
 
@@ -323,28 +366,22 @@ public double getVSN_Pxl_LL_TgtSideShort() {
     }  
 
 
- /**
-    * Method: captureVSN_CamImgData - Capture the Raw Image Data from
-    * the Camera.  Receives the data from the
-    * Network Tables that have been transmitted from the Rpi Controller.
+  /**
+    * Method: mngVSN_CamImgPeriodic - Manage the Periodic Cameara
+    * Image processing tasks.
     */
-    public boolean captureVSN_CamImgData() {
+    public void mngVSN_CamImgPeriodic() {
+      captureVSN_CamImgData();
+      calcVSN_CL_Err();
+    }
+   
+ 
+/**
+    * Method: dtrmnVSN_CamVldData - Determine whether the Raw Image Data from
+    * the Camera is valid to calculate the Image Pose data.
+    */
+    public boolean dtrmnVSN_CamVldData() {
       boolean LeVSN_b_TgtAcqVld = false;
-
-      //read values periodically
-      LL_TgtVld  = tv.getDouble(0.0);
-      if (LL_TgtVld == 1.0) {
-        LL_TgtAngX = tx.getDouble(0.0);
-        LL_TgtAngY = ty.getDouble(0.0);
-        LL_TgtArea = ta.getDouble(0.0);
-        LL_TgtSkew = ts.getDouble(0.0);
-        LL_TgtSideShort = tshort.getDouble(0.0);
-        LL_TgtSideLong  = tlong.getDouble(0.0);
-        LL_TgtLngthHort = thor.getDouble(0.0);
-        LL_TgtLngthVert = tvert.getDouble(0.0);
-        LL_TgtCornX   = tcornx.getDoubleArray(new double[0]);
-        LL_TgtCornY   = tcorny.getDoubleArray(new double[0]);    
-      }
 
       if ((LL_TgtVld == 1.0) &&
           (LL_TgtCornX.length >= K_Vision.KeVSN_Cnt_CamTgtCornMin) &&
@@ -360,7 +397,6 @@ public double getVSN_Pxl_LL_TgtSideShort() {
         System.out.println("Waiting for Valid 3+ Corner data-image ... ");
       }
         
-
       return(LeVSN_b_TgtAcqVld);
     }
 
@@ -416,9 +452,37 @@ public double getVSN_Pxl_LL_TgtSideShort() {
 
 
 
+
+
   /*******************************/
   /* Internal Class Methods      */
   /*******************************/   
+
+
+/**
+    * Method: captureVSN_CamImgData - Capture the Raw Image Data from
+    * the Camera.  Receives the data from the
+    * Network Tables that have been transmitted from the Rpi Controller.
+    */
+    private void captureVSN_CamImgData() {
+      //read values periodically
+      LL_TgtVld  = tv.getDouble(0.0);
+      LL_TgtAngX = tx.getDouble(0.0);
+      LL_TgtAngY = ty.getDouble(0.0);
+      LL_TgtArea = ta.getDouble(0.0);
+      LL_TgtSkew = ts.getDouble(0.0);
+      LL_TgtSideShort = tshort.getDouble(0.0);
+      LL_TgtSideLong  = tlong.getDouble(0.0);
+      LL_TgtLngthHort = thor.getDouble(0.0);
+      LL_TgtLngthVert = tvert.getDouble(0.0);
+      LL_TgtCornX   = tcornx.getDoubleArray(new double[0]);
+      LL_TgtCornY   = tcorny.getDoubleArray(new double[0]);
+    }
+
+
+
+
+
 
    /**
     * Method: parseVSN_CamImgData - Update the Raw Image Data from
@@ -461,7 +525,7 @@ public double getVSN_Pxl_LL_TgtSideShort() {
 
 
         /* Angle1: Calculate horiz angle from robot/camera forward and the robot-target line */
-        VeVSN_deg_Rbt2Tgt = Math.atan2(x[0], z[0]);
+        VeVSN_Deg_Rbt2Tgt = Math.atan2(x[0], z[0]);
 
         
         /* Initialize Local Matricies for prior to Angle2 calculation */
@@ -472,13 +536,13 @@ public double getVSN_Pxl_LL_TgtSideShort() {
         /* Angle2: Calculate horiz angle between the target perpendicular and the robot-target line */
         Calib3d.Rodrigues(VmVSM_k_RotVect, VmVSM_k_Rot);
         Core.transpose(VmVSM_k_Rot,LmVSM_k_RotInv);
-        System.out.println("VmVSM_k_TransVect :    " + VmVSM_k_TransVect.type());
-        System.out.println("LmVSM_k_ZerosVect :    " + LmVSM_k_ZerosVect.type());
-        System.out.println("LmVSM_k_TransVectNeg : " + LmVSM_k_TransVectNeg.type());
+        System.out.println("VmVSM_k_TransVect :    " + VmVSM_k_TransVect.dump());
+        System.out.println("LmVSM_k_ZerosVect :    " + LmVSM_k_ZerosVect.dump());
+        System.out.println("LmVSM_k_TransVectNeg : " + LmVSM_k_TransVectNeg.dump());
         Core.scaleAdd(VmVSM_k_TransVect, -1.0, LmVSM_k_ZerosVect, LmVSM_k_TransVectNeg);
-        System.out.println("LmVSM_k_RotInv : " + LmVSM_k_RotInv.type());
-        System.out.println("LmVSM_k_TransVectNeg : " + LmVSM_k_TransVectNeg.type());
-        System.out.println("VmVSM_k_ImgPlaneZeroWorld : " + VmVSM_k_ImgPlaneZeroWorld.type());
+        System.out.println("LmVSM_k_RotInv :            " + LmVSM_k_RotInv.dump());
+        System.out.println("LmVSM_k_TransVectNeg :      " + LmVSM_k_TransVectNeg.dump());
+        System.out.println("VmVSM_k_ImgPlaneZeroWorld : " + VmVSM_k_ImgPlaneZeroWorld.dump());
         Core.multiply(LmVSM_k_RotInv, LmVSM_k_TransVectNeg, VmVSM_k_ImgPlaneZeroWorld);
         x = VmVSM_k_ImgPlaneZeroWorld.get(0,0);
         z = VmVSM_k_ImgPlaneZeroWorld.get(2,0);
@@ -674,13 +738,13 @@ public double getVSN_Pxl_LL_TgtSideShort() {
     if (LeVSN_l_RefTgtBtm <= 1) {
       LeVSN_l_RefTgtBtm = 1;
     }
-      
-/*  LeVSN_l_FocalPt = (VeVSN_Pxl_ImgWidthBtm * K_Vision.KeVSN_l_RefTgtToCamDist)/
-                      (LeVSN_l_RefTgtBtm);  */
+  
+    System.out.println("VeVSN_Pxl_ImgWidthBtm :   " + VeVSN_Pxl_ImgWidthBtm);
+    System.out.println("KeVSN_l_RefTgtToCamDist : " + K_Vision.KeVSN_l_RefTgtToCamDist);
+    System.out.println("LeVSN_l_RefTgtBtm :       " + LeVSN_l_RefTgtBtm);
 
-    LeVSN_l_FocalPt = (LL_TgtLngthHort * K_Vision.KeVSN_l_RefTgtToCamDist)/
-                      (LeVSN_l_RefTgtBtm);  // todo
-
+    LeVSN_l_FocalPt = (VeVSN_Pxl_ImgWidthBtm * K_Vision.KeVSN_l_RefTgtToCamDist)/
+                      (LeVSN_l_RefTgtBtm);
 
 	  VeVSN_Pxl_CamFocalPt = (int)LeVSN_l_FocalPt;          
   }
@@ -704,20 +768,136 @@ public double getVSN_Pxl_LL_TgtSideShort() {
      double LeVSN_Pxl_In;
      double LeVSN_Pxl_Cam2Tgt;
 
-/*   LeVSN_Pxl_In = VeVSN_Pxl_ImgWidthBtm;  */
-     LeVSN_Pxl_In = LL_TgtLngthHort;  // todo
+     LeVSN_Pxl_In = VeVSN_Pxl_ImgWidthBtm;
 
      /* To protect against a divide by zero error */
      if (LeVSN_Pxl_In < 1) { 
          LeVSN_Pxl_In = 1;
       }
-        
+    
+    System.out.println("KeVSN_l_RefTgtBtm :    " + K_Vision.KeVSN_l_RefTgtBtm);
+    System.out.println("VeVSN_Pxl_CamFocalPt : " + VeVSN_Pxl_CamFocalPt);
+    System.out.println("LeVSN_Pxl_In :         " + LeVSN_Pxl_In);  
+
      LeVSN_Pxl_Cam2Tgt = (K_Vision.KeVSN_l_RefTgtBtm * VeVSN_Pxl_CamFocalPt)/
                           LeVSN_Pxl_In;
 
      VeVSN_l_Cam2Tgt2ndry = LeVSN_Pxl_Cam2Tgt;
     }
 
+
+  /****************************************************/
+  /*  Vision Closed Loop Error Calculations           */
+  /****************************************************/	 	
+
+   /**
+    * Method: CalcVSN_CL_Err - Calculate the Closed-Loop Error Signals for
+    * the vision targets.
+    */
+    private void calcVSN_CL_Err() {
+      VeVSN_Deg_PstnErr = calcErrSignal(LL_TgtAngX, K_Vision.KeVSN_Deg_ErrDB);
+      VeVSN_b_PstnErrInDB =  dtrmnErrInDB(VeVSN_Deg_PstnErr, K_Vision.KeVSN_Deg_ErrDB);
+      VeVSN_Deg_PstnErrAccum = calcErrAccum(VeVSN_Deg_PstnErrAccum, VeVSN_Deg_PstnErr,  K_Vision.KeVSN_Deg_AccumDsblErrMin);
+    }
+
+
+    /** Method: calcErrSgnl - Calculates Vision X-Axis Error in units of
+      * angular degrees, taking into account a symmetrical error dead-band
+      * around the zero-error point.
+      * @param1: ProcessVal - Current Input Angle along the X-Dimension (double)
+      * @param4: ThrshDB -    Dead-Band Threshold (double)
+      * @return: ErrSignal -  Dead-Band Adjusted Error Value (double)  */
+      private double calcErrSignal(double  ProcessVal,
+                                   double   ThrshDB) {
+      double  ErrSignal;
+
+      if (ProcessVal >= 0) {
+        if (ProcessVal > ThrshDB) {
+          ErrSignal = ProcessVal - ThrshDB;
+        }
+        else {
+          ErrSignal = 0;
+        }   
+      }
+      else {  /* (ProcessVal < 0) */
+        if (ProcessVal < -ThrshDB) {
+          ErrSignal = ProcessVal + ThrshDB;
+        }
+        else {
+          ErrSignal = 0;
+        }
+      }
+
+return ErrSignal;
+} 
+
+
+/** Method: dtrmnErrInDB - Determines if Controller Error
+  * is within the targeted Dead-Band.  Used when when rotating
+  * the robot to execute a turn when determining if the
+  * desired target position is being attained.
+  * @param1: Controller Target Set Point Value (double)
+  * @param2: Controller Actual Feedback Process Value (double)
+  * @return: Dead-Band Adjusted Error Value (double)  */
+  private boolean dtrmnErrInDB(double ErrSignal,
+                               double  ThrshDB) {
+    boolean ErrInDB = false;
+
+    if ((ErrSignal >= 0) && (ErrSignal <= ThrshDB))
+      ErrInDB = true;
+    else if ((ErrSignal < 0.0) && (ErrSignal >= -ThrshDB))
+      ErrInDB = true;
+
+    return ErrInDB;
+  }
+
+
+/** Method: calcErrAccum - Calculate the error accumulation
+  * signal for use by the Integral Controller.
+  * @param1: Controller Accumulated Error Signal (double)
+  * @param2: Controller Error Signal (double)
+  * @param3: Min Error Signal Thresh Above which Error will not
+  *          be accumulated. (double)
+  * @return: Updated Controller Accumulated Error Signal (double)  */
+  private double calcErrAccum(double ErrAccum,
+                              double ErrSignal,
+                              double ErrDsblThrshMin) {
+    double  ErrAccumTemp;
+    double  ErrSignalAbs;
+    boolean SignFlipRst = false;
+
+    ErrSignalAbs = Math.abs(ErrSignal);
+
+    if ((ErrAccum > 0) && (ErrSignal < 0)) {
+      SignFlipRst = true;
+    } 
+    else if ((ErrAccum < 0) && (ErrSignal > 0)) {
+      SignFlipRst = true;
+    }
+
+    if(SignFlipRst == true) {
+      ErrAccumTemp = (double)0.0;
+    }
+    else if (ErrSignalAbs >= (double)ErrDsblThrshMin) {
+      ErrAccumTemp = ErrAccum;
+    }
+    else {
+      // (SignFlipRst == false) 
+      ErrAccumTemp = ErrAccum + ErrSignal;  
+    }	    
+
+    return ErrAccumTemp;  	  
+  }
+
+
+
+  /****************************************************/
+  /*  Vision Visual Navigation Camera Methods         */
+  /****************************************************/
+
+    /**
+     * Method: switchCameras - Switches between the drive view cameras.
+     */ 
     public void switchCameras() {
       if(this.Active_Camera == 0) { // Camera is 0, set to 1
         this.NetTbl.getTable("").getEntry("CameraSelection").setString(Robot.camera1.getName());

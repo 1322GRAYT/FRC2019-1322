@@ -10,8 +10,8 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 
-public class CC_SwitchCam extends Command {
-  public CC_SwitchCam() {
+public class CC_CamSwitch extends Command {
+  public CC_CamSwitch() {
     requires(Robot.VISION);
   }
 

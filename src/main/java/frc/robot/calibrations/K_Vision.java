@@ -64,5 +64,25 @@ public class K_Vision {
    * target and the camera at the camera calibration reference
    * distance in measured inches. */
    public static final double KeVSN_l_RefTgtToCamDist = 30.75; // inches
-    
+ 
+
+  /**************************************************/
+	/*  Vision Target Closed-Loop Error Calibrations  */
+	/**************************************************/	 	
+	
+	/** KeVSN_Deg_ErrDB: Closed-Loop Error Dead-Band for the
+   * Vision Target X-Axis Error between the Calibrated Zero-Position
+   * Cross-Hair of the target center of mass and the current position
+   * Cross-Hair target center of mass. */
+  public static final double KeVSN_Deg_ErrDB = 2.0;  // degrees
+
+	
+	/** KeVSN_Deg_AccumDsblErrMin: Closed-Loop Error at which it is too large
+   * to consider addjusting with Integral Correction so that it is not applied
+   * to the error accumulator (to prevent unnecessary accumulator wind up before
+   * Feed-Forward and Proportional control have a change to make a correction). */
+  public static final double KeVSN_Deg_AccumDsblErrMin = 20.0;  // degrees
+
+
+
 }

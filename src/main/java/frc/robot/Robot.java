@@ -78,7 +78,8 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
-  Robot.DRIVES.updateDrvEncdrData();
+  Robot.VISION.mngVSN_CamImgPeriodic();  
+  Robot.DRIVES.updDRV_EncdrData();
   }
 
   /**
