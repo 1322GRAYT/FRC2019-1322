@@ -97,6 +97,8 @@ public class Vision extends Subsystem {
   private int VaVSN_Pxl_CamMatrix[][] = new int[3][3];
   private int VaVSN_Pxl_CamImgCoord[][] = new int[4][2];
 
+  /* Active CameraServer Camera */
+  private int Active_Camera = 0; // Default to camera 0
 
 
   /*******************************/
@@ -714,6 +716,17 @@ public double getVSN_Pxl_LL_TgtSideShort() {
                           LeVSN_Pxl_In;
 
      VeVSN_l_Cam2Tgt2ndry = LeVSN_Pxl_Cam2Tgt;
+    }
+
+    public void switchCameras() {
+      if(this.Active_Camera == 0) { // Camera is 0, set to 1
+        this.NetTbl.getTable("").getEntry("CameraSelection").setString(Robot.camera1.getName());
+        this.Active_Camera = 1;
+      } else { // Camera is 1, set to 0
+        this.NetTbl.getTable("").getEntry("CameraSelection").setString(Robot.camera0.getName());
+        this.Active_Camera = 0;
+      }
+      
     }
 
 

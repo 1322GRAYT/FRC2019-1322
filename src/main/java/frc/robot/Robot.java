@@ -7,6 +7,9 @@
 
 package frc.robot;
 
+import edu.wpi.cscore.UsbCamera;
+import edu.wpi.cscore.VideoSource.ConnectionStrategy;
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -35,6 +38,10 @@ public class Robot extends TimedRobot {
   public final static Scissor         SCISSOR   = new Scissor();
   public final static Vision          VISION    = new Vision();
 
+  // Cameras
+  public static UsbCamera camera0;
+  public static UsbCamera camera1;
+
   Command m_autonomousCommand;
   SendableChooser<Command> m_chooser = new SendableChooser<>();
 
@@ -48,6 +55,13 @@ public class Robot extends TimedRobot {
     VISION.MngVSN_InitCamCalibr();
   
     m_oi = new OI();
+
+    // Camera Server
+    camera0 = CameraServer.getInstance().startAutomaticCapture(0);
+    camera1 = CameraServer.getInstance().startAutomaticCapture(1);
+    // Set Keep Connections Open to Keep Switching Speed Fast!
+    camera0.setConnectionStrategy(ConnectionStrategy.kKeepOpen);
+    camera1.setConnectionStrategy(ConnectionStrategy.kKeepOpen);
 
 		m_chooser.addDefault("Driver Control Only", new CA_RevertToTele());
 		m_chooser.addObject("Auto Drive Forward", new CA_DrvPstnTgt(0, /*cvrtDistToCnts(252")*/ 140000));

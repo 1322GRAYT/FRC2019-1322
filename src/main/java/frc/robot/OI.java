@@ -46,13 +46,15 @@ public class OI {
     //When B Button is pressed, retract lift
     DriverStick.bButton.whileHeld(new CC_LiftHorizSpdTgt(-1));
     //When Right Trigger is pressed, lift bot
-    DriverStick.rightTriggerButton.whenPressed(new CC_LiftVertSpdTgt(1));
+    DriverStick.rightTriggerButton.whileHeld(new CC_LiftVertSpdTgt(1));
     //When Left Trigger is pressed, lower bot
-    DriverStick.leftTriggerButton.whenPressed(new CC_LiftVertSpdTgt(-1));
+    DriverStick.leftTriggerButton.whileHeld(new CC_LiftVertSpdTgt(-1));
     //When Right Bumper is pressed, retract lift pnumatics
     DriverStick.rightBumper.whenPressed(new CC_LiftChassisWhlCntrl(true));
     //When Left Bumper is pressed, extend lift pnumatics
     DriverStick.leftBumper.whenPressed(new CC_LiftChassisWhlCntrl(false));
+    //When X Button is pressed, switch Cameras
+    DriverStick.xButton.whenPressed(new CC_SwitchCam());
 
 
     // Camera: Target Image Capture - Testing
