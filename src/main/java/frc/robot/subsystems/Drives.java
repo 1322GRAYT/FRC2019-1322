@@ -149,7 +149,6 @@ public class Drives extends Subsystem {
     }
   }
 
-
   public int[] getClosedLoopError() {
     int[] val = new int[4];
     for (int i = 0; i < EncodedDrives.length; i++) {
