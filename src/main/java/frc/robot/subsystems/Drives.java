@@ -98,10 +98,10 @@ public class Drives extends Subsystem {
    * Drive Functions
    * Includes all functions required to drive the robot
    */
-  public void DriveInVoltage(double F, double L, double R) {
-    var y = deadzone(F, 0.2);
-    var x = deadzone(L, 0.4);
-    var r = deadzone(R, 0.2);
+  public void DriveInVoltage(double Longitudinal, double Lateral, double Rotate) {
+    var y = deadzone(Longitudinal, K_Drive.KeDRV_r_DB_InpLong);
+    var x = deadzone(Lateral, K_Drive.KeDRV_r_DB_InpLat);
+    var r = deadzone(Rotate, K_Drive.KeDRV_r_DB_InpRot);
 
     double wheelSpeeds[] = { y + x + r, y - x - r, y - x + r, y + x - r };
     wheelSpeeds = normalize(scale(wheelSpeeds, 1.0));

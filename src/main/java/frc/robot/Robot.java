@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.*;
+import frc.robot.calibrations.K_System;
 import frc.robot.commands.*;
 import frc.robot.models.*;
 
@@ -35,6 +36,7 @@ public class Robot extends TimedRobot {
   public final static LEDController   LEDS      = new LEDController();
   public final static Dashboard       DASHBOARD = new Dashboard();
   public final static Arm             ARM       = new Arm();
+  public final static Lift            LIFT      = new Lift();
   public final static Scissor         SCISSOR   = new Scissor();
   public final static Vision          VISION    = new Vision();
 
@@ -53,6 +55,7 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     VISION.MngVSN_InitLimeLightNetTbl(); 
     VISION.MngVSN_InitCamCalibr();
+    LIFT.resetLFT_InpRqstFlgs();
   
     m_oi = new OI();
 
@@ -78,8 +81,12 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
-  Robot.VISION.mngVSN_CamImgPeriodic();  
-  Robot.DRIVES.updDRV_EncdrData();
+    VISION.mngVSN_CamImgPeriodic();  
+    DRIVES.updDRV_EncdrData();
+    if (K_System.KeSYS_b_NewLiftEnbl == true) {
+      LIFT.cntrlLFT_System();
+      LIFT.resetLFT_InpRqstFlgs();
+    } 
   }
 
   /**

@@ -19,6 +19,9 @@ public class K_System {
 	/** KeSYS_b_CL_TgtEnbl: Enable Closed-Loop Vision Targeting Control. */
     public static final boolean KeSYS_b_CL_TgtEnbl = false;
 
+	/** KeSYS_b_NewLiftEnbl: Enable the use of the new Lift Control strategy. */
+    public static final boolean KeSYS_b_NewLiftEnbl = false;
+
 	/** KeSYS_t_LoopRt: Execution Loop Rate Period for the Autonomous
 	 * Command Group Controls (sec). */
 	public static final float KeSYS_t_LoopRt = (float)0.020; // sec 

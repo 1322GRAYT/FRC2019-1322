@@ -59,6 +59,38 @@ public class K_Drive {
      */
     public static final int KDRV_a_MM_MaxAccel = 13000;
 
+   
+    /**************************************************/
+    /*  Drive System Driver Control Deadbands         */
+    /**************************************************/	 	
+
+	/** KeDRV_r_DB_InpForeAft: Drive System Controller Driver Controls
+      * Input Power Deadband when detecting a direction request for Longitudinal
+      * robot movement. (Normalized Power Command) 
+     */
+    public static double KeDRV_r_DB_InpLong = 0.2;
+     
+
+	/** KeDRV_r_DB_InpLat: Drive System Controller Driver Controls
+      * Input Power Deadband when detecting a direction request for Lateral
+      * robot movement. (Normalized Power Command)
+     */
+    public static double KeDRV_r_DB_InpLat = 0.2;
+
+
+	/** KeDRV_r_DB_InpRot: Drive System Controller Driver Controls
+      * Input Power Deadband when detecting a direction request for Rotational
+      * robot movement. (Normalized Power Command)
+      */
+    public static double KeDRV_r_DB_InpRot = 0.2;
+
+	/** KeDRV_Deg_DB_Dirctn: Drive System Controller Driver Controls
+      * Input Direction Deadband when detecting a direction request for longitudinal
+      * or latitudinal robot movement. (Degrees) 
+     */
+    public static double KeDRV_Deg_DB_Dirctn = 0.2;
+     
+
 
     /**************************************************/
     /*  Drive System Speed Ratio / Conversion Cals    */

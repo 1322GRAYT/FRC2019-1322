@@ -40,24 +40,44 @@ public class OI {
   // button.whenReleased(new ExampleCommand());
 
   public OI() {
-    
-    //When A Button is pressed, extend Lift
-    DriverStick.aButton.whileHeld(new CC_LiftHorizSpdTgt(1));
-    //When B Button is pressed, retract lift
-    DriverStick.bButton.whileHeld(new CC_LiftHorizSpdTgt(-1));
-    //We Can't Use WhileHeld here because then only that button can be pressed
-    //When Right Trigger is pressed, lift bot
-    DriverStick.rightTriggerButton.whenPressed(new CC_LiftVertSpdTgt(1));
-    //When Left Trigger is pressed, lower bot
-    DriverStick.leftTriggerButton.whenPressed(new CC_LiftVertSpdTgt(-1));
-    //When Right Trigger is released, stop lift bot
-    DriverStick.rightTriggerButton.whenReleased(new CC_LiftVertSpdTgt(0));
-    //When Left Trigger is released, stop lower bot
-    DriverStick.leftTriggerButton.whenReleased(new CC_LiftVertSpdTgt(0));
-    //When Right Bumper is pressed, retract lift pnumatics
-    DriverStick.rightBumper.whenPressed(new CC_LiftChassisWhlCntrl(true));
-    //When Left Bumper is pressed, extend lift pnumatics
-    DriverStick.leftBumper.whenPressed(new CC_LiftChassisWhlCntrl(false));
+  
+    if (K_System.KeSYS_b_NewLiftEnbl == true) {
+      //When A Button is pressed, extend Lift drawer slide
+      DriverStick.aButton.whileHeld(new CT_LiftInpHorz(1));
+      //When B Button is pressed, retract lift drawer slide
+      DriverStick.bButton.whileHeld(new CT_LiftInpHorz(-1));
+
+      //When Right Trigger is pressed, lift bot
+      DriverStick.rightTriggerButton.whileHeld(new CT_LiftInpVert(1));
+
+      //When Left Trigger is pressed, lower bot
+      DriverStick.leftTriggerButton.whileHeld(new CT_LiftInpVert(-1));
+
+      //When Right Bumper is pressed, retract lift pnumatics    
+      DriverStick.rightBumper.whileHeld(new CT_LiftInpStblzr(1));
+      //When Left Bumper is pressed, extend lift pnumatics
+      DriverStick.leftBumper.whileHeld(new CT_LiftInpStblzr(-1));
+    }
+    else { /* Original Lift Method, commands using same subsystem do not allow simultaneous commands - not good */
+      //When A Button is pressed, extend Lift
+      DriverStick.aButton.whileHeld(new CC_LiftHorizSpdTgt(1));
+      //When B Button is pressed, retract lift
+      DriverStick.bButton.whileHeld(new CC_LiftHorizSpdTgt(-1));
+      //We Can't Use WhileHeld here because then only that button can be pressed
+      //When Right Trigger is pressed, lift bot
+      DriverStick.rightTriggerButton.whenPressed(new CC_LiftVertSpdTgt(1));
+      //When Left Trigger is pressed, lower bot
+      DriverStick.leftTriggerButton.whenPressed(new CC_LiftVertSpdTgt(-1));
+      //When Right Trigger is released, stop lift bot
+      DriverStick.rightTriggerButton.whenReleased(new CC_LiftVertSpdTgt(0));
+      //When Left Trigger is released, stop lower bot
+      DriverStick.leftTriggerButton.whenReleased(new CC_LiftVertSpdTgt(0));
+      //When Right Bumper is pressed, retract lift pnumatics
+      DriverStick.rightBumper.whenPressed(new CC_LiftChassisWhlCntrl(true));
+      //When Left Bumper is pressed, extend lift pnumatics
+      DriverStick.leftBumper.whenPressed(new CC_LiftChassisWhlCntrl(false));
+    }
+
     //When X Button is pressed, switch Cameras
     DriverStick.xButton.whenPressed(new CC_CamSwitch());
 

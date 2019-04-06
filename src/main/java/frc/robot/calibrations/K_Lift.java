@@ -13,11 +13,28 @@ package frc.robot.calibrations;
 public class K_Lift {
 
     /**************************************************/
-	/*  TBD                                           */
+	/*  Lift System Normalized Power Commands         */
 	/**************************************************/	 	
 	
-	/** TBD: YadaYada ... 
-     * ... YadaYada. */
-    //public static final double Knewcal = 0;
+	/** KeLFT_r_NormPwrExtdVert: Lift System Vertical Lift Normalized
+     * Power Command to the Lift Motors for Extending the lift.  (0 - 1)
+     */
+    public static final double KeLFT_r_NormPwrExtdVert = 1;
+
+ 	/** KeLFT_r_NormPwrRtctVert: Lift System Vertical Lift Normalized
+     * Power Command to the Lift Motors for Retracting the lift.  (0 - 1)
+     */
+    public static final double KeLFT_r_NormPwrRtctVert = 1;
+   
+	/** KeLFT_r_NormPwrExtdHorz: Lift System Horitontal Slide Normalized
+     * Power Command to the Lift Motors for Extending the slide.  (0 - 1)
+     */
+    public static final double KeLFT_r_NormPwrExtdHorz = 1;
+
+ 	/** KeLFT_r_NormPwrRtctHorz: Lift System Horizontal Slide Normalized
+     * Power Command to the Lift Motors for Retracting the slide.  (0 - 1)
+     */
+    public static final double KeLFT_r_NormPwrRtctHorz = 1;
     
+
 }
