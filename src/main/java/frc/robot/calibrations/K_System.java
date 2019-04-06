@@ -16,8 +16,8 @@ public class K_System {
 	/*   General System Configuration   */
 	/****************************************/	 	
 
-	/** KeSYS_b_CL_TgtEnbl: Enable Closed-Loop Vision Targeting Control. */
-    public static final boolean KeSYS_b_CL_TgtEnbl = false;
+	/** KeSYS_b_CL_DrvTgtEnbl: Enable Closed-Loop Vision Targeting Drive Control. */
+    public static final boolean KeSYS_b_CL_DrvTgtEnbl = false;
 
 	/** KeSYS_b_NewLiftEnbl: Enable the use of the new Lift Control strategy. */
     public static final boolean KeSYS_b_NewLiftEnbl = false;
@@ -35,7 +35,12 @@ public class K_System {
 	/** KeSYS_b_DebugEnblVsn: If True the Debug Smart Dash Display Variables
 	 * Are Broadcast and Updated, if False they are turned off to maximize
 	 * thru-put for controls. For the Vision System. */
-    public static final boolean KeSYS_b_DebugEnblVsn = false;
+    public static final boolean KeSYS_b_DebugEnblVsn = true;
+
+	/** KeSYS_b_DebugEnblCL: If True the Debug Smart Dash Display Variables
+	 * Are Broadcast and Updated, if False they are turned off to maximize
+	 * thru-put for controls. For the Closed-Loop Tracking System. */
+    public static final boolean KeSYS_b_DebugEnblCL = true;
 
 	/** KeSYS_b_DebugEnblDrv: If True the Debug Smart Dash Display Variables
 	 * Are Broadcast and Updated, if False they are turned off to maximize

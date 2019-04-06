@@ -113,14 +113,14 @@ public class Dashboard extends Subsystem {
 
 
   /* Called to Update SmartDash Data for Display of Camera Closed-Loop Data */
-  public void updateSmartDashCamCLData() {
-    SmartDashboard.putNumber("VeVSN_Deg_PstnErr : ", Robot.VISION.getVSN_Deg_PstnErr());
-    SmartDashboard.putBoolean("VeVSN_b_PstnErrInDB : ", Robot.VISION.getVSN_b_PstnErrInDB());
-    SmartDashboard.putNumber("VeVSN_Deg_PstnErrAccum : ", Robot.VISION.getVSN_Deg_PstnErrAccum());
+  public void updateSmartDashCamCLData() { 
+    SmartDashboard.putNumber("VePID_Deg_PstnErr :        ", Robot.PIDF.getPID_Deg_PstnErr());
+    SmartDashboard.putBoolean("VePID_b_PstnErrWithInDB : ", Robot.PIDF.getPID_b_PstnErrWithInDB());
+    SmartDashboard.putNumber("VePID_Deg_PstnErrAccum :   ", Robot.PIDF.getPID_Deg_ErrAccum());
 
-    System.out.println("VeVSN_Deg_PstnErr : " + Robot.VISION.getVSN_Deg_PstnErr());
-    System.out.println("VeVSN_b_PstnErrInDB : " + Robot.VISION.getVSN_b_PstnErrInDB());
-    System.out.println("VeVSN_Deg_PstnErrAccum : " + Robot.VISION.getVSN_Deg_PstnErrAccum());
+    System.out.println("VePID_Deg_PstnErr :       " + Robot.PIDF.getPID_Deg_PstnErr());
+    System.out.println("VePID_b_PstnErrWithInDB : " + Robot.PIDF.getPID_b_PstnErrWithInDB());
+    System.out.println("VePID_Deg_PstnErrAccum :  " + Robot.PIDF.getPID_Deg_ErrAccum());
   }
 
 
@@ -145,6 +145,54 @@ public class Dashboard extends Subsystem {
     System.out.println("Tgt Rbt Dist :    " + Robot.VISION.getVSN_l_Rbt2Tgt());
     System.out.println("Tgt Rbt2Tgt Ang : " + Robot.VISION.getVSN_Deg_Rbt2Tgt());
     System.out.println("Tgt Rbt2Tgt Rot : " + Robot.VISION.getVSN_Deg_RbtRot());
+  }
+
+
+  /* Called to Update SmartDash Data for Display of Target Closed-Loop Data */
+  public void updateSmartDashTgtCLData() { 
+    SmartDashboard.putNumber("VePID_Deg_PstnAct :        ", Robot.PIDF.getPID_Deg_PstnAct());
+    SmartDashboard.putNumber("VePID_Deg_PstnErr :        ", Robot.PIDF.getPID_Deg_PstnErr());
+    SmartDashboard.putBoolean("VePID_b_PstnErrWithInDB : ", Robot.PIDF.getPID_b_PstnErrWithInDB());
+    SmartDashboard.putNumber("VePID_Deg_PstnErrAccum :   ", Robot.PIDF.getPID_Deg_ErrAccum());
+    SmartDashboard.putNumber("VePID_Pct_FdFwdCorr :      ", Robot.PIDF.getPIDRot_Pct_FdFwdTerm());
+    SmartDashboard.putNumber("VePID_Pct_PropCorr :       ", Robot.PIDF.getPID_Pct_PropTerm());
+    SmartDashboard.putNumber("VePID_Pct_IntglCorr :      ", Robot.PIDF.getPID_Pct_IntglTerm());
+    SmartDashboard.putNumber("VePID_Pct_PwrCmnd :        ", Robot.PIDF.getPID_Pct_PIDCmndPct());
+
+    System.out.println("VePID_Deg_PstnAct :       " + Robot.PIDF.getPID_Deg_PstnAct());
+    System.out.println("VePID_Deg_PstnErr :       " + Robot.PIDF.getPID_Deg_PstnErr());
+    System.out.println("VePID_b_PstnErrWithInDB : " + Robot.PIDF.getPID_b_PstnErrWithInDB());
+    System.out.println("VePID_Deg_PstnErrAccum :  " + Robot.PIDF.getPID_Deg_ErrAccum());
+    System.out.println("VePID_Pct_FdFwdCorr :     " + Robot.PIDF.getPIDRot_Pct_FdFwdTerm());
+    System.out.println("VePID_Pct_PropCorr :      " + Robot.PIDF.getPID_Pct_PropTerm());
+    System.out.println("VePID_Pct_IntglCorr :     " + Robot.PIDF.getPID_Pct_IntglTerm());
+    System.out.println("VePID_Pct_PwrCmnd :       " + Robot.PIDF.getPID_Pct_PIDCmndPct());
+  }
+    
+
+  /* Called to Update SmartDash Data for Display of Drive Periodic System Data */
+  public void updateSmartDashDrvSysData() { 
+    SmartDashboard.putBoolean("VeDRV_b_CL_TgtRqstActv : ", Robot.DRIVES.getDRV_CL_TgtRqstActv());
+    SmartDashboard.putBoolean("VeDRV_b_CL_DrvRqstActv : ", Robot.DRIVES.getDRV_CL_DrvRqstActv());
+    SmartDashboard.putBoolean("VeDRV_b_DrvAutoCmdActv : ", Robot.DRIVES.getDRV_b_DrvAutoCmdActv());
+    SmartDashboard.putBoolean("VeDRV_b_DrvStkRqstActv : ", Robot.DRIVES.getDRV_b_DrvStkRqstActv());
+    SmartDashboard.putNumber("VeDRV_r_NormPwrCmdLong :  ", Robot.DRIVES.getDRV_r_NormPwrCmdLong());
+    SmartDashboard.putNumber("VeDRV_r_NormPwrCmdLat :   ", Robot.DRIVES.getDRV_r_NormPwrCmdLat());
+    SmartDashboard.putNumber("VeDRV_r_NormPwrCmdRot :   ", Robot.DRIVES.getDRV_r_NormPwrCmdRot());
+    SmartDashboard.putNumber("VeDRV_r_NormPwrDrvrLtY :  ", Robot.DRIVES.getDRV_r_NormPwrDrvrLtY());
+    SmartDashboard.putNumber("VeDRV_r_NormPwrDrvrLtX :  ", Robot.DRIVES.getDRV_r_NormPwrDrvrLtX());
+    SmartDashboard.putNumber("VeDRV_r_NormPwrDrvrRtX :  ", Robot.DRIVES.getDRV_r_NormPwrDrvrRtX());
+
+    System.out.println("VeDRV_b_CL_TgtRqstActv : " + Robot.DRIVES.getDRV_CL_TgtRqstActv());
+    System.out.println("VeDRV_b_CL_DrvRqstActv : " + Robot.DRIVES.getDRV_CL_DrvRqstActv());
+    System.out.println("VeDRV_b_DrvAutoCmdActv : " + Robot.DRIVES.getDRV_b_DrvAutoCmdActv());
+    System.out.println("VeDRV_b_DrvStkRqstActv : " + Robot.DRIVES.getDRV_b_DrvStkRqstActv());
+    System.out.println("VeDRV_r_NormPwrCmdLong : " + Robot.DRIVES.getDRV_r_NormPwrCmdLong());
+    System.out.println("VeDRV_r_NormPwrCmdLat :  " + Robot.DRIVES.getDRV_r_NormPwrCmdLat());
+    System.out.println("VeDRV_r_NormPwrCmdRot :  " + Robot.DRIVES.getDRV_r_NormPwrCmdRot());
+    System.out.println("VeDRV_r_NormPwrDrvrLtY : " + Robot.DRIVES.getDRV_r_NormPwrDrvrLtY());
+    System.out.println("VeDRV_r_NormPwrDrvrLtX : " + Robot.DRIVES.getDRV_r_NormPwrDrvrLtX());
+    System.out.println("VeDRV_r_NormPwrDrvrRtX : " + Robot.DRIVES.getDRV_r_NormPwrDrvrRtX());
   }
 
 

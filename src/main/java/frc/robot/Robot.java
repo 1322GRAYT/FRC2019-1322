@@ -31,6 +31,9 @@ import frc.robot.models.*;
 public class Robot extends TimedRobot {
   public static OI m_oi;
 
+  public final static TblLib          TBLLIB    = new TblLib();
+  public final static Vision          VISION    = new Vision();
+  public final static Fpid            PIDF      = new Fpid();
   public final static Drives          DRIVES    = new Drives();
   public final static Claw            CLAW      = new Claw();
   public final static LEDController   LEDS      = new LEDController();
@@ -38,7 +41,6 @@ public class Robot extends TimedRobot {
   public final static Arm             ARM       = new Arm();
   public final static Lift            LIFT      = new Lift();
   public final static Scissor         SCISSOR   = new Scissor();
-  public final static Vision          VISION    = new Vision();
 
   // Cameras
   public static UsbCamera camera0;
@@ -53,9 +55,11 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
-    VISION.MngVSN_InitLimeLightNetTbl(); 
-    VISION.MngVSN_InitCamCalibr();
-    LIFT.resetLFT_InpRqstFlgs();
+    VISION.mngVSN_InitLimeLightNetTbl(); 
+    VISION.mngVSN_InitCamCalibr();
+    PIDF.mngPID_InitCntrl();
+    DRIVES.rstDRV_CntrlPeriodic();
+    LIFT.mngLFT_InitCntrl();
   
     m_oi = new OI();
 
@@ -83,11 +87,13 @@ public class Robot extends TimedRobot {
   public void robotPeriodic() {
     VISION.mngVSN_CamImgPeriodic();  
     DRIVES.updDRV_EncdrData();
+    DRIVES.mngDRV_CntrlPeriodic();
     if (K_System.KeSYS_b_NewLiftEnbl == true) {
-      LIFT.cntrlLFT_System();
-      LIFT.resetLFT_InpRqstFlgs();
+      LIFT.mngLFT_Cntrl20msTask();
+      LIFT.mngLFT_InitCntrl();  /* Clear Request Flags before OI is early next loop */
     } 
   }
+
 
   /**
    * This function is called once each time the robot enters Disabled mode.

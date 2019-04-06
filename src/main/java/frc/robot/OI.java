@@ -81,11 +81,22 @@ public class OI {
     //When X Button is pressed, switch Cameras
     DriverStick.xButton.whenPressed(new CC_CamSwitch());
 
-    // Vision System Camera
-    DriverStick.startButton.whenPressed(new CC_CamCaptureTgt());    
+    if (K_System.KeSYS_b_CL_DrvTgtEnbl == true) {
+      /* Drive Target System Robot Tracking */ 
+      DriverStick.startButton.whileHeld(new CC_AutoTgtTrkEnbl());    
+      DriverStick.startButton.whenReleased(new CC_AutoTgtTrkDsbl());    
 
-    // Autonomous forward
-    DriverStick.selectButton.whileHeld(new CA_DrvPstnTgt(0, 140000));
+      /* Drive Target System Robot Drive Forward */ 
+      DriverStick.selectButton.whileHeld(new CC_AutoTgtDrvEnbl());
+      DriverStick.selectButton.whenReleased(new CC_AutoTgtDrvDsbl());
+    }
+    else {
+      // Vision System Camera
+      DriverStick.startButton.whenPressed(new CC_CamCaptureTgt());    
+
+      // Autonomous forward
+      DriverStick.selectButton.whileHeld(new CA_DrvPstnTgt(0, 140000));
+    }
 
     // Arm Controls
     AuxStick.yButton.whenPressed(new CC_ArmHoldPanel(AuxStick.yButton));

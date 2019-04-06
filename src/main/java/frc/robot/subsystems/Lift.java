@@ -29,17 +29,49 @@ public class Lift extends Subsystem {
   /* Public Class Methods        */
   /*******************************/
 
-  public void resetLFT_InpRqstFlgs() {
-    VeLFT_b_JackExtdRqst = false;
-    VeLFT_b_JackRtctRqst = false;
-    VeLFT_b_DrwrExtdRqst = false;
-    VeLFT_b_DrwrRtctRqst = false;
-    VeLFT_b_StblzrExtdRqst = false;
-    VeLFT_b_StblzrRtctRqst = false;
+  public void mngLFT_InitCntrl() {
+    rstLFT_InpRqstFlgs();
   }
- 
 
-  public void cntrlLFT_System() {
+  public void mngLFT_Cntrl20msTask() {
+    cntrlLFT_System();
+  }
+
+  /*******************************/
+  /* Public Class Interfaces     */
+  /*******************************/
+
+  public void setLFT_JackExtdRqst(boolean state) {
+    VeLFT_b_JackExtdRqst = state;
+  }
+
+  public void setLFT_JackRtctRqst(boolean state) {
+    VeLFT_b_JackRtctRqst = state;
+  }
+
+  public void setLFT_DrwrExtdRqst(boolean state) {
+    VeLFT_b_DrwrExtdRqst = state;
+  }
+
+  public void setLFT_DrwrRtctRqst(boolean state) {
+    VeLFT_b_DrwrRtctRqst = state;
+  }
+
+  public void setLFT_StblzrExtdRqst(boolean state) {
+    VeLFT_b_StblzrExtdRqst = state;
+  }
+
+  public void setLFT_StblzrRtctRqst(boolean state) {
+    VeLFT_b_StblzrRtctRqst = state;
+  }
+
+
+
+  /*******************************/
+  /* Private Class Methods       */
+  /*******************************/
+
+  private void cntrlLFT_System() {
     double NormPwrVert, NormPwrHorz;
     boolean DrwrMvmtRvrs = false;
     boolean StblzrExtd = false; 
@@ -94,36 +126,14 @@ public class Lift extends Subsystem {
   }
 
 
-
-  /*******************************/
-  /* Public Class Interfaces     */
-  /*******************************/
-
-
-  public void setLFT_JackExtdRqst(boolean state) {
-    VeLFT_b_JackExtdRqst = state;
+  private void rstLFT_InpRqstFlgs() {
+    VeLFT_b_JackExtdRqst = false;
+    VeLFT_b_JackRtctRqst = false;
+    VeLFT_b_DrwrExtdRqst = false;
+    VeLFT_b_DrwrRtctRqst = false;
+    VeLFT_b_StblzrExtdRqst = false;
+    VeLFT_b_StblzrRtctRqst = false;
   }
-
-  public void setLFT_JackRtctRqst(boolean state) {
-    VeLFT_b_JackRtctRqst = state;
-  }
-
-  public void setLFT_DrwrExtdRqst(boolean state) {
-    VeLFT_b_DrwrExtdRqst = state;
-  }
-
-  public void setLFT_DrwrRtctRqst(boolean state) {
-    VeLFT_b_DrwrRtctRqst = state;
-  }
-
-  public void setLFT_StblzrExtdRqst(boolean state) {
-    VeLFT_b_StblzrExtdRqst = state;
-  }
-
-  public void setLFT_StblzrRtctRqst(boolean state) {
-    VeLFT_b_StblzrRtctRqst = state;
-  }
-
 
 
 

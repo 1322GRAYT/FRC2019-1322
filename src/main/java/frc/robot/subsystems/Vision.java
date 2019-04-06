@@ -81,16 +81,6 @@ public class Vision extends Subsystem {
 
 
   /**********************************************/
-  /* Vision Closed Loop Error Variables         */
-  /**********************************************/
-
-  private double VeVSN_Deg_PstnErr;           // (degrees)
-  private boolean VeVSN_b_PstnErrInDB;        // (boolean)
-  private double VeVSN_Deg_PstnErrAccum;      // (degrees)
-
-
-
-  /**********************************************/
   /* Matricies for Object Dimensions and Images */
   /**********************************************/
 
@@ -311,45 +301,15 @@ public double getVSN_Pxl_LL_TgtSideShort() {
 
 
 
-  /**
-   * Method: getVSN_Deg_PstnErr - Vision System Closed-Loop
-   * Target Error in X-Axis angular degrees.
-   * @return: double - degrees
-   * */
-  public double getVSN_Deg_PstnErr() {
-    return(VeVSN_Deg_PstnErr); 
-  }
-
-  /**
-   * Method: getVSN_b_PstnErrInDB - Calculated Angle of Rotation of the
-   * Robot wrt to the line perpendicular to the camera lens and the and
-   * the line between the robot and center of target.
-   * @return: double - degrees
-   * */
-  public boolean getVSN_b_PstnErrInDB() {
-    return(VeVSN_b_PstnErrInDB); 
-  }
-
-  /**
-   * Method: getVSN_Deg_PstnErrAccum - Vision System Closed-Loop
-   * Accumulated Target Error in X-Axis angular degrees.
-   * @return: double - degrees
-   * */
-  public double getVSN_Deg_PstnErrAccum() {
-    return(VeVSN_Deg_PstnErrAccum); 
-  }
-
-
-
   /*******************************/
   /* Public Class Methods        */
   /*******************************/
 
    /**
-    * Method: MngVSN_InitLimeLightNetTbl - Processes the Initialization
+    * Method: mngVSN_InitLimeLightNetTbl - Processes the Initialization
     * of the Network Tables Address Mapping for the Lime Light Camera.
     */
-    public void MngVSN_InitLimeLightNetTbl() {
+    public void mngVSN_InitLimeLightNetTbl() {
       NetTbl =       NetworkTableInstance.getDefault();
       LimeLightTbl = NetworkTableInstance.getDefault().getTable("limelight");
       tv = LimeLightTbl.getEntry("tv");
@@ -372,7 +332,6 @@ public double getVSN_Pxl_LL_TgtSideShort() {
     */
     public void mngVSN_CamImgPeriodic() {
       captureVSN_CamImgData();
-      calcVSN_CL_Err();
     }
    
  
@@ -402,14 +361,14 @@ public double getVSN_Pxl_LL_TgtSideShort() {
 
 
    /**
-    * Method: MngVSN_InitCamCalibr - Processes the Camera
+    * Method: mngVSN_InitCamCalibr - Processes the Camera
     * Calibration Calculations from the Camera Reference
     * Calibration Data.  Creates the Object Geometry Matrix
     * and the Reference Image Matrix, and calculates the
     * Camera Focal Length, etc..  Done during Robot Initialization
     * at the beginning of the Match.
     */
-    public void MngVSN_InitCamCalibr() {
+    public void mngVSN_InitCamCalibr() {
       calcVSN_RefTgtObjMat();
       calcVSN_RefTgtImgMat();
       calcVSN_CamFocalPt();
@@ -784,110 +743,6 @@ public double getVSN_Pxl_LL_TgtSideShort() {
 
      VeVSN_l_Cam2Tgt2ndry = LeVSN_Pxl_Cam2Tgt;
     }
-
-
-  /****************************************************/
-  /*  Vision Closed Loop Error Calculations           */
-  /****************************************************/	 	
-
-   /**
-    * Method: CalcVSN_CL_Err - Calculate the Closed-Loop Error Signals for
-    * the vision targets.
-    */
-    private void calcVSN_CL_Err() {
-      VeVSN_Deg_PstnErr = calcErrSignal(LL_TgtAngX, K_Vision.KeVSN_Deg_ErrDB);
-      VeVSN_b_PstnErrInDB =  dtrmnErrInDB(VeVSN_Deg_PstnErr, K_Vision.KeVSN_Deg_ErrDB);
-      VeVSN_Deg_PstnErrAccum = calcErrAccum(VeVSN_Deg_PstnErrAccum, VeVSN_Deg_PstnErr,  K_Vision.KeVSN_Deg_AccumDsblErrMin);
-    }
-
-
-    /** Method: calcErrSgnl - Calculates Vision X-Axis Error in units of
-      * angular degrees, taking into account a symmetrical error dead-band
-      * around the zero-error point.
-      * @param1: ProcessVal - Current Input Angle along the X-Dimension (double)
-      * @param4: ThrshDB -    Dead-Band Threshold (double)
-      * @return: ErrSignal -  Dead-Band Adjusted Error Value (double)  */
-      private double calcErrSignal(double  ProcessVal,
-                                   double   ThrshDB) {
-      double  ErrSignal;
-
-      if (ProcessVal >= 0) {
-        if (ProcessVal > ThrshDB) {
-          ErrSignal = ProcessVal - ThrshDB;
-        }
-        else {
-          ErrSignal = 0;
-        }   
-      }
-      else {  /* (ProcessVal < 0) */
-        if (ProcessVal < -ThrshDB) {
-          ErrSignal = ProcessVal + ThrshDB;
-        }
-        else {
-          ErrSignal = 0;
-        }
-      }
-
-return ErrSignal;
-} 
-
-
-/** Method: dtrmnErrInDB - Determines if Controller Error
-  * is within the targeted Dead-Band.  Used when when rotating
-  * the robot to execute a turn when determining if the
-  * desired target position is being attained.
-  * @param1: Controller Target Set Point Value (double)
-  * @param2: Controller Actual Feedback Process Value (double)
-  * @return: Dead-Band Adjusted Error Value (double)  */
-  private boolean dtrmnErrInDB(double ErrSignal,
-                               double  ThrshDB) {
-    boolean ErrInDB = false;
-
-    if ((ErrSignal >= 0) && (ErrSignal <= ThrshDB))
-      ErrInDB = true;
-    else if ((ErrSignal < 0.0) && (ErrSignal >= -ThrshDB))
-      ErrInDB = true;
-
-    return ErrInDB;
-  }
-
-
-/** Method: calcErrAccum - Calculate the error accumulation
-  * signal for use by the Integral Controller.
-  * @param1: Controller Accumulated Error Signal (double)
-  * @param2: Controller Error Signal (double)
-  * @param3: Min Error Signal Thresh Above which Error will not
-  *          be accumulated. (double)
-  * @return: Updated Controller Accumulated Error Signal (double)  */
-  private double calcErrAccum(double ErrAccum,
-                              double ErrSignal,
-                              double ErrDsblThrshMin) {
-    double  ErrAccumTemp;
-    double  ErrSignalAbs;
-    boolean SignFlipRst = false;
-
-    ErrSignalAbs = Math.abs(ErrSignal);
-
-    if ((ErrAccum > 0) && (ErrSignal < 0)) {
-      SignFlipRst = true;
-    } 
-    else if ((ErrAccum < 0) && (ErrSignal > 0)) {
-      SignFlipRst = true;
-    }
-
-    if(SignFlipRst == true) {
-      ErrAccumTemp = (double)0.0;
-    }
-    else if (ErrSignalAbs >= (double)ErrDsblThrshMin) {
-      ErrAccumTemp = ErrAccum;
-    }
-    else {
-      // (SignFlipRst == false) 
-      ErrAccumTemp = ErrAccum + ErrSignal;  
-    }	    
-
-    return ErrAccumTemp;  	  
-  }
 
 
 

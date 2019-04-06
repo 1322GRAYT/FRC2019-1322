@@ -15,6 +15,17 @@ enum DrivePosition {
 }
 
 public class Drives extends Subsystem {
+  private boolean VeDRV_b_CL_TgtRqstActv;  // boolean
+  private boolean VeDRV_b_CL_DrvRqstActv;  // boolean
+  private boolean VeDRV_b_DrvAutoCmdActv;  // boolean
+  private boolean VeDRV_b_DrvStkRqstActv;  // boolean
+  private double VeDRV_r_NormPwrDrvrLtY;   // double: normalized power - Drivers Stick Left - Y Axis
+  private double VeDRV_r_NormPwrDrvrLtX;   // double: normalized power - Drivers Stick Left - X Axis
+  private double VeDRV_r_NormPwrDrvrRtX;   // double: normalized power - Drivers Stick Right - X Axis
+  private double VeDRV_r_NormPwrCmdLong;   // double: normalized power - longitudinal
+  private double VeDRV_r_NormPwrCmdLat;    // double: normalized power - lateral
+  private double VeDRV_r_NormPwrCmdRot;    // double: normalized power - rotational
+
 	// Drive System Encoders/Wheels
 	// Idx [0] - FL: Front Left		
 	// Idx [1] - FR: Front Right	
@@ -41,13 +52,13 @@ public class Drives extends Subsystem {
     final boolean[] sInv = {false, true, false, true}; // use this to invert the sensors safely
     for (var i = 0; i < EncodedDrives.length; i++) {
       EncodedDrives[i].configFactoryDefault();
-      EncodedDrives[i].configMotionCruiseVelocity(K_Drive.KDRV_n_MM_CruiseVel);
-      EncodedDrives[i].configMotionAcceleration(K_Drive.KDRV_a_MM_MaxAccel);
+      EncodedDrives[i].configMotionCruiseVelocity(K_Drive.KeDRV_n_MM_CruiseVel);
+      EncodedDrives[i].configMotionAcceleration(K_Drive.KeDRV_a_MM_MaxAccel);
       EncodedDrives[i].configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative);
-      EncodedDrives[i].config_kF(0, K_Drive.KDRV_dPct_VelFeedFwdTerm);
-      EncodedDrives[i].config_kP(0, K_Drive.KDRV_k_VelPropGx);
-      EncodedDrives[i].config_kI(0, K_Drive.KDRV_k_VelIntglGx);
-      EncodedDrives[i].config_kD(0, K_Drive.KDRV_k_VelDerivGx);
+      EncodedDrives[i].config_kF(0, K_Drive.KeDRV_dPct_VelFeedFwdTerm);
+      EncodedDrives[i].config_kP(0, K_Drive.KeDRV_k_VelPropGx);
+      EncodedDrives[i].config_kI(0, K_Drive.KeDRV_k_VelIntglGx);
+      EncodedDrives[i].config_kD(0, K_Drive.KeDRV_k_VelDerivGx);
       EncodedDrives[i].setInverted(dInv[i]);
       FollowerDrives[i].set(ControlMode.Follower, EncodedDrives[i].getDeviceID());
       FollowerDrives[i].setInverted(dInv[i]);
@@ -86,6 +97,145 @@ public class Drives extends Subsystem {
     for (int i = 0; i < EncodedDrives.length; i++) {
       EncodedDrives[i].setSelectedSensorPosition(0);
     }
+  }
+
+
+  /**************************************
+   ** Public Interfaces Control Task   **
+   **                                  **
+   **************************************/
+
+  public boolean getDRV_CL_TgtRqstActv() {
+    return(VeDRV_b_CL_TgtRqstActv);  
+  }
+
+  public void setDRV_CL_TgtRqstActv(boolean RqstSt) {
+    VeDRV_b_CL_TgtRqstActv = RqstSt;
+  }
+
+  public boolean getDRV_CL_DrvRqstActv() {
+    return(VeDRV_b_CL_DrvRqstActv);  
+  }
+
+  public void setDRV_CL_DrvRqstActv(boolean RqstSt) {
+    VeDRV_b_CL_DrvRqstActv = RqstSt;
+  }
+
+  public boolean getDRV_b_DrvAutoCmdActv() {
+    return(VeDRV_b_DrvAutoCmdActv);  
+  }
+
+  public void setDRV_b_DrvAutoCmdActv(boolean RqstSt) {
+    VeDRV_b_DrvAutoCmdActv = RqstSt;
+  }
+
+  public boolean getDRV_b_DrvStkRqstActv() {
+    return(VeDRV_b_DrvStkRqstActv);  
+  }
+
+  public void setDRV_b_DrvStkRqstActv(boolean RqstSt) {
+    VeDRV_b_DrvStkRqstActv = RqstSt;
+  }
+
+  public double getDRV_r_NormPwrDrvrLtY() {
+    return(VeDRV_r_NormPwrDrvrLtY);
+  }
+
+  public void setDRV_r_NormPwrDrvrLtY(double StkInp) {
+    VeDRV_r_NormPwrDrvrLtY = StkInp;
+  }
+ 
+  public double getDRV_r_NormPwrDrvrLtX() {
+    return(VeDRV_r_NormPwrDrvrLtX);
+  }
+
+  public void setDRV_r_NormPwrDrvrLtX(double StkInp) {
+    VeDRV_r_NormPwrDrvrLtX = StkInp;
+  }
+  
+  public double getDRV_r_NormPwrDrvrRtX() {
+    return(VeDRV_r_NormPwrDrvrRtX);
+  }
+
+  public void setDRV_r_NormPwrDrvrRtX(double StkInp) {
+    VeDRV_r_NormPwrDrvrRtX = StkInp;
+  }
+
+  public double getDRV_r_NormPwrCmdLong() {
+    return(VeDRV_r_NormPwrCmdLong);
+  }
+
+  public double getDRV_r_NormPwrCmdLat() {
+    return(VeDRV_r_NormPwrCmdLat);
+  }
+ 
+  public double getDRV_r_NormPwrCmdRot() {
+    return(VeDRV_r_NormPwrCmdRot);
+  }
+
+
+  /************************************************
+   ** Periodic Drive Control Strategy Tasks      **
+   **                                            **
+   ************************************************/
+   
+  public void mngDRV_CntrlPeriodic() {
+    double LeDRV_r_NormPwrCmdLong, LeDRV_r_NormPwrCmdLat, LeDRV_r_NormPwrCmdRot;
+    boolean LeDRV_b_DrvrStkCtrl = false;
+    boolean LeDRV_b_SetSafe = false;
+
+    if ((Math.abs(getDRV_r_NormPwrDrvrLtY()) >= K_Drive.KeDRV_r_DB_InpLong) ||
+        (Math.abs(getDRV_r_NormPwrDrvrLtX()) >= K_Drive.KeDRV_r_DB_InpLat) ||
+        (Math.abs(getDRV_r_NormPwrDrvrRtX()) >= K_Drive.KeDRV_r_DB_InpRot)) {
+      setDRV_b_DrvStkRqstActv(LeDRV_b_DrvrStkCtrl);
+    }
+
+    /* Drive Control Arbitration */
+    if ((getDRV_CL_TgtRqstActv() == true) &&
+        (getDRV_CL_DrvRqstActv() == true)) {
+          LeDRV_r_NormPwrCmdLong = 0.0;
+          LeDRV_r_NormPwrCmdLat =  0.0;
+          LeDRV_r_NormPwrCmdRot =  Robot.PIDF.VePID_r_PwrCmndNorm;
+    }
+    else if ((getDRV_CL_TgtRqstActv() == true) &&
+             (getDRV_CL_DrvRqstActv() == false)) {
+              LeDRV_r_NormPwrCmdLong = K_Drive.KeDRV_r_CL_NormPwrLong;
+              LeDRV_r_NormPwrCmdLat =  Robot.PIDF.VePID_r_PwrCmndNorm * K_Drive.KeDRV_r_CL_ScalarRotToLat;
+              LeDRV_r_NormPwrCmdRot =  0.0;                 
+    }
+    else if (getDRV_b_DrvStkRqstActv()) {
+      LeDRV_r_NormPwrCmdLong = getDRV_r_NormPwrDrvrLtY();
+      LeDRV_r_NormPwrCmdLat =  getDRV_r_NormPwrDrvrLtX();
+      LeDRV_r_NormPwrCmdRot =  getDRV_r_NormPwrDrvrRtX();
+    }
+    else { /* (getDRV_CL_TgtRqstActv() == false) */
+      /* Disable Drives */
+      LeDRV_r_NormPwrCmdLong = 0.0;
+      LeDRV_r_NormPwrCmdLat =  0.0;
+      LeDRV_r_NormPwrCmdRot =  0.0;
+      LeDRV_b_SetSafe = true;
+    }
+
+    VeDRV_r_NormPwrCmdLong = LeDRV_r_NormPwrCmdLong;
+    VeDRV_r_NormPwrCmdLat =  LeDRV_r_NormPwrCmdLat;
+    VeDRV_r_NormPwrCmdRot =  LeDRV_r_NormPwrCmdRot;
+    if ((K_System.KeSYS_b_CL_DrvTgtEnbl == true) && (getDRV_b_DrvAutoCmdActv() == false)) {
+      DriveInVoltage(LeDRV_r_NormPwrCmdLong, LeDRV_r_NormPwrCmdLat, LeDRV_r_NormPwrCmdRot);
+      setSafety(LeDRV_b_SetSafe);
+    }
+    if (K_System.KeSYS_b_DebugEnblCL == true) {
+      Robot.DASHBOARD.updateSmartDashTgtCLData();
+      Robot.DASHBOARD.updateSmartDashDrvSysData();
+    }
+  }
+
+
+  public void rstDRV_CntrlPeriodic() {
+    VeDRV_b_CL_TgtRqstActv = false;
+    VeDRV_b_CL_DrvRqstActv = false;
+    VeDRV_r_NormPwrCmdLong = 0.0;
+    VeDRV_r_NormPwrCmdLat =  0.0;
+    VeDRV_r_NormPwrCmdRot =  0.0;
   }
 
 
@@ -258,9 +408,9 @@ public class Drives extends Subsystem {
       VaDRV_cnt_EncdrCnt[idx]  = EncodedDrives[idx].getSelectedSensorPosition();  // Counts
       VaDRV_f_EncdrVelRaw[idx] = EncodedDrives[idx].getSelectedSensorVelocity();  // counts/100ms
       VaDRV_f_EncdrVel[idx]    = VaDRV_f_EncdrVelRaw[idx] * 10; // counts/sec 
-      VaDRV_n_EncdrRPM[idx]    = (VaDRV_f_EncdrVel[idx]/K_Drive.KDRV_Cnt_PlsPerRevEncdr)*(60); // rpm  (1 rpm = 600 rev/100 rpm)
-      VaDRV_n_WhlRPM[idx]      = VaDRV_n_EncdrRPM[idx]/K_Drive.KDRV_r_EncdrToWhl;              // rpm
-      VaDRV_v_WhlVel[idx]      = (VaDRV_n_WhlRPM[idx]*K_Drive.KDRV_l_DistPerRevWhl)/60;        // inches/sec
+      VaDRV_n_EncdrRPM[idx]    = (VaDRV_f_EncdrVel[idx]/K_Drive.KeDRV_Cnt_PlsPerRevEncdr)*(60); // rpm  (1 rpm = 600 rev/100 rpm)
+      VaDRV_n_WhlRPM[idx]      = VaDRV_n_EncdrRPM[idx]/K_Drive.KeDRV_r_EncdrToWhl;              // rpm
+      VaDRV_v_WhlVel[idx]      = (VaDRV_n_WhlRPM[idx]*K_Drive.KeDRV_l_DistPerRevWhl)/60;        // inches/sec
     }
 
     if (K_System.KeSYS_b_DebugEnblDrv == true) {
@@ -276,7 +426,7 @@ public class Drives extends Subsystem {
    *  @param: Wheel Angular Speed (rpm)
    *  @return: Robot Linear Speed (inch/sec) */	
    public static float cvrtAngToLinSpd(float SpdWhl) {
-    return ((float)((K_Drive.KDRV_l_DistPerRevWhl * SpdWhl)/(float)60));
+    return ((float)((K_Drive.KeDRV_l_DistPerRevWhl * SpdWhl)/(float)60));
   }
   
 
@@ -291,9 +441,9 @@ public class Drives extends Subsystem {
     double EncdrRevs;
     double EncdrCnts;
    
-    WhlRevs   = (double)(DistInch / K_Drive.KDRV_l_DistPerRevWhl);	 
-    EncdrRevs = WhlRevs * (double)K_Drive.KDRV_r_EncdrToWhl;	 
-    EncdrCnts = EncdrRevs * (double)K_Drive.KDRV_Cnt_PlsPerRevEncdr;
+    WhlRevs   = (double)(DistInch / K_Drive.KeDRV_l_DistPerRevWhl);	 
+    EncdrRevs = WhlRevs * (double)K_Drive.KeDRV_r_EncdrToWhl;	 
+    EncdrCnts = EncdrRevs * (double)K_Drive.KeDRV_Cnt_PlsPerRevEncdr;
    
     return EncdrCnts;
   }
@@ -310,9 +460,9 @@ public class Drives extends Subsystem {
     double WhlRevs;
     double DistInch;
 
-    EncdrRevs = (double)EncdrCnts / (double)K_Drive.KDRV_Cnt_PlsPerRevEncdr;
-    WhlRevs   = EncdrRevs / (double)K_Drive.KDRV_r_EncdrToWhl;	 
-    DistInch  = WhlRevs * (double)K_Drive.KDRV_l_DistPerRevWhl;	 
+    EncdrRevs = (double)EncdrCnts / (double)K_Drive.KeDRV_Cnt_PlsPerRevEncdr;
+    WhlRevs   = EncdrRevs / (double)K_Drive.KeDRV_r_EncdrToWhl;	 
+    DistInch  = WhlRevs * (double)K_Drive.KeDRV_l_DistPerRevWhl;	 
   
     return DistInch;
   }

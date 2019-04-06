@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
+import frc.robot.calibrations.K_System;
 
 public class CT_DrvCntrl extends Command {
 
@@ -27,9 +28,16 @@ public class CT_DrvCntrl extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    Robot.DRIVES.DriveInVoltage(Robot.m_oi.DriverStick.getLeftStickY(), Robot.m_oi.DriverStick.getLeftStickX(),
-        Robot.m_oi.DriverStick.getRightStickX());
-    
+    if (K_System.KeSYS_b_CL_DrvTgtEnbl == true) {
+      Robot.DRIVES.setDRV_r_NormPwrDrvrLtY(Robot.m_oi.DriverStick.getLeftStickY());
+      Robot.DRIVES.setDRV_r_NormPwrDrvrLtX(Robot.m_oi.DriverStick.getLeftStickX());
+      Robot.DRIVES.setDRV_r_NormPwrDrvrRtX(Robot.m_oi.DriverStick.getRightStickX());  
+    }
+    else {
+      Robot.DRIVES.DriveInVoltage(Robot.m_oi.DriverStick.getLeftStickY(), Robot.m_oi.DriverStick.getLeftStickX(),
+      Robot.m_oi.DriverStick.getRightStickX());
+    }
+
     SmartDashboard.putNumber("Joystick", Robot.m_oi.DriverStick.getY(Hand.kLeft));
     SmartDashboard.putNumberArray("Velocity", Robot.DRIVES.rawVelocities());
     SmartDashboard.putNumberArray("Position", Robot.DRIVES.rawPosition());
@@ -45,7 +53,14 @@ public class CT_DrvCntrl extends Command {
   // Called once after isFinished returns true
   @Override
   protected void end() {
-    Robot.DRIVES.DriveInVoltage(0, 0, 0);
+    if (K_System.KeSYS_b_CL_DrvTgtEnbl == true) {
+      Robot.DRIVES.setDRV_r_NormPwrDrvrLtY(0.0);
+      Robot.DRIVES.setDRV_r_NormPwrDrvrLtX(0.0);
+      Robot.DRIVES.setDRV_r_NormPwrDrvrRtX(0.0);  
+    }
+    else {
+      Robot.DRIVES.DriveInVoltage(0, 0, 0);
+    }
   }
 
   // Called when another command which requires one or more of the same
