@@ -9,7 +9,6 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
-import frc.robot.calibrations.K_System;
 
 public class CC_AutoTgtTrkDsbl extends Command {
   public CC_AutoTgtTrkDsbl() {
@@ -18,7 +17,7 @@ public class CC_AutoTgtTrkDsbl extends Command {
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-    Robot.DRIVES.setDRV_CL_TgtRqstActv(false);
+    Robot.NAV.setNAV_CL_TgtRqstActv(false);
   }
 
   // Called repeatedly when this Command is scheduled to run

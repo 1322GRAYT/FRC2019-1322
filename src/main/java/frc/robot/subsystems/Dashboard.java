@@ -18,48 +18,48 @@ public class Dashboard extends Subsystem {
 
   /* Called to Update SmartDash Data for Display of Drive Data */
   public void updateSmartDashDrvData() {
-    SmartDashboard.putNumber("Encoder Cnts FL : ", Robot.DRIVES.getDRV_cnt_EncdrCnt(0));
-    SmartDashboard.putNumber("Encoder Cnts FR : ", Robot.DRIVES.getDRV_cnt_EncdrCnt(1));
-    SmartDashboard.putNumber("Encoder Cnts RL : ", Robot.DRIVES.getDRV_cnt_EncdrCnt(2));
-    SmartDashboard.putNumber("Encoder Cnts RR : ", Robot.DRIVES.getDRV_cnt_EncdrCnt(3));
-    SmartDashboard.putNumber("Encoder Vel FL : ", Robot.DRIVES.getDRV_f_EncdrVel(0));
-    SmartDashboard.putNumber("Encoder Vel FR : ", Robot.DRIVES.getDRV_f_EncdrVel(1));
-    SmartDashboard.putNumber("Encoder Vel RL : ", Robot.DRIVES.getDRV_f_EncdrVel(2));
-    SmartDashboard.putNumber("Encoder Vel RR : ", Robot.DRIVES.getDRV_f_EncdrVel(3));
-    SmartDashboard.putNumber("Encoder RPM FL : ", Robot.DRIVES.getDRV_n_EncdrRPM(0));
-    SmartDashboard.putNumber("Encoder RPM FR : ", Robot.DRIVES.getDRV_n_EncdrRPM(1));
-    SmartDashboard.putNumber("Encoder RPM RL : ", Robot.DRIVES.getDRV_n_EncdrRPM(2));
-    SmartDashboard.putNumber("Encoder RPM RR : ", Robot.DRIVES.getDRV_n_EncdrRPM(3));
-    SmartDashboard.putNumber("Wheel RPM FL : ", Robot.DRIVES.getDRV_n_WhlRPM(0));
-    SmartDashboard.putNumber("Wheel RPM FR : ", Robot.DRIVES.getDRV_n_WhlRPM(1));
-    SmartDashboard.putNumber("Wheel RPM RL : ", Robot.DRIVES.getDRV_n_WhlRPM(2));
-    SmartDashboard.putNumber("Wheel RPM RR : ", Robot.DRIVES.getDRV_n_WhlRPM(3));
-    SmartDashboard.putNumber("Wheel Vel FL : ", Robot.DRIVES.getDRV_v_WhlVel(0));
-    SmartDashboard.putNumber("Wheel Vel FR : ", Robot.DRIVES.getDRV_v_WhlVel(1));
-    SmartDashboard.putNumber("Wheel Vel RL : ", Robot.DRIVES.getDRV_v_WhlVel(2));
-    SmartDashboard.putNumber("Wheel Vel RR : ", Robot.DRIVES.getDRV_v_WhlVel(3));
+    SmartDashboard.putNumber("Encoder Cnts FL : ", Robot.NAV.getNAV_cnt_EncdrCnt(0));
+    SmartDashboard.putNumber("Encoder Cnts FR : ", Robot.NAV.getNAV_cnt_EncdrCnt(1));
+    SmartDashboard.putNumber("Encoder Cnts RL : ", Robot.NAV.getNAV_cnt_EncdrCnt(2));
+    SmartDashboard.putNumber("Encoder Cnts RR : ", Robot.NAV.getNAV_cnt_EncdrCnt(3));
+    SmartDashboard.putNumber("Encoder Vel FL : ", Robot.NAV.getNAV_f_EncdrVel(0));
+    SmartDashboard.putNumber("Encoder Vel FR : ", Robot.NAV.getNAV_f_EncdrVel(1));
+    SmartDashboard.putNumber("Encoder Vel RL : ", Robot.NAV.getNAV_f_EncdrVel(2));
+    SmartDashboard.putNumber("Encoder Vel RR : ", Robot.NAV.getNAV_f_EncdrVel(3));
+    SmartDashboard.putNumber("Encoder RPM FL : ", Robot.NAV.getNAV_n_EncdrRPM(0));
+    SmartDashboard.putNumber("Encoder RPM FR : ", Robot.NAV.getNAV_n_EncdrRPM(1));
+    SmartDashboard.putNumber("Encoder RPM RL : ", Robot.NAV.getNAV_n_EncdrRPM(2));
+    SmartDashboard.putNumber("Encoder RPM RR : ", Robot.NAV.getNAV_n_EncdrRPM(3));
+    SmartDashboard.putNumber("Wheel RPM FL : ", Robot.NAV.getNAV_n_WhlRPM(0));
+    SmartDashboard.putNumber("Wheel RPM FR : ", Robot.NAV.getNAV_n_WhlRPM(1));
+    SmartDashboard.putNumber("Wheel RPM RL : ", Robot.NAV.getNAV_n_WhlRPM(2));
+    SmartDashboard.putNumber("Wheel RPM RR : ", Robot.NAV.getNAV_n_WhlRPM(3));
+    SmartDashboard.putNumber("Wheel Vel FL : ", Robot.NAV.getNAV_v_WhlVel(0));
+    SmartDashboard.putNumber("Wheel Vel FR : ", Robot.NAV.getNAV_v_WhlVel(1));
+    SmartDashboard.putNumber("Wheel Vel RL : ", Robot.NAV.getNAV_v_WhlVel(2));
+    SmartDashboard.putNumber("Wheel Vel RR : ", Robot.NAV.getNAV_v_WhlVel(3));
 
 /*    
-    System.out.println("Encoder Cnts FL : " + Robot.DRIVES.getDRV_cnt_EncdrCnt(0));
-    System.out.println("Encoder Cnts FR : " + Robot.DRIVES.getDRV_cnt_EncdrCnt(1));
-    System.out.println("Encoder Cnts RL : " + Robot.DRIVES.getDRV_cnt_EncdrCnt(2));
-    System.out.println("Encoder Cnts RR : " + Robot.DRIVES.getDRV_cnt_EncdrCnt(3));
-    System.out.println("Encoder Vel FL : " + Robot.DRIVES.getDRV_f_EncdrVel(0));
-    System.out.println("Encoder Vel FR : " + Robot.DRIVES.getDRV_f_EncdrVel(1));
-    System.out.println("Encoder Vel RL : " + Robot.DRIVES.getDRV_f_EncdrVel(2));
-    System.out.println("Encoder Vel RR : " + Robot.DRIVES.getDRV_f_EncdrVel(3));
-    System.out.println("Encoder RPM FL : " + Robot.DRIVES.getDRV_n_EncdrRPM(0));
-    System.out.println("Encoder RPM FR : " + Robot.DRIVES.getDRV_n_EncdrRPM(1));
-    System.out.println("Encoder RPM RL : " + Robot.DRIVES.getDRV_n_EncdrRPM(2));
-    System.out.println("Encoder RPM RR : " + Robot.DRIVES.getDRV_n_EncdrRPM(3));
-    System.out.println("Wheel RPM FL : " + Robot.DRIVES.getDRV_n_WhlRPM(0));
-    System.out.println("Wheel RPM FR : " + Robot.DRIVES.getDRV_n_WhlRPM(1));
-    System.out.println("Wheel RPM RL : " + Robot.DRIVES.getDRV_n_WhlRPM(2));
-    System.out.println("Wheel RPM RR : " + Robot.DRIVES.getDRV_n_WhlRPM(3));
-    System.out.println("Wheel Vel FL : " + Robot.DRIVES.getDRV_v_WhlVel(0));
-    System.out.println("Wheel Vel FR : " + Robot.DRIVES.getDRV_v_WhlVel(1));
-    System.out.println("Wheel Vel RL : " + Robot.DRIVES.getDRV_v_WhlVel(2));
-    System.out.println("Wheel Vel RR : " + Robot.DRIVES.getDRV_v_WhlVel(3));
+    System.out.println("Encoder Cnts FL : " + Robot.NAV.getNAV_cnt_EncdrCnt(0));
+    System.out.println("Encoder Cnts FR : " + Robot.NAV.getNAV_cnt_EncdrCnt(1));
+    System.out.println("Encoder Cnts RL : " + Robot.NAV.getNAV_cnt_EncdrCnt(2));
+    System.out.println("Encoder Cnts RR : " + Robot.NAV.getNAV_cnt_EncdrCnt(3));
+    System.out.println("Encoder Vel FL : " + Robot.NAV.getNAV_f_EncdrVel(0));
+    System.out.println("Encoder Vel FR : " + Robot.NAV.getNAV_f_EncdrVel(1));
+    System.out.println("Encoder Vel RL : " + Robot.NAV.getNAV_f_EncdrVel(2));
+    System.out.println("Encoder Vel RR : " + Robot.NAV.getNAV_f_EncdrVel(3));
+    System.out.println("Encoder RPM FL : " + Robot.NAV.getNAV_n_EncdrRPM(0));
+    System.out.println("Encoder RPM FR : " + Robot.NAV.getNAV_n_EncdrRPM(1));
+    System.out.println("Encoder RPM RL : " + Robot.NAV.getNAV_n_EncdrRPM(2));
+    System.out.println("Encoder RPM RR : " + Robot.NAV.getNAV_n_EncdrRPM(3));
+    System.out.println("Wheel RPM FL : " + Robot.NAV.getNAV_n_WhlRPM(0));
+    System.out.println("Wheel RPM FR : " + Robot.NAV.getNAV_n_WhlRPM(1));
+    System.out.println("Wheel RPM RL : " + Robot.NAV.getNAV_n_WhlRPM(2));
+    System.out.println("Wheel RPM RR : " + Robot.NAV.getNAV_n_WhlRPM(3));
+    System.out.println("Wheel Vel FL : " + Robot.NAV.getNAV_v_WhlVel(0));
+    System.out.println("Wheel Vel FR : " + Robot.NAV.getNAV_v_WhlVel(1));
+    System.out.println("Wheel Vel RL : " + Robot.NAV.getNAV_v_WhlVel(2));
+    System.out.println("Wheel Vel RR : " + Robot.NAV.getNAV_v_WhlVel(3));
 */
   }
 
@@ -172,27 +172,27 @@ public class Dashboard extends Subsystem {
 
   /* Called to Update SmartDash Data for Display of Drive Periodic System Data */
   public void updateSmartDashDrvSysData() { 
-    SmartDashboard.putBoolean("VeDRV_b_CL_TgtRqstActv : ", Robot.DRIVES.getDRV_CL_TgtRqstActv());
-    SmartDashboard.putBoolean("VeDRV_b_CL_DrvRqstActv : ", Robot.DRIVES.getDRV_CL_DrvRqstActv());
-    SmartDashboard.putBoolean("VeDRV_b_DrvAutoCmdActv : ", Robot.DRIVES.getDRV_b_DrvAutoCmdActv());
-    SmartDashboard.putBoolean("VeDRV_b_DrvStkRqstActv : ", Robot.DRIVES.getDRV_b_DrvStkRqstActv());
-    SmartDashboard.putNumber("VeDRV_r_NormPwrCmdLong :  ", Robot.DRIVES.getDRV_r_NormPwrCmdLong());
-    SmartDashboard.putNumber("VeDRV_r_NormPwrCmdLat :   ", Robot.DRIVES.getDRV_r_NormPwrCmdLat());
-    SmartDashboard.putNumber("VeDRV_r_NormPwrCmdRot :   ", Robot.DRIVES.getDRV_r_NormPwrCmdRot());
-    SmartDashboard.putNumber("VeDRV_r_NormPwrDrvrLtY :  ", Robot.DRIVES.getDRV_r_NormPwrDrvrLtY());
-    SmartDashboard.putNumber("VeDRV_r_NormPwrDrvrLtX :  ", Robot.DRIVES.getDRV_r_NormPwrDrvrLtX());
-    SmartDashboard.putNumber("VeDRV_r_NormPwrDrvrRtX :  ", Robot.DRIVES.getDRV_r_NormPwrDrvrRtX());
+    SmartDashboard.putBoolean("VeDRV_b_CL_TgtRqstActv : ", Robot.NAV.getNAV_CL_TgtRqstActv());
+    SmartDashboard.putBoolean("VeDRV_b_CL_DrvRqstActv : ", Robot.NAV.getNAV_CL_DrvRqstActv());
+    SmartDashboard.putBoolean("VeDRV_b_DrvAutoCmdActv : ", Robot.NAV.getNAV_b_DrvAutoCmdActv());
+    SmartDashboard.putBoolean("VeDRV_b_DrvStkRqstActv : ", Robot.NAV.getNAV_b_DrvStkRqstActv());
+    SmartDashboard.putNumber("VeDRV_r_NormPwrCmdLong :  ", Robot.NAV.getNAV_r_NormPwrCmdLong());
+    SmartDashboard.putNumber("VeDRV_r_NormPwrCmdLat :   ", Robot.NAV.getNAV_r_NormPwrCmdLat());
+    SmartDashboard.putNumber("VeDRV_r_NormPwrCmdRot :   ", Robot.NAV.getNAV_r_NormPwrCmdRot());
+    SmartDashboard.putNumber("VeDRV_r_NormPwrDrvrLtY :  ", Robot.NAV.getNAV_r_NormPwrDrvrLtY());
+    SmartDashboard.putNumber("VeDRV_r_NormPwrDrvrLtX :  ", Robot.NAV.getNAV_r_NormPwrDrvrLtX());
+    SmartDashboard.putNumber("VeDRV_r_NormPwrDrvrRtX :  ", Robot.NAV.getNAV_r_NormPwrDrvrRtX());
 
-    System.out.println("VeDRV_b_CL_TgtRqstActv : " + Robot.DRIVES.getDRV_CL_TgtRqstActv());
-    System.out.println("VeDRV_b_CL_DrvRqstActv : " + Robot.DRIVES.getDRV_CL_DrvRqstActv());
-    System.out.println("VeDRV_b_DrvAutoCmdActv : " + Robot.DRIVES.getDRV_b_DrvAutoCmdActv());
-    System.out.println("VeDRV_b_DrvStkRqstActv : " + Robot.DRIVES.getDRV_b_DrvStkRqstActv());
-    System.out.println("VeDRV_r_NormPwrCmdLong : " + Robot.DRIVES.getDRV_r_NormPwrCmdLong());
-    System.out.println("VeDRV_r_NormPwrCmdLat :  " + Robot.DRIVES.getDRV_r_NormPwrCmdLat());
-    System.out.println("VeDRV_r_NormPwrCmdRot :  " + Robot.DRIVES.getDRV_r_NormPwrCmdRot());
-    System.out.println("VeDRV_r_NormPwrDrvrLtY : " + Robot.DRIVES.getDRV_r_NormPwrDrvrLtY());
-    System.out.println("VeDRV_r_NormPwrDrvrLtX : " + Robot.DRIVES.getDRV_r_NormPwrDrvrLtX());
-    System.out.println("VeDRV_r_NormPwrDrvrRtX : " + Robot.DRIVES.getDRV_r_NormPwrDrvrRtX());
+    System.out.println("VeDRV_b_CL_TgtRqstActv : " + Robot.NAV.getNAV_CL_TgtRqstActv());
+    System.out.println("VeDRV_b_CL_DrvRqstActv : " + Robot.NAV.getNAV_CL_DrvRqstActv());
+    System.out.println("VeDRV_b_DrvAutoCmdActv : " + Robot.NAV.getNAV_b_DrvAutoCmdActv());
+    System.out.println("VeDRV_b_DrvStkRqstActv : " + Robot.NAV.getNAV_b_DrvStkRqstActv());
+    System.out.println("VeDRV_r_NormPwrCmdLong : " + Robot.NAV.getNAV_r_NormPwrCmdLong());
+    System.out.println("VeDRV_r_NormPwrCmdLat :  " + Robot.NAV.getNAV_r_NormPwrCmdLat());
+    System.out.println("VeDRV_r_NormPwrCmdRot :  " + Robot.NAV.getNAV_r_NormPwrCmdRot());
+    System.out.println("VeDRV_r_NormPwrDrvrLtY : " + Robot.NAV.getNAV_r_NormPwrDrvrLtY());
+    System.out.println("VeDRV_r_NormPwrDrvrLtX : " + Robot.NAV.getNAV_r_NormPwrDrvrLtX());
+    System.out.println("VeDRV_r_NormPwrDrvrRtX : " + Robot.NAV.getNAV_r_NormPwrDrvrRtX());
   }
 
 

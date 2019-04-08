@@ -11,7 +11,7 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.Timer;
 import frc.robot.Robot;
-import frc.robot.commands.CC_DrvVsnTgtDsbl;
+import frc.robot.commands.*;
 import frc.robot.calibrations.K_PID;
 
 
@@ -164,12 +164,17 @@ public class CLpid extends Subsystem {
   /* Manage Rotate PID Control Subsystem Scheduler Task  */
   /******************************************************/
 	
-  /** Method: managePIDRotate - Scheduler Function for the Periodic
+  /** Method: mngPID_Cntrl - Scheduler Function for the Periodic
 	  * Drive System Rotate Control PI Control System.
 	  */ 
-    public void managePIDRotate() {
+    public void mngPID_Cntrl() {
 
-	    VePID_Deg_PstnAct = Robot.VISION.getVSN_Deg_LL_TgtAngX();
+			if (Robot.NAV.getNAV_CL_TgtRqstActv() == true) {
+			  VePID_Deg_PstnAct = Robot.VISION.getVSN_Deg_LL_TgtAngX();
+			}
+			else {
+				VePID_Deg_PstnAct = Robot.NAV.getNAV_GyroAngle();
+			}
 
    	  if (VePID_b_CL_Enbl == true) {
 	      VePID_Deg_PstnErr = calcPID_ErrSig(VePID_Deg_PstnDsrd, VePID_Deg_PstnAct,K_PID.KePID_Deg_PosErrDB);

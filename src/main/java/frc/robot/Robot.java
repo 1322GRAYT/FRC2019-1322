@@ -35,6 +35,7 @@ public class Robot extends TimedRobot {
   public final static Vision          VISION    = new Vision();
   public final static CLpid           PID       = new CLpid();
   public final static Drives          DRIVES    = new Drives();
+  public final static Nav             NAV       = new Nav();
   public final static Claw            CLAW      = new Claw();
   public final static LEDController   LEDS      = new LEDController();
   public final static Dashboard       DASHBOARD = new Dashboard();
@@ -57,8 +58,9 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     VISION.mngVSN_InitLimeLightNetTbl(); 
     VISION.mngVSN_InitCamCalibr();
+    PID.setPID_Deg_PstnTgt(false, 0.0);
     PID.mngPID_InitCntrl();
-    DRIVES.rstDRV_CntrlPeriodic();
+    NAV.mngNAV_InitCntrl();
     LIFT.mngLFT_InitCntrl();
   
     m_oi = new OI();
@@ -86,11 +88,11 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() {
     VISION.mngVSN_CamImgPeriodic();  
-    DRIVES.updDRV_EncdrData();
-    DRIVES.mngDRV_CntrlPeriodic();
+    NAV.mngNAV_CmndSysTsk1();
+    PID.mngPID_Cntrl(); 
+    NAV.mngNAV_CmndSysTsk1();
     if (K_System.KeSYS_b_NewLiftEnbl == true) {
-      LIFT.mngLFT_Cntrl20msTask();
-      LIFT.mngLFT_InitCntrl();  /* Clear Request Flags before OI is early next loop */
+      LIFT.mngLFT_CntrlSys();
     } 
   }
 

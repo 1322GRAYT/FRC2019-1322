@@ -33,8 +33,9 @@ public class Lift extends Subsystem {
     rstLFT_InpRqstFlgs();
   }
 
-  public void mngLFT_Cntrl20msTask() {
+  public void mngLFT_CntrlSys() {
     cntrlLFT_System();
+    rstLFT_InpRqstFlgs();  /* Clear Request flags before OI which runs early next loop */
   }
 
   /*******************************/

@@ -29,9 +29,9 @@ public class CT_DrvCntrl extends Command {
   @Override
   protected void execute() {
     if (K_System.KeSYS_b_CL_DrvTgtEnbl == true) {
-      Robot.DRIVES.setDRV_r_NormPwrDrvrLtY(Robot.m_oi.DriverStick.getLeftStickY());
-      Robot.DRIVES.setDRV_r_NormPwrDrvrLtX(Robot.m_oi.DriverStick.getLeftStickX());
-      Robot.DRIVES.setDRV_r_NormPwrDrvrRtX(Robot.m_oi.DriverStick.getRightStickX());  
+      Robot.NAV.setNAV_r_NormPwrDrvrLtY(Robot.m_oi.DriverStick.getLeftStickY());
+      Robot.NAV.setNAV_r_NormPwrDrvrLtX(Robot.m_oi.DriverStick.getLeftStickX());
+      Robot.NAV.setNAV_r_NormPwrDrvrRtX(Robot.m_oi.DriverStick.getRightStickX());  
     }
     else {
       Robot.DRIVES.DriveInVoltage(Robot.m_oi.DriverStick.getLeftStickY(), Robot.m_oi.DriverStick.getLeftStickX(),
@@ -54,9 +54,9 @@ public class CT_DrvCntrl extends Command {
   @Override
   protected void end() {
     if (K_System.KeSYS_b_CL_DrvTgtEnbl == true) {
-      Robot.DRIVES.setDRV_r_NormPwrDrvrLtY(0.0);
-      Robot.DRIVES.setDRV_r_NormPwrDrvrLtX(0.0);
-      Robot.DRIVES.setDRV_r_NormPwrDrvrRtX(0.0);  
+      Robot.NAV.setNAV_r_NormPwrDrvrLtY(0.0);
+      Robot.NAV.setNAV_r_NormPwrDrvrLtX(0.0);
+      Robot.NAV.setNAV_r_NormPwrDrvrRtX(0.0);  
     }
     else {
       Robot.DRIVES.DriveInVoltage(0, 0, 0);

@@ -92,7 +92,8 @@ public class OI {
     }
     else {
       // Vision System Camera
-      DriverStick.startButton.whenPressed(new CC_CamCaptureTgt());    
+      DriverStick.startButton.whenPressed(new CC_CamCaptureTgt());  
+      DriverStick.startButton.whenReleased(new CC_AutoTgtTrkDsbl());    
 
       // Autonomous forward
       DriverStick.selectButton.whileHeld(new CA_DrvPstnTgt(0, 140000));

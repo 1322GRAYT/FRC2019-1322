@@ -23,7 +23,7 @@ public class CC_CamCaptureTgt extends Command {
   @Override
   protected void initialize() {
     LeVSN_b_ImgCaptureVld = false;
-    Robot.DRIVES.setDRV_CL_TgtRqstActv(true);
+    Robot.NAV.setNAV_CL_TgtRqstActv(true);
   }
 
   // Called repeatedly when this Command is scheduled to run
