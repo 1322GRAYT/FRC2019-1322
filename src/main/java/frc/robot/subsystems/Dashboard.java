@@ -114,13 +114,13 @@ public class Dashboard extends Subsystem {
 
   /* Called to Update SmartDash Data for Display of Camera Closed-Loop Data */
   public void updateSmartDashCamCLData() { 
-    SmartDashboard.putNumber("VePID_Deg_PstnErr :        ", Robot.PIDF.getPID_Deg_PstnErr());
-    SmartDashboard.putBoolean("VePID_b_PstnErrWithInDB : ", Robot.PIDF.getPID_b_PstnErrWithInDB());
-    SmartDashboard.putNumber("VePID_Deg_PstnErrAccum :   ", Robot.PIDF.getPID_Deg_ErrAccum());
+    SmartDashboard.putNumber("VePID_Deg_PstnErr :        ", Robot.PID.getPID_Deg_PstnErr());
+    SmartDashboard.putBoolean("VePID_b_PstnErrWithInDB : ", Robot.PID.getPID_b_PstnErrWithInDB());
+    SmartDashboard.putNumber("VePID_Deg_PstnErrAccum :   ", Robot.PID.getPID_Deg_ErrAccum());
 
-    System.out.println("VePID_Deg_PstnErr :       " + Robot.PIDF.getPID_Deg_PstnErr());
-    System.out.println("VePID_b_PstnErrWithInDB : " + Robot.PIDF.getPID_b_PstnErrWithInDB());
-    System.out.println("VePID_Deg_PstnErrAccum :  " + Robot.PIDF.getPID_Deg_ErrAccum());
+    System.out.println("VePID_Deg_PstnErr :       " + Robot.PID.getPID_Deg_PstnErr());
+    System.out.println("VePID_b_PstnErrWithInDB : " + Robot.PID.getPID_b_PstnErrWithInDB());
+    System.out.println("VePID_Deg_PstnErrAccum :  " + Robot.PID.getPID_Deg_ErrAccum());
   }
 
 
@@ -150,23 +150,23 @@ public class Dashboard extends Subsystem {
 
   /* Called to Update SmartDash Data for Display of Target Closed-Loop Data */
   public void updateSmartDashTgtCLData() { 
-    SmartDashboard.putNumber("VePID_Deg_PstnAct :        ", Robot.PIDF.getPID_Deg_PstnAct());
-    SmartDashboard.putNumber("VePID_Deg_PstnErr :        ", Robot.PIDF.getPID_Deg_PstnErr());
-    SmartDashboard.putBoolean("VePID_b_PstnErrWithInDB : ", Robot.PIDF.getPID_b_PstnErrWithInDB());
-    SmartDashboard.putNumber("VePID_Deg_PstnErrAccum :   ", Robot.PIDF.getPID_Deg_ErrAccum());
-    SmartDashboard.putNumber("VePID_Pct_FdFwdCorr :      ", Robot.PIDF.getPIDRot_Pct_FdFwdTerm());
-    SmartDashboard.putNumber("VePID_Pct_PropCorr :       ", Robot.PIDF.getPID_Pct_PropTerm());
-    SmartDashboard.putNumber("VePID_Pct_IntglCorr :      ", Robot.PIDF.getPID_Pct_IntglTerm());
-    SmartDashboard.putNumber("VePID_Pct_PwrCmnd :        ", Robot.PIDF.getPID_Pct_PIDCmndPct());
+    SmartDashboard.putNumber("VePID_Deg_PstnAct :        ", Robot.PID.getPID_Deg_PstnAct());
+    SmartDashboard.putNumber("VePID_Deg_PstnErr :        ", Robot.PID.getPID_Deg_PstnErr());
+    SmartDashboard.putBoolean("VePID_b_PstnErrWithInDB : ", Robot.PID.getPID_b_PstnErrWithInDB());
+    SmartDashboard.putNumber("VePID_Deg_PstnErrAccum :   ", Robot.PID.getPID_Deg_ErrAccum());
+    SmartDashboard.putNumber("VePID_Pct_FdFwdCorr :      ", Robot.PID.getPIDRot_Pct_FdFwdTerm());
+    SmartDashboard.putNumber("VePID_Pct_PropCorr :       ", Robot.PID.getPID_Pct_PropTerm());
+    SmartDashboard.putNumber("VePID_Pct_IntglCorr :      ", Robot.PID.getPID_Pct_IntglTerm());
+    SmartDashboard.putNumber("VePID_Pct_PwrCmnd :        ", Robot.PID.getPID_Pct_PIDCmndPct());
 
-    System.out.println("VePID_Deg_PstnAct :       " + Robot.PIDF.getPID_Deg_PstnAct());
-    System.out.println("VePID_Deg_PstnErr :       " + Robot.PIDF.getPID_Deg_PstnErr());
-    System.out.println("VePID_b_PstnErrWithInDB : " + Robot.PIDF.getPID_b_PstnErrWithInDB());
-    System.out.println("VePID_Deg_PstnErrAccum :  " + Robot.PIDF.getPID_Deg_ErrAccum());
-    System.out.println("VePID_Pct_FdFwdCorr :     " + Robot.PIDF.getPIDRot_Pct_FdFwdTerm());
-    System.out.println("VePID_Pct_PropCorr :      " + Robot.PIDF.getPID_Pct_PropTerm());
-    System.out.println("VePID_Pct_IntglCorr :     " + Robot.PIDF.getPID_Pct_IntglTerm());
-    System.out.println("VePID_Pct_PwrCmnd :       " + Robot.PIDF.getPID_Pct_PIDCmndPct());
+    System.out.println("VePID_Deg_PstnAct :       " + Robot.PID.getPID_Deg_PstnAct());
+    System.out.println("VePID_Deg_PstnErr :       " + Robot.PID.getPID_Deg_PstnErr());
+    System.out.println("VePID_b_PstnErrWithInDB : " + Robot.PID.getPID_b_PstnErrWithInDB());
+    System.out.println("VePID_Deg_PstnErrAccum :  " + Robot.PID.getPID_Deg_ErrAccum());
+    System.out.println("VePID_Pct_FdFwdCorr :     " + Robot.PID.getPIDRot_Pct_FdFwdTerm());
+    System.out.println("VePID_Pct_PropCorr :      " + Robot.PID.getPID_Pct_PropTerm());
+    System.out.println("VePID_Pct_IntglCorr :     " + Robot.PID.getPID_Pct_IntglTerm());
+    System.out.println("VePID_Pct_PwrCmnd :       " + Robot.PID.getPID_Pct_PIDCmndPct());
   }
     
 

@@ -9,23 +9,23 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
-import frc.robot.subsystems.Fpid;
+import frc.robot.subsystems.CLpid;
 
 public class CC_DrvVsnTgt extends Command {
   public CC_DrvVsnTgt() {
-    requires(Robot.PIDF);
+    requires(Robot.PID);
   }
 
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-   Robot.PIDF.setPID_Deg_RotPstnTgt(true, 0.0);
+   Robot.PID.setPID_Deg_PstnTgt(true, 0.0);
   }
 
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    Robot.PIDF.managePIDRotate(); 
+    Robot.PID.managePIDRotate(); 
   }
 
   // Make this return true when this Command no longer needs to run execute()
@@ -37,15 +37,15 @@ public class CC_DrvVsnTgt extends Command {
   // Called once after isFinished returns true
   @Override
   protected void end() {
-    Robot.PIDF.setPID_Deg_RotPstnTgt(false, 0.0);
-    Robot.PIDF.mngPID_InitCntrl();
+    Robot.PID.setPID_Deg_PstnTgt(false, 0.0);
+    Robot.PID.mngPID_InitCntrl();
   }
 
   // Called when another command which requires one or more of the same
   // subsystems is scheduled to run
   @Override
   protected void interrupted() {
-    Robot.PIDF.setPID_Deg_RotPstnTgt(false, 0.0);
-    Robot.PIDF.mngPID_InitCntrl();
+    Robot.PID.setPID_Deg_PstnTgt(false, 0.0);
+    Robot.PID.mngPID_InitCntrl();
   }
 }

@@ -20,7 +20,7 @@ public class CC_CamSwitch extends Command {
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-    Robot.VISION.switchCameras();
+    Robot.VISION.SlctVSN_DrvrCam();
     finished = true;
   }
 

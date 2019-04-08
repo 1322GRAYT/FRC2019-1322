@@ -195,12 +195,12 @@ public class Drives extends Subsystem {
         (getDRV_CL_DrvRqstActv() == true)) {
           LeDRV_r_NormPwrCmdLong = 0.0;
           LeDRV_r_NormPwrCmdLat =  0.0;
-          LeDRV_r_NormPwrCmdRot =  Robot.PIDF.VePID_r_PwrCmndNorm;
+          LeDRV_r_NormPwrCmdRot =  Robot.PID.getPID_r_PwrCmndNorm();
     }
     else if ((getDRV_CL_TgtRqstActv() == true) &&
              (getDRV_CL_DrvRqstActv() == false)) {
               LeDRV_r_NormPwrCmdLong = K_Drive.KeDRV_r_CL_NormPwrLong;
-              LeDRV_r_NormPwrCmdLat =  Robot.PIDF.VePID_r_PwrCmndNorm * K_Drive.KeDRV_r_CL_ScalarRotToLat;
+              LeDRV_r_NormPwrCmdLat =  Robot.PID.getPID_r_PwrCmndNorm() * K_Drive.KeDRV_r_CL_ScalarRotToLat;
               LeDRV_r_NormPwrCmdRot =  0.0;                 
     }
     else if (getDRV_b_DrvStkRqstActv()) {

@@ -33,7 +33,7 @@ public class Robot extends TimedRobot {
 
   public final static TblLib          TBLLIB    = new TblLib();
   public final static Vision          VISION    = new Vision();
-  public final static Fpid            PIDF      = new Fpid();
+  public final static CLpid           PID       = new CLpid();
   public final static Drives          DRIVES    = new Drives();
   public final static Claw            CLAW      = new Claw();
   public final static LEDController   LEDS      = new LEDController();
@@ -57,7 +57,7 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     VISION.mngVSN_InitLimeLightNetTbl(); 
     VISION.mngVSN_InitCamCalibr();
-    PIDF.mngPID_InitCntrl();
+    PID.mngPID_InitCntrl();
     DRIVES.rstDRV_CntrlPeriodic();
     LIFT.mngLFT_InitCntrl();
   
