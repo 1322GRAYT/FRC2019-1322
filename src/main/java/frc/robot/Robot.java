@@ -56,13 +56,6 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
-    VISION.mngVSN_InitLimeLightNetTbl(); 
-    VISION.mngVSN_InitCamCalibr();
-    PID.setPID_Deg_PstnTgt(false, 0.0);
-    PID.mngPID_InitCntrl();
-    NAV.mngNAV_InitCntrl();
-    LIFT.mngLFT_InitCntrl();
-  
     m_oi = new OI();
 
     // Camera Server
@@ -72,9 +65,16 @@ public class Robot extends TimedRobot {
     camera0.setConnectionStrategy(ConnectionStrategy.kKeepOpen);
     camera1.setConnectionStrategy(ConnectionStrategy.kKeepOpen);
 
-		m_chooser.addDefault("Driver Control Only", new CA_RevertToTele());
-		m_chooser.addObject("Auto Drive Forward", new CA_DrvPstnTgt(0, /*cvrtDistToCnts(252")*/ 140000));
-		SmartDashboard.putData("Auto Mode:", m_chooser);
+    VISION.mngVSN_InitLimeLightNetTbl(); 
+    VISION.mngVSN_InitCamCalibr();
+    PID.setPID_Deg_PstnTgt(false, 0.0);
+    PID.mngPID_InitCntrl();
+    NAV.mngNAV_InitCntrl();
+    LIFT.mngLFT_InitCntrl();
+
+    m_chooser.setDefaultOption("Driver Control Only", new CA_RevertToTele());
+		m_chooser.addOption("Auto Drive Forward", new CA_DrvPstnTgt(0, 140000));
+    SmartDashboard.putData("Auto Mode:", m_chooser);
   }
 
   /**
@@ -87,13 +87,13 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
-    VISION.mngVSN_CamImgPeriodic();  
+    VISION.mngVSN_CamImgPeriodic();
     NAV.mngNAV_CmndSysTsk1();
     PID.mngPID_Cntrl(); 
-    NAV.mngNAV_CmndSysTsk1();
+    NAV.mngNAV_CmndSysTsk2();
     if (K_System.KeSYS_b_NewLiftEnbl == true) {
       LIFT.mngLFT_CntrlSys();
-    } 
+    }
   }
 
 
@@ -164,8 +164,10 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
+    System.out.println("teleopPeriodic *** ");
     Scheduler.getInstance().run();
-  }
+  } 
+
 
   /**
    * This function is called periodically during test mode.
@@ -174,10 +176,12 @@ public class Robot extends TimedRobot {
   public void testPeriodic() {
   }
 
+
   public static double deadzonify(double number) {
-      if(Math.abs(number) > .07) {
-        return number;
-      }
-      return 0;
+    if(Math.abs(number) > .07) {
+      return number;
+    }
+    return 0;
   }
+
 }

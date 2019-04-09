@@ -168,13 +168,15 @@ public class CLpid extends Subsystem {
 	  * Drive System Rotate Control PI Control System.
 	  */ 
     public void mngPID_Cntrl() {
+      double LePID_Deg_PstAct;
 
 			if (Robot.NAV.getNAV_CL_TgtRqstActv() == true) {
-			  VePID_Deg_PstnAct = Robot.VISION.getVSN_Deg_LL_TgtAngX();
+			  LePID_Deg_PstAct = -(Robot.VISION.getVSN_Deg_LL_TgtAngX());
 			}
 			else {
-				VePID_Deg_PstnAct = Robot.NAV.getNAV_GyroAngle();
+				LePID_Deg_PstAct = Robot.NAV.getNAV_GyroAngle();
 			}
+			VePID_Deg_PstnAct = LePID_Deg_PstAct;
 
    	  if (VePID_b_CL_Enbl == true) {
 	      VePID_Deg_PstnErr = calcPID_ErrSig(VePID_Deg_PstnDsrd, VePID_Deg_PstnAct,K_PID.KePID_Deg_PosErrDB);
@@ -471,7 +473,8 @@ public class CLpid extends Subsystem {
 	      
 	
   public void initDefaultCommand() {
-    setDefaultCommand(new CC_DrvVsnTgtDsbl());
+//    setDefaultCommand(new CC_DrvVsnTgtDsbl());
+// todo rfs
 	}
 	
 }

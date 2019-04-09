@@ -172,27 +172,29 @@ public class Dashboard extends Subsystem {
 
   /* Called to Update SmartDash Data for Display of Drive Periodic System Data */
   public void updateSmartDashDrvSysData() { 
-    SmartDashboard.putBoolean("VeDRV_b_CL_TgtRqstActv : ", Robot.NAV.getNAV_CL_TgtRqstActv());
-    SmartDashboard.putBoolean("VeDRV_b_CL_DrvRqstActv : ", Robot.NAV.getNAV_CL_DrvRqstActv());
-    SmartDashboard.putBoolean("VeDRV_b_DrvAutoCmdActv : ", Robot.NAV.getNAV_b_DrvAutoCmdActv());
-    SmartDashboard.putBoolean("VeDRV_b_DrvStkRqstActv : ", Robot.NAV.getNAV_b_DrvStkRqstActv());
-    SmartDashboard.putNumber("VeDRV_r_NormPwrCmdLong :  ", Robot.NAV.getNAV_r_NormPwrCmdLong());
-    SmartDashboard.putNumber("VeDRV_r_NormPwrCmdLat :   ", Robot.NAV.getNAV_r_NormPwrCmdLat());
-    SmartDashboard.putNumber("VeDRV_r_NormPwrCmdRot :   ", Robot.NAV.getNAV_r_NormPwrCmdRot());
-    SmartDashboard.putNumber("VeDRV_r_NormPwrDrvrLtY :  ", Robot.NAV.getNAV_r_NormPwrDrvrLtY());
-    SmartDashboard.putNumber("VeDRV_r_NormPwrDrvrLtX :  ", Robot.NAV.getNAV_r_NormPwrDrvrLtX());
-    SmartDashboard.putNumber("VeDRV_r_NormPwrDrvrRtX :  ", Robot.NAV.getNAV_r_NormPwrDrvrRtX());
+    SmartDashboard.putBoolean("VeNAV_b_CL_TgtRqstActv : ", Robot.NAV.getNAV_CL_TgtRqstActv());
+    SmartDashboard.putBoolean("VeNAV_b_CL_DrvRqstActv : ", Robot.NAV.getNAV_CL_DrvRqstActv());
+    SmartDashboard.putBoolean("VeNAV_b_DrvAutoCmdActv : ", Robot.NAV.getNAV_b_DrvAutoCmdActv());
+    SmartDashboard.putBoolean("VeNAV_b_DrvStkRqstActv : ", Robot.NAV.getNAV_b_DrvStkRqstActv());
+    SmartDashboard.putNumber("VeNAV_r_NormPwrCmdLong :  ", Robot.NAV.getNAV_r_NormPwrCmdLong());
+    SmartDashboard.putNumber("VeNAV_r_NormPwrCmdLat :   ", Robot.NAV.getNAV_r_NormPwrCmdLat());
+    SmartDashboard.putNumber("VeNAV_r_NormPwrCmdRot :   ", Robot.NAV.getNAV_r_NormPwrCmdRot());
+    SmartDashboard.putNumber("VeNAV_r_NormPwrDrvrLtY :  ", Robot.NAV.getNAV_r_NormPwrDrvrLtY());
+    SmartDashboard.putNumber("VeNAV_r_NormPwrDrvrLtX :  ", Robot.NAV.getNAV_r_NormPwrDrvrLtX());
+    SmartDashboard.putNumber("VeNAV_r_NormPwrDrvrRtX :  ", Robot.NAV.getNAV_r_NormPwrDrvrRtX());
 
-    System.out.println("VeDRV_b_CL_TgtRqstActv : " + Robot.NAV.getNAV_CL_TgtRqstActv());
-    System.out.println("VeDRV_b_CL_DrvRqstActv : " + Robot.NAV.getNAV_CL_DrvRqstActv());
-    System.out.println("VeDRV_b_DrvAutoCmdActv : " + Robot.NAV.getNAV_b_DrvAutoCmdActv());
-    System.out.println("VeDRV_b_DrvStkRqstActv : " + Robot.NAV.getNAV_b_DrvStkRqstActv());
-    System.out.println("VeDRV_r_NormPwrCmdLong : " + Robot.NAV.getNAV_r_NormPwrCmdLong());
-    System.out.println("VeDRV_r_NormPwrCmdLat :  " + Robot.NAV.getNAV_r_NormPwrCmdLat());
-    System.out.println("VeDRV_r_NormPwrCmdRot :  " + Robot.NAV.getNAV_r_NormPwrCmdRot());
-    System.out.println("VeDRV_r_NormPwrDrvrLtY : " + Robot.NAV.getNAV_r_NormPwrDrvrLtY());
-    System.out.println("VeDRV_r_NormPwrDrvrLtX : " + Robot.NAV.getNAV_r_NormPwrDrvrLtX());
-    System.out.println("VeDRV_r_NormPwrDrvrRtX : " + Robot.NAV.getNAV_r_NormPwrDrvrRtX());
+/*    
+    System.out.println("VeNAV_b_CL_TgtRqstActv : " + Robot.NAV.getNAV_CL_TgtRqstActv());
+    System.out.println("VeNAV_b_CL_DrvRqstActv : " + Robot.NAV.getNAV_CL_DrvRqstActv());
+    System.out.println("VeNAV_b_DrvAutoCmdActv : " + Robot.NAV.getNAV_b_DrvAutoCmdActv());
+    System.out.println("VeNAV_b_DrvStkRqstActv : " + Robot.NAV.getNAV_b_DrvStkRqstActv());
+    System.out.println("VeNAV_r_NormPwrCmdLong : " + Robot.NAV.getNAV_r_NormPwrCmdLong());
+    System.out.println("VeNAV_r_NormPwrCmdLat :  " + Robot.NAV.getNAV_r_NormPwrCmdLat());
+    System.out.println("VeNAV_r_NormPwrCmdRot :  " + Robot.NAV.getNAV_r_NormPwrCmdRot());
+    System.out.println("VeNAV_r_NormPwrDrvrLtY : " + Robot.NAV.getNAV_r_NormPwrDrvrLtY());
+    System.out.println("VeNAV_r_NormPwrDrvrLtX : " + Robot.NAV.getNAV_r_NormPwrDrvrLtX());
+    System.out.println("VeNAV_r_NormPwrDrvrRtX : " + Robot.NAV.getNAV_r_NormPwrDrvrRtX());
+*/    
   }
 
 

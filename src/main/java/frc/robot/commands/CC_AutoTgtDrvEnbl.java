@@ -35,7 +35,7 @@ public class CC_AutoTgtDrvEnbl extends Command {
   // Called once after isFinished returns true
   @Override
   protected void end() {
-    /* Nothing Required */
+    System.out.println("***  AutoTgtDrvEnbl Command. ***");
   }
 
   // Called when another command which requires one or more of the same

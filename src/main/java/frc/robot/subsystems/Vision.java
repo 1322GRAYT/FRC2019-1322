@@ -9,7 +9,6 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
 import java.util.*;
-import java.lang.Object;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -52,6 +51,11 @@ public class Vision extends Subsystem {
   private double LL_TgtCornX[] = new double[4];  // Target Corner Coord-X: RH, RL, LL, LH
   private double LL_TgtCornY[] = new double[4];  // Target Corner Coord-Y: RH, RL, LL, LH
 
+
+  private double VeVSN_Pxl_RefWidthTop;
+  private double VeVSN_Pxl_RefWidthBtm;
+  private double VeVSN_Pxl_RefHeightLt;
+  private double VeVSN_Pxl_RefHeightRt;
 
   private int    VeVSN_Cnt_TgtCornAqrd;
   private double VeVSN_Pxl_ImgWidthBtm;
@@ -337,6 +341,7 @@ public double getVSN_Pxl_LL_TgtSideShort() {
     public void mngVSN_InitCamCalibr() {
       calcVSN_RefTgtObjMat();
       calcVSN_RefTgtImgMat();
+      calcVSN_RefTgtImgGeometry();
       calcVSN_CamFocalPt();
       calcVSN_CamMat();
       RstVSN_ImgVects();
@@ -488,6 +493,44 @@ public double getVSN_Pxl_LL_TgtSideShort() {
     }
 
 
+  /**
+    * Method: calcVSN_RegTgtImgGeometry - Calculate the dimensions
+    * of the vision reference in pixels, i.e. the length of all the sides.
+    */
+    private void calcVSN_RefTgtImgGeometry() {
+      VeVSN_Pxl_RefWidthTop = calcVSN_PxlLengthLineSeg(K_Vision.KaVSN_Pxl_RefImgCoord[RtUpr], K_Vision.KaVSN_Pxl_RefImgCoord[LtUpr]);
+      VeVSN_Pxl_RefWidthBtm = calcVSN_PxlLengthLineSeg(K_Vision.KaVSN_Pxl_RefImgCoord[RtLwr], K_Vision.KaVSN_Pxl_RefImgCoord[LtLwr]);
+      VeVSN_Pxl_RefHeightLt = calcVSN_PxlLengthLineSeg(K_Vision.KaVSN_Pxl_RefImgCoord[LtLwr], K_Vision.KaVSN_Pxl_RefImgCoord[LtUpr]);
+      VeVSN_Pxl_RefHeightRt = calcVSN_PxlLengthLineSeg(K_Vision.KaVSN_Pxl_RefImgCoord[RtLwr], K_Vision.KaVSN_Pxl_RefImgCoord[RtUpr]);
+    }
+
+
+  /**
+    * Method: calcVSN_PxlLengthLineSeg - Calculate the length of a
+    * line segment given the X-Y coordinates of the two end-points
+    * of the line.  Uses the Pythagorean Theorem.
+    * @param1: Array of Cartesian Coordinates of Line Segment PointA (int)
+    * @param2: Array of Cartesian Coordinates of Line Segment PointB (int)
+    * @return: Length of Line Segment in Camera Pixels (double)
+    */
+    private double calcVSN_PxlLengthLineSeg(int LeVSN_Pxl_PntA[], int LeVSN_Pxl_PntB[]) {
+      double diffX, diffY, hyp2;
+      double length;
+  
+      /* Calculate the delta between the points in the X-dimension. */
+      diffX = (double)(LeVSN_Pxl_PntA[Xcell] - LeVSN_Pxl_PntB[Xcell]);
+  
+      /* Calculate the delta between the points in the Y-dimension. */
+      diffY = (double)(LeVSN_Pxl_PntA[Ycell] - LeVSN_Pxl_PntB[Ycell]);
+  
+      /* calculate the hypoteneuse */
+      hyp2 = (Math.pow(diffX,2)) + (Math.pow(diffY,2));
+      length = Math.sqrt((double)hyp2);
+
+      return (length);
+    }
+
+
 /*****************************************************/
 /*  Calculate Camera Focal Point                     */
 /*  F = (P x D) / W                                  */
@@ -511,14 +554,35 @@ public double getVSN_Pxl_LL_TgtSideShort() {
       LeVSN_l_RefTgtBtm = 1;
     }
   
-    System.out.println("VeVSN_Pxl_ImgWidthBtm :   " + VeVSN_Pxl_ImgWidthBtm);
+
+    System.out.println("KaVSN_Pxl_RefImgCoord[RtUpr][X] :   " + K_Vision.KaVSN_Pxl_RefImgCoord[RtUpr][0]);
+    System.out.println("KaVSN_Pxl_RefImgCoord[RtUpr][Y] :   " + K_Vision.KaVSN_Pxl_RefImgCoord[RtUpr][1]);
+
+    System.out.println("KaVSN_Pxl_RefImgCoord[RtLwr][X] :   " + K_Vision.KaVSN_Pxl_RefImgCoord[RtLwr][0]);
+    System.out.println("KaVSN_Pxl_RefImgCoord[RtLwr][Y] :   " + K_Vision.KaVSN_Pxl_RefImgCoord[RtLwr][1]);
+
+    System.out.println("KaVSN_Pxl_RefImgCoord[LtLwr][X] :   " + K_Vision.KaVSN_Pxl_RefImgCoord[LtLwr][0]);
+    System.out.println("KaVSN_Pxl_RefImgCoord[LtLwr][Y] :   " + K_Vision.KaVSN_Pxl_RefImgCoord[LtLwr][1]);
+
+    System.out.println("KaVSN_Pxl_RefImgCoord[LtUpr][X] :   " + K_Vision.KaVSN_Pxl_RefImgCoord[LtUpr][0]);
+    System.out.println("KaVSN_Pxl_RefImgCoord[LtUpr][Y] :   " + K_Vision.KaVSN_Pxl_RefImgCoord[LtUpr][1]);
+
+    System.out.println("VeVSN_Pxl_RefWidthTop :   " + VeVSN_Pxl_RefWidthTop);
+    System.out.println("VeVSN_Pxl_RefWidthBtm :   " + VeVSN_Pxl_RefWidthBtm);
+    System.out.println("VeVSN_Pxl_RefHeightLt :   " + VeVSN_Pxl_RefHeightLt);
+    System.out.println("VeVSN_Pxl_RefHeightRt :   " + VeVSN_Pxl_RefHeightRt);
+
+
+    LeVSN_l_FocalPt = ((VeVSN_Pxl_ImgWidthBtm * K_Vision.KeVSN_l_RefTgtToCamDist)/
+                       LeVSN_l_RefTgtBtm);
+
     System.out.println("KeVSN_l_RefTgtToCamDist : " + K_Vision.KeVSN_l_RefTgtToCamDist);
     System.out.println("LeVSN_l_RefTgtBtm :       " + LeVSN_l_RefTgtBtm);
+    System.out.println("LeVSN_l_FocalPt :         " + LeVSN_l_FocalPt);
 
-    LeVSN_l_FocalPt = (VeVSN_Pxl_ImgWidthBtm * K_Vision.KeVSN_l_RefTgtToCamDist)/
-                      (LeVSN_l_RefTgtBtm);
+    VeVSN_Pxl_CamFocalPt = (int)LeVSN_l_FocalPt;
 
-	  VeVSN_Pxl_CamFocalPt = (int)LeVSN_l_FocalPt;          
+    System.out.println("VeVSN_Pxl_CamFocalPt :    " + VeVSN_Pxl_CamFocalPt);
   }
 
 
@@ -626,32 +690,24 @@ public double getVSN_Pxl_LL_TgtSideShort() {
       VeVSN_Pxl_ImgWidthBtm = calcVSN_PxlLengthLineSeg(VaVSN_Pxl_CamImgCoord[RtLwr], VaVSN_Pxl_CamImgCoord[LtLwr]);
       VeVSN_Pxl_ImgHeightLt = calcVSN_PxlLengthLineSeg(VaVSN_Pxl_CamImgCoord[LtLwr], VaVSN_Pxl_CamImgCoord[LtUpr]);
       VeVSN_Pxl_ImgHeightRt = calcVSN_PxlLengthLineSeg(VaVSN_Pxl_CamImgCoord[RtLwr], VaVSN_Pxl_CamImgCoord[RtUpr]);
-    }
 
-
-  /**
-    * Method: calcVSN_PxlLengthLineSeg - Calculate the length of a
-    * line segment given the X-Y coordinates of the two end-points
-    * of the line.  Uses the Pythagorean Theorem.
-    * @param1: Array of Cartesian Coordinates of Line Segment PointA (int)
-    * @param2: Array of Cartesian Coordinates of Line Segment PointB (int)
-    * @return: Length of Line Segment in Camera Pixels (double)
-    */
-    private double calcVSN_PxlLengthLineSeg(int LeVSN_Pxl_PntA[], int LeVSN_Pxl_PntB[]) {
-      double diffX, diffY, hyp2;
-      double length;
+      System.out.println("VaVSN_Pxl_CamImgCoord[RtUpr][X] :   " + VaVSN_Pxl_CamImgCoord[RtUpr][0]);
+      System.out.println("VaVSN_Pxl_CamImgCoord[RtUpr][Y] :   " + VaVSN_Pxl_CamImgCoord[RtUpr][1]);
   
-      /* Calculate the delta between the points in the X-dimension. */
-      diffX = (double)(LeVSN_Pxl_PntA[Xcell] - LeVSN_Pxl_PntB[Xcell]);
+      System.out.println("VaVSN_Pxl_CamImgCoord[RtLwr][X] :   " + VaVSN_Pxl_CamImgCoord[RtLwr][0]);
+      System.out.println("VaVSN_Pxl_CamImgCoord[RtLwr][Y] :   " + VaVSN_Pxl_CamImgCoord[RtLwr][1]);
   
-      /* Calculate the delta between the points in the Y-dimension. */
-      diffY = (double)(LeVSN_Pxl_PntA[Ycell] - LeVSN_Pxl_PntB[Ycell]);
+      System.out.println("VaVSN_Pxl_CamImgCoord[LtLwr][X] :   " + VaVSN_Pxl_CamImgCoord[LtLwr][0]);
+      System.out.println("VaVSN_Pxl_CamImgCoord[LtLwr][Y] :   " + VaVSN_Pxl_CamImgCoord[LtLwr][1]);
   
-      /* calculate the hypoteneuse */
-      hyp2 = (Math.pow(diffX,2)) + (Math.pow(diffY,2));
-      length = Math.sqrt((double)hyp2);
-
-      return (length);
+      System.out.println("VaVSN_Pxl_CamImgCoord[LtUpr][X] :   " + VaVSN_Pxl_CamImgCoord[LtUpr][0]);
+      System.out.println("VaVSN_Pxl_CamImgCoord[LtUpr][Y] :   " + VaVSN_Pxl_CamImgCoord[LtUpr][1]);
+  
+      System.out.println("VeVSN_Pxl_RefWidthTop :   " + VeVSN_Pxl_ImgWidthTop);
+      System.out.println("VeVSN_Pxl_RefWidthBtm :   " + VeVSN_Pxl_ImgWidthBtm);
+      System.out.println("VeVSN_Pxl_RefHeightLt :   " + VeVSN_Pxl_ImgHeightLt);
+      System.out.println("VeVSN_Pxl_RefHeightRt :   " + VeVSN_Pxl_ImgHeightRt);
+  
     }
 
 

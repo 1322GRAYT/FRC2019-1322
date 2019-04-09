@@ -1,8 +1,10 @@
 package frc.robot.subsystems;
 
-import frc.robot.commands.*;
+
 import edu.wpi.first.wpilibj.command.Subsystem;
-import edu.wpi.first.wpilibj.ADXRS450_Gyro;
+import edu.wpi.first.wpilibj.SerialPort;
+import com.kauailabs.navx.frc.AHRS;
+
 import frc.robot.Robot;
 import frc.robot.calibrations.K_Nav;
 import frc.robot.calibrations.K_Drive;
@@ -10,7 +12,7 @@ import frc.robot.calibrations.K_System;
 
 
 public class Nav extends Subsystem {
-  private ADXRS450_Gyro gyro = new ADXRS450_Gyro();
+//  private AHRS Gyro = new AHRS(SerialPort.Port.kMXP);  // todo rfs
   private double VeNAV_Deg_GyroAngle;      // double: degree heading
 
 	// Drive System Encoders/Wheels
@@ -186,7 +188,6 @@ public class Nav extends Subsystem {
   * Tasks that should be run when the robot is initialized or reset.
   */	
   public void mngNAV_InitCntrl() {
-    perfmNAV_GyroCal();
     rstNAV_DrvCmndArb();
   }
 
@@ -194,7 +195,7 @@ public class Nav extends Subsystem {
   * Command System Periodic Task 1 (runs First).
   */	
   public void mngNAV_CmndSysTsk1() {
-    updNAV_GyroAngle();
+//    updNAV_GyroAngle();
     updNAV_DrvWhlData();
   }
 
@@ -210,7 +211,7 @@ public class Nav extends Subsystem {
   * Gyrometer as the 0 degree mark.
   */	
   public void rstNAV_GyroAngle() {
-    gyro.reset();
+ //   Gyro.reset();  // todo rfs
   }
 
 
@@ -222,23 +223,27 @@ public class Nav extends Subsystem {
   }
   
 
-  /** Method: cvrtAngToLinSpd - Calculates the Linear 
-   *  Speed of the Robot from the Angular Wheel Speed
-   *  when moving directly forward or rearward.
-   *  @param: Wheel Angular Speed (rpm)
-   *  @return: Robot Linear Speed (inch/sec) */	
-   public static float cvrtAngToLinSpd(float SpdWhl) {
-    return ((float)((K_Nav.KeNAV_l_DistPerRevWhl * SpdWhl)/(float)60));
-  }
+  /** Method: cvrtNAV_AngToLinSpd - Calculates the Linear 
+    *  Speed of the Robot from the Angular Wheel Speed
+    *  when moving directly forward or rearward.
+    *  @param: Wheel Angular Speed (rpm)
+    *  @return: Robot Linear Speed (inch/sec) */	
+    public static float cvrtNAV_AngToLinSpd(float SpdWhl) {
+      float LinVel;
+      
+      LinVel = (float)((K_Nav.KeNAV_l_DistPerRevWhl * SpdWhl)/(float)60);
+
+    return(LinVel);
+    }
   
 
-  /** Method: cvrtDistToCnts - Calculates the nominal number 
+  /** Method: cvrtNAV_DistToCnts - Calculates the nominal number 
    *  of Drive encoder counts (cnts) that would be registered if
    *  the the Drive Wheel traveled forward/backward the
    *  desired distance given (inches).
    *  @param: Desired Distance (inches)
    *  @return: Encoder Counts (cnts) */
-  public static double cvrtDistToCnts(float DistInch) {
+  public static double cvrtNAV_DistToCnts(float DistInch) {
     double WhlRevs;
     double EncdrRevs;
     double EncdrCnts;
@@ -247,17 +252,17 @@ public class Nav extends Subsystem {
     EncdrRevs = WhlRevs * (double)K_Nav.KeNAV_r_EncdrToWhl;	 
     EncdrCnts = EncdrRevs * (double)K_Nav.KeNAV_Cnt_PlsPerRevEncdr;
    
-    return EncdrCnts;
+    return(EncdrCnts);
   }
 
 
-  /** Method: cvrtCntsToDist - Calculates the nominal distance
+  /** Method: cvrtNAV_CntsToDist - Calculates the nominal distance
    *  that would be/was travelled in inches based on the number
    *  of encoder counts that were registered by the the Drive Wheel
    *  encoder (cnts).
    *  @param: Encoder Counts (cnts) 
    *  @return: Desired Distance (inches) */
-  public static double cvrtCntsToDist(int EncdrCnts) {
+  public static double cvrtNAV_CntsToDist(int EncdrCnts) {
     double EncdrRevs;
     double WhlRevs;
     double DistInch;
@@ -266,7 +271,7 @@ public class Nav extends Subsystem {
     WhlRevs   = EncdrRevs / (double)K_Nav.KeNAV_r_EncdrToWhl;	 
     DistInch  = WhlRevs * (double)K_Nav.KeNAV_l_DistPerRevWhl;	 
   
-    return DistInch;
+    return(DistInch);
   }
 
 
@@ -278,9 +283,10 @@ public class Nav extends Subsystem {
 
 /** Method: perfmNAV_GyroCal - Performs the Calibration of the
   * Gyrometer to set the proper home / oridinal positions.
-  */	
-  private void perfmNAV_GyroCal() {
-    gyro.calibrate();
+  */
+  private boolean chkNAV_GyroCal() {
+   return(true);
+ //   return(Gyro.isCalibrating());  // todo rfs
   }
 
 
@@ -288,7 +294,7 @@ public class Nav extends Subsystem {
   * of the Gyrometer Angle reading (Positive is Clockwise: [0 to 360) )
   */	
   private void updNAV_GyroAngle() {
-    VeNAV_Deg_GyroAngle = gyro.getAngle();
+//    VeNAV_Deg_GyroAngle = Gyro.getAngle();  // todo rfs
   }
 
 
@@ -400,6 +406,7 @@ public class Nav extends Subsystem {
 
   @Override
   public void initDefaultCommand() {
-    setDefaultCommand(new CC_DrvVsnTgtDsbl());
+//  setDefaultCommand(new CC_DrvVsnTgtDsbl());
+// todo rfs
   }
 }

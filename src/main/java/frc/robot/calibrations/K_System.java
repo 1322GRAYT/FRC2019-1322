@@ -17,7 +17,7 @@ public class K_System {
 	/****************************************/	 	
 
 	/** KeSYS_b_CL_DrvTgtEnbl: Enable Closed-Loop Vision Targeting Drive Control. */
-    public static final boolean KeSYS_b_CL_DrvTgtEnbl = false;
+    public static final boolean KeSYS_b_CL_DrvTgtEnbl = true;
 
 	/** KeSYS_b_NewLiftEnbl: Enable the use of the new Lift Control strategy. */
     public static final boolean KeSYS_b_NewLiftEnbl = false;
@@ -30,7 +30,7 @@ public class K_System {
 	 * is running on the Practice Robot which does not have the
 	 * full complement of actuators and sensors so certain
 	 * functionality in software should be disabled. */
-    public static final boolean KeSYS_b_PracticeBot = false;	
+    public static final boolean KeSYS_b_PracticeBot = true;	
 
 	/** KeSYS_b_DebugEnblVsn: If True the Debug Smart Dash Display Variables
 	 * Are Broadcast and Updated, if False they are turned off to maximize
@@ -40,7 +40,7 @@ public class K_System {
 	/** KeSYS_b_DebugEnblCL: If True the Debug Smart Dash Display Variables
 	 * Are Broadcast and Updated, if False they are turned off to maximize
 	 * thru-put for controls. For the Closed-Loop Tracking System. */
-    public static final boolean KeSYS_b_DebugEnblCL = true;
+    public static final boolean KeSYS_b_DebugEnblCL = false;
 
 	/** KeSYS_b_DebugEnblDrv: If True the Debug Smart Dash Display Variables
 	 * Are Broadcast and Updated, if False they are turned off to maximize

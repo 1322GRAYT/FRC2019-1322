@@ -50,7 +50,7 @@ public class K_Nav {
   /** KeNAV_Cnt_PlsPerRevEncdr: Number of Shaft Encoder Pulses per one
     * rotation of the Shaft the Encoder is mounted on.  (Encoder Teeth * 4)
     */
-    public static final int KeNAV_Cnt_PlsPerRevEncdr = (int) 1000;    // clicks
+    public static final int KeNAV_Cnt_PlsPerRevEncdr = (int) 1024 * 4; // 1024 ticks at 4x encoder (4x Encoder counts - Up and Down)
   
   /** KeNAV_r_EncdrToWhl: The ratio of the number of rotations of
     * the encoder shaft to the number of rotations of the wheel axle shaft,
