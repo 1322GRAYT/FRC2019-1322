@@ -46,7 +46,7 @@ public class Vision extends Subsystem {
   private double LL_TgtSkew;       // Target Skew or Rotation
   private double LL_TgtSideShort;  // Sidelength of shortest side of the fitted bounding box (pixels)  
   private double LL_TgtSideLong;   // Sidelength of longest side of the fitted bounding box (pixels)
-  private double LL_TgtLngthHort;  // Horizontal sidelength of the rough bounding box (0 - 320 pixels)
+  private double LL_TgtLngthHorz;  // Horizontal sidelength of the rough bounding box (0 - 320 pixels)
   private double LL_TgtLngthVert;  // Vertical sidelength of the rough bounding box (0 - 320 pixels)
   private double LL_TgtCornX[] = new double[4];  // Target Corner Coord-X: RH, RL, LL, LH
   private double LL_TgtCornY[] = new double[4];  // Target Corner Coord-Y: RH, RL, LL, LH
@@ -174,12 +174,12 @@ public double getVSN_Pxl_LL_TgtSideShort() {
   }
 
  /**
-   * Method: getVSN_Pxl_LL_TgtLngthHort - Horizontal sidelength of
+   * Method: getVSN_Pxl_LL_TgtLngthHorz - Horizontal sidelength of
    * the rough bounding box (0 - 320 pixels).
    * @return: double - pixels
    */
-  public double getVSN_Pxl_LL_TgtLngthHort() {
-    return(LL_TgtLngthHort);
+  public double getVSN_Pxl_LL_TgtLngthHorz() {
+    return(LL_TgtLngthHorz);
   }
 
  /**
@@ -368,17 +368,21 @@ public double getVSN_Pxl_LL_TgtSideShort() {
     public boolean dtrmnVSN_CamVldData() {
       boolean LeVSN_b_TgtAcqVld = false;
 
+      VeVSN_Cnt_TgtCornAqrd = LL_TgtCornX.length;
+
       if ((LL_TgtVld == 1.0) &&
           (LL_TgtCornX.length >= K_Vision.KeVSN_Cnt_CamTgtCornMin) &&
-          (LL_TgtCornY.length >= K_Vision.KeVSN_Cnt_CamTgtCornMin)) {
+          (LL_TgtCornY.length >= K_Vision.KeVSN_Cnt_CamTgtCornMin) &&
+          (LL_TgtCornX.length <= 4)) {
         LeVSN_b_TgtAcqVld = true;
         VeVSN_Cnt_TgtCornAqrd = LL_TgtCornX.length;
+
         System.out.println("VeVSN_Cnt_TgtCornAqrd : " + VeVSN_Cnt_TgtCornAqrd);
         if (K_System.KeSYS_b_DebugEnblVsn == true) {
           Robot.DASHBOARD.updateSmartDashCamLLData();
-        }  
+        }    
       }
-      else {
+      else { /* (LeVSN_b_TgtAcqVld == false) */
         System.out.println("Waiting for Valid 3+ Corner data-image ... ");
       }
         
@@ -554,35 +558,10 @@ public double getVSN_Pxl_LL_TgtSideShort() {
       LeVSN_l_RefTgtBtm = 1;
     }
   
-
-    System.out.println("KaVSN_Pxl_RefImgCoord[RtUpr][X] :   " + K_Vision.KaVSN_Pxl_RefImgCoord[RtUpr][0]);
-    System.out.println("KaVSN_Pxl_RefImgCoord[RtUpr][Y] :   " + K_Vision.KaVSN_Pxl_RefImgCoord[RtUpr][1]);
-
-    System.out.println("KaVSN_Pxl_RefImgCoord[RtLwr][X] :   " + K_Vision.KaVSN_Pxl_RefImgCoord[RtLwr][0]);
-    System.out.println("KaVSN_Pxl_RefImgCoord[RtLwr][Y] :   " + K_Vision.KaVSN_Pxl_RefImgCoord[RtLwr][1]);
-
-    System.out.println("KaVSN_Pxl_RefImgCoord[LtLwr][X] :   " + K_Vision.KaVSN_Pxl_RefImgCoord[LtLwr][0]);
-    System.out.println("KaVSN_Pxl_RefImgCoord[LtLwr][Y] :   " + K_Vision.KaVSN_Pxl_RefImgCoord[LtLwr][1]);
-
-    System.out.println("KaVSN_Pxl_RefImgCoord[LtUpr][X] :   " + K_Vision.KaVSN_Pxl_RefImgCoord[LtUpr][0]);
-    System.out.println("KaVSN_Pxl_RefImgCoord[LtUpr][Y] :   " + K_Vision.KaVSN_Pxl_RefImgCoord[LtUpr][1]);
-
-    System.out.println("VeVSN_Pxl_RefWidthTop :   " + VeVSN_Pxl_RefWidthTop);
-    System.out.println("VeVSN_Pxl_RefWidthBtm :   " + VeVSN_Pxl_RefWidthBtm);
-    System.out.println("VeVSN_Pxl_RefHeightLt :   " + VeVSN_Pxl_RefHeightLt);
-    System.out.println("VeVSN_Pxl_RefHeightRt :   " + VeVSN_Pxl_RefHeightRt);
-
-
-    LeVSN_l_FocalPt = ((VeVSN_Pxl_ImgWidthBtm * K_Vision.KeVSN_l_RefTgtToCamDist)/
+    LeVSN_l_FocalPt = ((VeVSN_Pxl_RefWidthBtm * K_Vision.KeVSN_l_RefTgtToCamDist)/
                        LeVSN_l_RefTgtBtm);
 
-    System.out.println("KeVSN_l_RefTgtToCamDist : " + K_Vision.KeVSN_l_RefTgtToCamDist);
-    System.out.println("LeVSN_l_RefTgtBtm :       " + LeVSN_l_RefTgtBtm);
-    System.out.println("LeVSN_l_FocalPt :         " + LeVSN_l_FocalPt);
-
     VeVSN_Pxl_CamFocalPt = (int)LeVSN_l_FocalPt;
-
-    System.out.println("VeVSN_Pxl_CamFocalPt :    " + VeVSN_Pxl_CamFocalPt);
   }
 
 
@@ -658,7 +637,7 @@ public double getVSN_Pxl_LL_TgtSideShort() {
       LL_TgtSkew = ts.getDouble(0.0);
       LL_TgtSideShort = tshort.getDouble(0.0);
       LL_TgtSideLong  = tlong.getDouble(0.0);
-      LL_TgtLngthHort = thor.getDouble(0.0);
+      LL_TgtLngthHorz = thor.getDouble(0.0);
       LL_TgtLngthVert = tvert.getDouble(0.0);
       LL_TgtCornX   = tcornx.getDoubleArray(new double[0]);
       LL_TgtCornY   = tcorny.getDoubleArray(new double[0]);
@@ -689,25 +668,7 @@ public double getVSN_Pxl_LL_TgtSideShort() {
       VeVSN_Pxl_ImgWidthTop = calcVSN_PxlLengthLineSeg(VaVSN_Pxl_CamImgCoord[RtUpr], VaVSN_Pxl_CamImgCoord[LtUpr]);
       VeVSN_Pxl_ImgWidthBtm = calcVSN_PxlLengthLineSeg(VaVSN_Pxl_CamImgCoord[RtLwr], VaVSN_Pxl_CamImgCoord[LtLwr]);
       VeVSN_Pxl_ImgHeightLt = calcVSN_PxlLengthLineSeg(VaVSN_Pxl_CamImgCoord[LtLwr], VaVSN_Pxl_CamImgCoord[LtUpr]);
-      VeVSN_Pxl_ImgHeightRt = calcVSN_PxlLengthLineSeg(VaVSN_Pxl_CamImgCoord[RtLwr], VaVSN_Pxl_CamImgCoord[RtUpr]);
-
-      System.out.println("VaVSN_Pxl_CamImgCoord[RtUpr][X] :   " + VaVSN_Pxl_CamImgCoord[RtUpr][0]);
-      System.out.println("VaVSN_Pxl_CamImgCoord[RtUpr][Y] :   " + VaVSN_Pxl_CamImgCoord[RtUpr][1]);
-  
-      System.out.println("VaVSN_Pxl_CamImgCoord[RtLwr][X] :   " + VaVSN_Pxl_CamImgCoord[RtLwr][0]);
-      System.out.println("VaVSN_Pxl_CamImgCoord[RtLwr][Y] :   " + VaVSN_Pxl_CamImgCoord[RtLwr][1]);
-  
-      System.out.println("VaVSN_Pxl_CamImgCoord[LtLwr][X] :   " + VaVSN_Pxl_CamImgCoord[LtLwr][0]);
-      System.out.println("VaVSN_Pxl_CamImgCoord[LtLwr][Y] :   " + VaVSN_Pxl_CamImgCoord[LtLwr][1]);
-  
-      System.out.println("VaVSN_Pxl_CamImgCoord[LtUpr][X] :   " + VaVSN_Pxl_CamImgCoord[LtUpr][0]);
-      System.out.println("VaVSN_Pxl_CamImgCoord[LtUpr][Y] :   " + VaVSN_Pxl_CamImgCoord[LtUpr][1]);
-  
-      System.out.println("VeVSN_Pxl_RefWidthTop :   " + VeVSN_Pxl_ImgWidthTop);
-      System.out.println("VeVSN_Pxl_RefWidthBtm :   " + VeVSN_Pxl_ImgWidthBtm);
-      System.out.println("VeVSN_Pxl_RefHeightLt :   " + VeVSN_Pxl_ImgHeightLt);
-      System.out.println("VeVSN_Pxl_RefHeightRt :   " + VeVSN_Pxl_ImgHeightRt);
-  
+      VeVSN_Pxl_ImgHeightRt = calcVSN_PxlLengthLineSeg(VaVSN_Pxl_CamImgCoord[RtLwr], VaVSN_Pxl_CamImgCoord[RtUpr]);  
     }
 
 
@@ -729,17 +690,18 @@ public double getVSN_Pxl_LL_TgtSideShort() {
       double LeVSN_Pxl_In;
       double LeVSN_Pxl_Cam2Tgt;
 
-      LeVSN_Pxl_In = VeVSN_Pxl_ImgWidthBtm;
+      if (VeVSN_Cnt_TgtCornAqrd == 4) {
+        LeVSN_Pxl_In = VeVSN_Pxl_ImgWidthBtm;
+      }
+      else {
+        LeVSN_Pxl_In = LL_TgtLngthHorz;
+      }
 
       /* To protect against a divide by zero error */
       if (LeVSN_Pxl_In < 1) { 
         LeVSN_Pxl_In = 1;
       }
    
-      System.out.println("KeVSN_l_RefTgtBtm :    " + K_Vision.KeVSN_l_RefTgtBtm);
-      System.out.println("VeVSN_Pxl_CamFocalPt : " + VeVSN_Pxl_CamFocalPt);
-      System.out.println("LeVSN_Pxl_In :         " + LeVSN_Pxl_In);  
-
       LeVSN_Pxl_Cam2Tgt = (K_Vision.KeVSN_l_RefTgtBtm * VeVSN_Pxl_CamFocalPt)/
                            LeVSN_Pxl_In;
 
@@ -781,25 +743,9 @@ public double getVSN_Pxl_LL_TgtSideShort() {
         LmVSM_k_TransVectNeg.zeros(1,3,CvType.CV_64F);
         LmVSM_k_ZerosVect.zeros(3,1,CvType.CV_64F);
 
-//                         3x1             3x3
-//  Calib3d.Rodrigues(VmVSM_k_RotVect, VmVSM_k_Rot);
-
-//                      3x3          3x3
-//  Core.transpose(VmVSM_k_Rot,LmVSM_k_RotInv);
-
-//                     3x1             1          3x1                  3x1
-//  Core.scaleAdd(VmVSM_k_TransVect, -1.0, LmVSM_k_ZerosVect, LmVSM_k_TransVectNeg);
-
-//                     3x3                 3x1                         3x3
-//  Core.multiply(LmVSM_k_RotInv, LmVSM_k_TransVectNeg, VmVSM_k_ImgPlaneZeroWorld);
-
-
         /* Angle2: Calculate horiz angle between the target perpendicular and the robot-target line */
         Calib3d.Rodrigues(VmVSM_k_RotVect, VmVSM_k_Rot);
         Core.transpose(VmVSM_k_Rot,LmVSM_k_RotInv);
-        System.out.println("VmVSM_k_TransVect :    " + VmVSM_k_TransVect.dump());
-        System.out.println("LmVSM_k_ZerosVect :    " + LmVSM_k_ZerosVect.dump());
-        System.out.println("LmVSM_k_TransVectNeg : " + LmVSM_k_TransVectNeg.dump());
         Core.scaleAdd(VmVSM_k_TransVect, -1.0, LmVSM_k_ZerosVect, LmVSM_k_TransVectNeg);
         System.out.println("LmVSM_k_RotInv :            " + LmVSM_k_RotInv.dump());
         System.out.println("LmVSM_k_TransVectNeg :      " + LmVSM_k_TransVectNeg.dump());

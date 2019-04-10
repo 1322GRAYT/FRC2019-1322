@@ -11,7 +11,6 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.Timer;
 import frc.robot.Robot;
-import frc.robot.commands.*;
 import frc.robot.calibrations.K_PID;
 
 
@@ -41,7 +40,16 @@ public class CLpid extends Subsystem {
   double  VePID_r_PwrCmndNorm;       // (normalized power)
   double  VePID_t_OnTgtTm;           // (seconds)
   double  VePID_t_OnTgtTmMax;        // (seconds)
-    
+	
+	/*  Calibration Data Manager */
+	double VePID_Deg_PosErrDB;          // (degrees)
+	double VePID_Deg_IntglErrDsblMin;   // (degrees)
+	double VePID_K_PropGx;              // (scalar)
+	double VePID_Pct_PropCorrMax;       // (percent)
+	double VePID_K_IntglGx;             // (scalar)
+	double VePID_Pct_IntglCorrMax;      // (percent)
+	double VePID_t_PstnTgtSyncMetThrsh; // (seconds)
+
     
   /**********************************************/
   /* Public Interface Definitions               */
@@ -168,26 +176,44 @@ public class CLpid extends Subsystem {
 	  * Drive System Rotate Control PI Control System.
 	  */ 
     public void mngPID_Cntrl() {
-      double LePID_Deg_PstAct;
 
 			if (Robot.NAV.getNAV_CL_TgtRqstActv() == true) {
-			  LePID_Deg_PstAct = -(Robot.VISION.getVSN_Deg_LL_TgtAngX());
+				VePID_Deg_PstnAct = Robot.VISION.getVSN_Deg_LL_TgtAngX();
 			}
 			else {
-				LePID_Deg_PstAct = Robot.NAV.getNAV_GyroAngle();
+				VePID_Deg_PstnAct = -(Robot.NAV.getNAV_GyroAngle());
 			}
-			VePID_Deg_PstnAct = LePID_Deg_PstAct;
+
 
    	  if (VePID_b_CL_Enbl == true) {
-	      VePID_Deg_PstnErr = calcPID_ErrSig(VePID_Deg_PstnDsrd, VePID_Deg_PstnAct,K_PID.KePID_Deg_PosErrDB);
-        VePID_b_PstnErrWithInDB = dtrmnPID_ErrInDB(VePID_Deg_PstnErr, K_PID.KePID_Deg_PosErrDB); 
-		    VePID_Deg_PstnErrAccum = calcPID_ErrAccum(VePID_Deg_PstnErrAccum, VePID_Deg_PstnErr, K_PID.KePID_Deg_IntglErrDsblMin);
+				if (Robot.NAV.getNAV_CL_TgtRqstActv() == true) {
+					VePID_Deg_PosErrDB = K_PID.KePID_Deg_VSN_PosErrDB;
+					VePID_Deg_IntglErrDsblMin = K_PID.KePID_Deg_VSN_IntglErrDsblMin;
+					VePID_K_PropGx = K_PID.KePID_K_VSN_PropGx;
+					VePID_Pct_PropCorrMax = K_PID.KePID_Pct_VSN_PropCorrMax;
+					VePID_K_IntglGx = K_PID.KePID_K_VSN_IntglGx;
+					VePID_Pct_IntglCorrMax = K_PID.KePID_Pct_VSN_IntglCorrMax;
+					VePID_t_PstnTgtSyncMetThrsh = K_PID.KePID_t_VSN_PstnTgtSyncMetThrsh;
+				}
+				else {
+					VePID_Deg_PosErrDB = K_PID.KePID_Deg_NAV_PosErrDB;
+					VePID_Deg_IntglErrDsblMin = K_PID.KePID_Deg_NAV_IntglErrDsblMin;
+					VePID_K_PropGx = K_PID.KePID_K_NAV_PropGx;
+					VePID_Pct_PropCorrMax = K_PID.KePID_Pct_NAV_PropCorrMax;
+					VePID_K_IntglGx = K_PID.KePID_K_NAV_IntglGx;
+					VePID_Pct_IntglCorrMax = K_PID.KePID_Pct_NAV_IntglCorrMax;
+					VePID_t_PstnTgtSyncMetThrsh = K_PID.KePID_t_NAV_PstnTgtSyncMetThrsh;
+				}
+
+	      VePID_Deg_PstnErr = calcPID_ErrSig(VePID_Deg_PstnDsrd, VePID_Deg_PstnAct, VePID_Deg_PosErrDB);
+        VePID_b_PstnErrWithInDB = dtrmnPID_ErrInDB(VePID_Deg_PstnErr, VePID_Deg_PosErrDB); 
+		    VePID_Deg_PstnErrAccum = calcPID_ErrAccum(VePID_Deg_PstnErrAccum, VePID_Deg_PstnErr, VePID_Deg_IntglErrDsblMin);
 		    VePID_Pct_FdFwdCorr = calcPID_FdFwdTerm(VePID_Deg_PstnErr);
-		    VePID_Pct_PropCorr = calcPID_PropTerm(VePID_Deg_PstnErr, K_PID.KePID_K_PropGx, K_PID.KePID_Pct_PropCorrMax);
-		    VePID_Pct_IntglCorr = calcPID_IntglTerm(VePID_Deg_PstnErrAccum, K_PID.KePID_K_IntglGx, K_PID.KePID_Pct_IntglCorrMax);
+				VePID_Pct_PropCorr = calcPID_PropTerm(VePID_Deg_PstnErr, VePID_K_PropGx, VePID_Pct_PropCorrMax);
+				VePID_Pct_IntglCorr = calcPID_IntglTerm(VePID_Deg_PstnErrAccum, VePID_K_IntglGx,VePID_Pct_IntglCorrMax);
 		    VePID_Pct_PwrCmnd = calcPID_TotCorr(VePID_Pct_FdFwdCorr, VePID_Pct_PropCorr, VePID_Pct_IntglCorr);
 		    VePID_r_PwrCmndNorm = VePID_Pct_PwrCmnd/100;
-				VePID_b_TgtCondCmplt = dtrmnPID_TgtCondMet(VePID_b_PstnErrWithInDB, VePID_t_TgtCondTmr, K_PID.KePID_t_PstnTgtSyncMetThrsh);
+				VePID_b_TgtCondCmplt = dtrmnPID_TgtCondMet(VePID_b_PstnErrWithInDB, VePID_t_TgtCondTmr, VePID_t_PstnTgtSyncMetThrsh);
 				
    	  }
    	  else {  // (PIDEnbl == false)
@@ -306,23 +332,38 @@ public class CLpid extends Subsystem {
   /** Method: calcPID_FdFwdTerm - Calculate the Feed-Forward Correction Term.
     * @return: Feed-Forward Correction Term (double)  */
     private double calcPID_FdFwdTerm(double ErrSig) {
+			double ErrSigAbs;
      	float ErrAxis;   // scalar
     	double FF_Corr;  // percent power
-     	
-     	ErrAxis = Robot.TBLLIB.AxisPieceWiseLinear_int((float)ErrSig,
-     	   		                                         K_PID.KnPID_Deg_FdFwdErrAxis,
-     			                                           (int)10);
-     	
-     	FF_Corr = Robot.TBLLIB.XY_Lookup_flt(K_PID.KtPID_Pct_FdFwdCorr,
-     			                                 ErrAxis,
-     		   	                               (int)10);
-     	
-     	if (FF_Corr < 0.0) {
-     		FF_Corr = 0.0;
+			float[] LnPID_Deg_Err;
+			float[] LtPID_Pct_FdFwdCorr;
+			
+			ErrSigAbs = Math.abs(ErrSig);
+
+			if (Robot.NAV.getNAV_CL_TgtRqstActv() == true) {
+				LnPID_Deg_Err = K_PID.KnPID_Deg_VSN_FdFwdErrAxis;
+				LtPID_Pct_FdFwdCorr =  K_PID.KtPID_Pct_VSN_FdFwdCorr;
 			}
-			else if (FF_Corr > 100.0) {
-     		FF_Corr = 100.0;;
-     	}
+			else {
+				LnPID_Deg_Err = K_PID.KnPID_Deg_NAV_FdFwdErrAxis;
+				LtPID_Pct_FdFwdCorr =  K_PID.KtPID_Pct_NAV_FdFwdCorr;
+			}
+
+     	ErrAxis = Robot.TBLLIB.AxisPieceWiseLinear_flt((float)ErrSigAbs, LnPID_Deg_Err, (int)10);     	
+     	FF_Corr = Robot.TBLLIB.XY_Lookup_flt(LtPID_Pct_FdFwdCorr, ErrAxis, (int)10);
+																						 
+			if (ErrSig < 0) {
+				FF_Corr = -FF_Corr;
+			}
+
+			if (FF_Corr >= 0.0) {
+				if (FF_Corr > 100.0)
+					FF_Corr = 100.0;
+			}
+			else { /* (FF_Corr < 0.0 )*/
+				if (FF_Corr < -100.0)
+					FF_Corr = -100.0;
+			}
 
      	return FF_Corr;
     }
@@ -335,17 +376,17 @@ public class CLpid extends Subsystem {
     * @param3: Proportional Correction Maximum Limit (double)
     * @return: Proportional Correction Term (double)  */
     private double calcPID_PropTerm(double ErrSig,
-    		                            float  PropGx,
-                                    float  CorrLimMax) {
+    		                            double PropGx,
+                                    double CorrLimMax) {
 			double P_Corr;  // percent power
 			 
-     	P_Corr = (double)PropGx * ErrSig;
+     	P_Corr = PropGx * ErrSig;
      	
-     	if (P_Corr > (double)CorrLimMax) {
-     		P_Corr = (double)CorrLimMax;
+     	if (P_Corr > CorrLimMax) {
+     		P_Corr = CorrLimMax;
      	}
-     	else if (P_Corr < (double)(-CorrLimMax)) {
-     		P_Corr = (double)(-CorrLimMax);
+     	else if (P_Corr < -CorrLimMax) {
+     		P_Corr = -CorrLimMax;
      	}
      	return P_Corr;
     }
@@ -358,11 +399,11 @@ public class CLpid extends Subsystem {
     * @param3: Proportional Correction Maximum Limit (double)
     * @return: Integral Correction Term (double)  */
     private double calcPID_IntglTerm(double ErrAccum,
-    		                             float  IntglGx,
-    		                             float  CorrLimMax) {
+    		                             double IntglGx,
+    		                             double CorrLimMax) {
       double I_Corr;     	
      	
-     	I_Corr = (double)IntglGx * ErrAccum;
+     	I_Corr = IntglGx * ErrAccum;
      	     	
     	if (I_Corr > CorrLimMax)
     	  I_Corr = CorrLimMax;
@@ -386,16 +427,17 @@ public class CLpid extends Subsystem {
      	double CmndPct; // %
      	
      	CmndPct = FdFwdTerm + PropTerm + IntglTerm;
- 	    
- 	    if (CmndPct > 100) {
- 	      CmndPct = 100;
- 	    }
- 	    else if (CmndPct < 0) {
- 	      CmndPct = 0;
- 	    }
+			 
+			if (CmndPct >= 0.0) {
+				if (CmndPct > 100.0)
+				CmndPct = 100.0;
+			}
+			else { /* (CmndPct < 0.0 )*/
+				if (CmndPct < -100.0)
+				CmndPct = -100.0;
+			}
 
 	  return CmndPct;
- 
  	  }
      
 
@@ -404,11 +446,11 @@ public class CLpid extends Subsystem {
     * satisfied. 
     * @param1: Indication of basic target condition has been met (boolean)
     * @param2: Condition Timer (double)
-    * @param3: Target Condition Time Threshold (float)
+    * @param3: Target Condition Time Threshold (double)
     * @return: Indication that target condition time threshold has been met (boolean)  */
     private boolean dtrmnPID_TgtCondMet(boolean CondMet,
                                         Timer   CondTmr,
-                                        float   CondMetThrsh) {
+                                        double  CondMetThrsh) {
     	boolean TgtCondCmptd = false;
     	
     	if (CondMet == false)  { // Error outside Target DB

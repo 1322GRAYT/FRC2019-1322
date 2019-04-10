@@ -12,7 +12,7 @@ import frc.robot.calibrations.K_System;
 
 
 public class Nav extends Subsystem {
-//  private AHRS Gyro = new AHRS(SerialPort.Port.kMXP);  // todo rfs
+  private AHRS ahrs = new AHRS(SerialPort.Port.kMXP);
   private double VeNAV_Deg_GyroAngle;      // double: degree heading
 
 	// Drive System Encoders/Wheels
@@ -197,6 +197,12 @@ public class Nav extends Subsystem {
   public void mngNAV_CmndSysTsk1() {
 //    updNAV_GyroAngle();
     updNAV_DrvWhlData();
+    if (getNAV_CL_TgtRqstActv() == true) {
+      Robot.PID.setPID_Deg_PstnTgt(true, 0.0);
+    }
+    else {
+      Robot.PID.setPID_Deg_PstnTgt(false, 0.0);
+    }
   }
 
 /** Method: mngNAV_CmndSysTsk2 - Manages the Navigation Control
@@ -211,11 +217,11 @@ public class Nav extends Subsystem {
   * Gyrometer as the 0 degree mark.
   */	
   public void rstNAV_GyroAngle() {
- //   Gyro.reset();  // todo rfs
+    ahrs.reset();
   }
 
 
-/** Method: rstNAV_GyroAngle - Provides access to the current value
+/** Method: getNAV_GyroAngle - Provides access to the current value
   * of the Gyrometer Angle reading (Positive is Clockwise: [0 to 360) )
   */	
   public double getNAV_GyroAngle() {
@@ -285,16 +291,16 @@ public class Nav extends Subsystem {
   * Gyrometer to set the proper home / oridinal positions.
   */
   private boolean chkNAV_GyroCal() {
-   return(true);
- //   return(Gyro.isCalibrating());  // todo rfs
+    return(ahrs.isCalibrating());
   }
 
 
-/** Method: updNAV_GyroAngle - Provides access to the current value
-  * of the Gyrometer Angle reading (Positive is Clockwise: [0 to 360) )
+/** Method: updNAV_GyroAngle - Updates Local Gyro Angle value the with the
+  * current value of the Gyrometer Angle reading from the sensor.
+  * (Positive is Clockwise: [0 to 360) )
   */	
   private void updNAV_GyroAngle() {
-//    VeNAV_Deg_GyroAngle = Gyro.getAngle();  // todo rfs
+    VeNAV_Deg_GyroAngle = ahrs.getAngle();
   }
 
 
@@ -341,21 +347,22 @@ public class Nav extends Subsystem {
       if ((Math.abs(getNAV_r_NormPwrDrvrLtY()) >= K_Drive.KeDRV_r_DB_InpLong) ||
           (Math.abs(getNAV_r_NormPwrDrvrLtX()) >= K_Drive.KeDRV_r_DB_InpLat) ||
           (Math.abs(getNAV_r_NormPwrDrvrRtX()) >= K_Drive.KeDRV_r_DB_InpRot)) {
-        setNAV_b_DrvStkRqstActv(LeNAV_b_DrvrStkCntrl);
+          LeNAV_b_DrvrStkCntrl = true;
       }
+      setNAV_b_DrvStkRqstActv(LeNAV_b_DrvrStkCntrl);
 
       /* Drive Control Arbitration */
       if ((getNAV_CL_TgtRqstActv() == true) &&
           (getNAV_CL_DrvRqstActv() == true)) {
-        LeNAV_r_NormPwrCmdLong = 0.0;
-        LeNAV_r_NormPwrCmdLat =  0.0;
-        LeNAV_r_NormPwrCmdRot =  Robot.PID.getPID_r_PwrCmndNorm();
-      }
-      else if ((getNAV_CL_TgtRqstActv() == true) &&
-               (getNAV_CL_DrvRqstActv() == false)) {
         LeNAV_r_NormPwrCmdLong = K_Nav.KeNAV_r_CL_NormPwrLong;
         LeNAV_r_NormPwrCmdLat =  Robot.PID.getPID_r_PwrCmndNorm() * K_Nav.KeNAV_r_CL_ScalarRotToLat;
-        LeNAV_r_NormPwrCmdRot =  0.0;                 
+        LeNAV_r_NormPwrCmdRot =  0.0;
+          }
+      else if ((getNAV_CL_TgtRqstActv() == true) &&
+               (getNAV_CL_DrvRqstActv() == false)) {        
+        LeNAV_r_NormPwrCmdLong = 0.0;
+        LeNAV_r_NormPwrCmdLat =  0.0;
+        LeNAV_r_NormPwrCmdRot =  Robot.PID.getPID_r_PwrCmndNorm();        
       }
       else if (getNAV_b_DrvStkRqstActv()) {
         LeNAV_r_NormPwrCmdLong = getNAV_r_NormPwrDrvrLtY();
@@ -373,11 +380,12 @@ public class Nav extends Subsystem {
       VeNAV_r_NormPwrCmdLong = LeNAV_r_NormPwrCmdLong;
       VeNAV_r_NormPwrCmdLat =  LeNAV_r_NormPwrCmdLat;
       VeNAV_r_NormPwrCmdRot =  LeNAV_r_NormPwrCmdRot;
+
       if ((K_System.KeSYS_b_CL_DrvTgtEnbl == true) && (getNAV_b_DrvAutoCmdActv() == false)) {
         Robot.DRIVES.DriveInVoltage(LeNAV_r_NormPwrCmdLong, LeNAV_r_NormPwrCmdLat, LeNAV_r_NormPwrCmdRot);
         Robot.DRIVES.setSafety(LeNAV_b_SetSafe);
       }
-      if (K_System.KeSYS_b_DebugEnblCL == true) {
+      if ((K_System.KeSYS_b_DebugEnblCL == true) && (getNAV_CL_TgtRqstActv() == true)) {
         Robot.DASHBOARD.updateSmartDashTgtCLData();
         Robot.DASHBOARD.updateSmartDashDrvSysData();
       }

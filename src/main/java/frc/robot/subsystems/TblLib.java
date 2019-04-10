@@ -14,7 +14,17 @@ public class TblLib extends Subsystem {
 	
     private static final int MIN_INT =  0x8000;
     private static final int MAX_INT =  0x7FFF;	
-    
+
+		
+
+	/** Method: AxisPieceWiseLinear_flt - This function will return an rescaled
+	  * axis index value from a Piece-Wise Linear tunable axis of type float.
+	  * @param1: Axis Input Value in engineering units (float)
+	  * @param2: Axis Array Object Reference (reference to array of floats)
+	  * @param3: Table Size (int)
+	  * @return: Rescaled Axis Output value in a normalized index value (float) */	
+
+
     
 	/** Method: AxisPieceWiseLinear_int - This function will return an rescaled
 	  * axis index value from a Piece-Wise Linear tunable axis of type Integer.
@@ -24,10 +34,9 @@ public class TblLib extends Subsystem {
 	  * @return: Rescaled Axis Output value in a normalized index value (float) */
 	public float AxisPieceWiseLinear_int(float  InpVal,
 	                                     int [] AxisArray,
-	                                     int    TblSize)
-	  {
+	                                     int    TblSize) {
 	  int    InpValInt;
-      int    TblSegs;
+    int    TblSegs;
 	  int    ArrayIdx;
 	  float  InterpFrac;
 	  float  AxisOutVal;
@@ -38,45 +47,45 @@ public class TblLib extends Subsystem {
 	  // Convert input value from float to int
 	  if (InpVal <= (float)MIN_INT)
 	    {
-		InpValInt = MIN_INT;
+		  InpValInt = MIN_INT;
 	    }
 	  else if (InpVal >= (float)MAX_INT)
 	    {
-		InpValInt = MAX_INT;
+		  InpValInt = MAX_INT;
 	    }
 	  else
 	    {
-		InpValInt = (int)InpVal;
+		  InpValInt = (int)InpVal;
 	    }
 
       /* determine where the input value is in the array based on the calibrated
        * cell values, and linearly interpolate between cells if necessary. */
 	  if (InpValInt <= AxisArray[0])
-	      {
+	    {
 		  AxisOutVal = (float)0.0;
-	      }
+	    }
 	  else if (InpValInt >= AxisArray[TblSegs])
-	      {
-		  AxisOutVal = (float)1.0;
-	      }
+	    {
+		  AxisOutVal = 1;
+	    }
 	  else
-	      {
-	      for (ArrayIdx = 1;
+	    {
+	    for (ArrayIdx = 1;
 	    	   InpValInt >= AxisArray[ArrayIdx];
 	    	   ArrayIdx++)
-	        {}
+	      {}
 
-	      ArrayIdx--;
+	    ArrayIdx--;
 
-	      InterpFrac = InterpCoefFrac(InpVal,
-	                                  ((float)(AxisArray[ArrayIdx])),
-	                                  ((float)(AxisArray[ArrayIdx + 1])));
+	    InterpFrac = InterpCoefFrac(InpVal,
+	                                ((float)(AxisArray[ArrayIdx])),
+	                                ((float)(AxisArray[ArrayIdx + 1])));
 
-	      AxisOutVal = ((float)ArrayIdx + InterpFrac) / (float)TblSegs;
-	      }
+	    AxisOutVal = ((float)ArrayIdx + InterpFrac) / (float)TblSegs;
+	    }
 
 	  return AxisOutVal;
-	  }
+	}
 
 	
 	/** Method: AxisPieceWiseLinear_flt - This function will return an rescaled

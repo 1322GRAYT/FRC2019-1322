@@ -7,6 +7,8 @@
 
 package frc.robot;
 
+import javax.lang.model.util.ElementScanner6;
+
 /**
  * The RobotMap is a mapping from the ports sensors and actuators are wired into
  * to a variable name. This provides flexibility changing wiring, makes checking
@@ -41,6 +43,14 @@ public class RobotMap {
 
   public static final int[] RobotLiftAddresses = {10,11};
   public static final int RobotLiftExtendAddress = 12;
+  //Relays
+  public static final int RobotScissorLock = 2;  
+  public static final int PracticeBotCompressor = 1; // Practice Bot only!  
+
+
+
+
+
 
 	/***********************************************
    * Air Things Competition Bot

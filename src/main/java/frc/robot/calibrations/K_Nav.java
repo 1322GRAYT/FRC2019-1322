@@ -20,7 +20,7 @@ public class K_Nav {
     * for Driving the Robot forward while tracking the vision target
     * via Closed-Loop Control.
     */
-    public static final double KeNAV_r_CL_NormPwrLong = 0.5;
+    public static final double KeNAV_r_CL_NormPwrLong = 0.3;
 
 	/** KeNAV_r_CL_ScalarRotToLat: Drive System Normalized Power Command
     * Scalar to Convert Closed-Loop Rotational Power Command to Closed-Loop

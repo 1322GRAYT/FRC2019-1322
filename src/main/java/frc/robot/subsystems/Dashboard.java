@@ -16,6 +16,11 @@ import frc.robot.Robot;
  */
 public class Dashboard extends Subsystem {
 
+  enum DebugSlct {
+    DebugDsbl, DebugEnblDash, DebugEnblSmartDash, DebugEnblBoth
+  }
+
+
   /* Called to Update SmartDash Data for Display of Drive Data */
   public void updateSmartDashDrvData() {
     SmartDashboard.putNumber("Encoder Cnts FL : ", Robot.NAV.getNAV_cnt_EncdrCnt(0));
@@ -81,7 +86,7 @@ public class Dashboard extends Subsystem {
     SmartDashboard.putNumber("LL Tgt Skew : ", Robot.VISION.getVSN_Deg_LL_TgtSkew());
     SmartDashboard.putNumber("LL Tgt Side Short : ", Robot.VISION.getVSN_Pxl_LL_TgtSideShort());
     SmartDashboard.putNumber("LL Tgt Side Long : ", Robot.VISION.getVSN_Pxl_LL_TgtSideLong());
-    SmartDashboard.putNumber("LL Tgt Lngth Hort : ", Robot.VISION.getVSN_Pxl_LL_TgtLngthHort());
+    SmartDashboard.putNumber("LL Tgt Lngth Horz : ", Robot.VISION.getVSN_Pxl_LL_TgtLngthHorz());
     SmartDashboard.putNumber("LL Tgt Lngth Vert : ", Robot.VISION.getVSN_Pxl_LL_TgtLngthVert());
     SmartDashboard.putNumber("LL Corner RtU X : ", Robot.VISION.getVSN_Pxl_LL_TgtCornX(0));
     SmartDashboard.putNumber("LL Corner RtU Y : ", Robot.VISION.getVSN_Pxl_LL_TgtCornY(0));
@@ -99,7 +104,7 @@ public class Dashboard extends Subsystem {
     System.out.println("LL Tgt Skew : " + Robot.VISION.getVSN_Deg_LL_TgtSkew());
     System.out.println("LL Tgt Side Short : " + Robot.VISION.getVSN_Pxl_LL_TgtSideShort());
     System.out.println("LL Tgt Side Long : " + Robot.VISION.getVSN_Pxl_LL_TgtSideLong());
-    System.out.println("LL Tgt Lngth Hort : " + Robot.VISION.getVSN_Pxl_LL_TgtLngthHort());
+    System.out.println("LL Tgt Lngth Horz : " + Robot.VISION.getVSN_Pxl_LL_TgtLngthHorz());
     System.out.println("LL Tgt Lngth Vert : " + Robot.VISION.getVSN_Pxl_LL_TgtLngthVert());
     System.out.println("LL Corner RtU X : " + Robot.VISION.getVSN_Pxl_LL_TgtCornX(0));
     System.out.println("LL Corner RtU Y : " + Robot.VISION.getVSN_Pxl_LL_TgtCornY(0));
@@ -182,8 +187,7 @@ public class Dashboard extends Subsystem {
     SmartDashboard.putNumber("VeNAV_r_NormPwrDrvrLtY :  ", Robot.NAV.getNAV_r_NormPwrDrvrLtY());
     SmartDashboard.putNumber("VeNAV_r_NormPwrDrvrLtX :  ", Robot.NAV.getNAV_r_NormPwrDrvrLtX());
     SmartDashboard.putNumber("VeNAV_r_NormPwrDrvrRtX :  ", Robot.NAV.getNAV_r_NormPwrDrvrRtX());
-
-/*    
+    
     System.out.println("VeNAV_b_CL_TgtRqstActv : " + Robot.NAV.getNAV_CL_TgtRqstActv());
     System.out.println("VeNAV_b_CL_DrvRqstActv : " + Robot.NAV.getNAV_CL_DrvRqstActv());
     System.out.println("VeNAV_b_DrvAutoCmdActv : " + Robot.NAV.getNAV_b_DrvAutoCmdActv());
@@ -194,7 +198,6 @@ public class Dashboard extends Subsystem {
     System.out.println("VeNAV_r_NormPwrDrvrLtY : " + Robot.NAV.getNAV_r_NormPwrDrvrLtY());
     System.out.println("VeNAV_r_NormPwrDrvrLtX : " + Robot.NAV.getNAV_r_NormPwrDrvrLtX());
     System.out.println("VeNAV_r_NormPwrDrvrRtX : " + Robot.NAV.getNAV_r_NormPwrDrvrRtX());
-*/    
   }
 
 
