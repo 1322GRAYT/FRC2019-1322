@@ -10,6 +10,7 @@ package frc.robot;
 import edu.wpi.cscore.UsbCamera;
 import edu.wpi.cscore.VideoSource.ConnectionStrategy;
 import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.wpilibj.Relay;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -72,8 +73,7 @@ public class Robot extends TimedRobot {
     PID.mngPID_InitCntrl();
     NAV.mngNAV_InitCntrl();
     LIFT.mngLFT_InitCntrl();
-    //setLFT_b_JackLckApply(**Off**); //todo rfs
-
+    LIFT.setLFT_e_JackLckCmnd(Relay.Value.kForward);
 
     m_chooser.setDefaultOption("Driver Control Only", new CA_RevertToTele());
 		m_chooser.addOption("Auto Drive Forward", new CA_DrvPstnTgt(0, 140000));

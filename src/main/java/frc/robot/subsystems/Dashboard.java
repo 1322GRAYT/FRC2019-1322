@@ -226,26 +226,25 @@ public void updINS_RRL_RawLL_Data() {
 
   /* Called to Update Smart Dashboard Data for Display of Lift System Data */
   public void updINS_SDB_Lift_Sys() { 
-    SmartDashboard.putBoolean("VeLFT_b_JackExtdRqst :   ", Robot.LIFT.getLFT_b_JackExtdRqst());
-    SmartDashboard.putBoolean("VeLFT_b_JackRtctRqst :   ", Robot.LIFT.getLFT_b_JackRtctRqst());
-    SmartDashboard.putBoolean("VeLFT_b_DrwrExtdRqst :   ", Robot.LIFT.getLFT_b_DrwrExtdRqst());
-    SmartDashboard.putBoolean("VeLFT_b_DrwrRtctRqst :   ", Robot.LIFT.getLFT_b_DrwrRtctRqst());
-    SmartDashboard.putBoolean("VeLFT_b_StblzrExtdRqst : ", Robot.LIFT.getLFT_b_StblzrExtdRqst());
-    SmartDashboard.putBoolean("VeLFT_b_StblzrRtctRqst : ", Robot.LIFT.getLFT_b_StblzrRtctRqst());
+    SmartDashboard.putBoolean("VeLFT_b_JackExtdCmnd :   ", Robot.LIFT.getLFT_b_JackExtdCmnd());
+    SmartDashboard.putBoolean("VeLFT_b_JackRtctCmnd :   ", Robot.LIFT.getLFT_b_JackRtctCmnd());
+    SmartDashboard.putBoolean("VeLFT_b_DrwrExtdCmnd :   ", Robot.LIFT.getLFT_b_DrwrExtdCmnd());
+    SmartDashboard.putBoolean("VeLFT_b_DrwrRtctCmnd :   ", Robot.LIFT.getLFT_b_DrwrRtctCmnd());
     SmartDashboard.putBoolean("VeLFT_b_StblzrExtdCmnd : ", Robot.LIFT.getLFT_b_StblzrExtdCmnd());
-    SmartDashboard.putString("VeLFT_b_JackLckApply :    ", Robot.LIFT.getLFT_b_JackLckApply());
+    SmartDashboard.putBoolean("VeLFT_b_StblzrRtctCmnd : ", Robot.LIFT.getLFT_b_StblzrRtctCmnd());
+    SmartDashboard.putString("VeLFT_e_JackLckCmnd :    ", Robot.LIFT.getLFT_e_JackLckCmnd());
   }
 
   /* Called to Update RoboRIO Logfile for Display of Lift System Data */
   public void updINS_RRL_Lift_Sys() { 
-    System.out.println("VeLFT_b_JackExtdRqst :   " + Robot.LIFT.getLFT_b_JackExtdRqst());
-    System.out.println("VeLFT_b_JackRtctRqst :   " + Robot.LIFT.getLFT_b_JackRtctRqst());
-    System.out.println("VeLFT_b_DrwrExtdRqst :   " + Robot.LIFT.getLFT_b_DrwrExtdRqst());
-    System.out.println("VeLFT_b_DrwrRtctRqst :   " + Robot.LIFT.getLFT_b_DrwrRtctRqst());
-    System.out.println("VeLFT_b_StblzrExtdRqst : " + Robot.LIFT.getLFT_b_StblzrExtdRqst());
-    System.out.println("VeLFT_b_StblzrRtctRqst : " + Robot.LIFT.getLFT_b_StblzrRtctRqst());
+    System.out.println("VeLFT_b_JackExtdCmnd :   " + Robot.LIFT.getLFT_b_JackExtdCmnd());
+    System.out.println("VeLFT_b_JackRtctCmnd :   " + Robot.LIFT.getLFT_b_JackRtctCmnd());
+    System.out.println("VeLFT_b_DrwrExtdCmnd :   " + Robot.LIFT.getLFT_b_DrwrExtdCmnd());
+    System.out.println("VeLFT_b_DrwrRtctCmnd :   " + Robot.LIFT.getLFT_b_DrwrRtctCmnd());
     System.out.println("VeLFT_b_StblzrExtdCmnd : " + Robot.LIFT.getLFT_b_StblzrExtdCmnd());
-    System.out.println("VeLFT_b_JackLckApply :    " + Robot.LIFT.getLFT_b_JackLckApply());
+    System.out.println("VeLFT_b_StblzrRtctCmnd : " + Robot.LIFT.getLFT_b_StblzrRtctCmnd());
+    System.out.println("VeLFT_b_StblzrRtctCmnd : " + Robot.LIFT.getLFT_b_StblzrRtctCmnd());
+    System.out.println("VeLFT_e_JackLckCmnd :   " + Robot.LIFT.getLFT_e_JackLckCmnd());
   }
 
 

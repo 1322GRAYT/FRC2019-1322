@@ -196,7 +196,7 @@ public class Nav extends Subsystem {
   * Command System Periodic Task 1 (runs First).
   */	
   public void mngNAV_CmndSysTsk1() {
-//    updNAV_GyroAngle();
+    updNAV_GyroAngle();
     updNAV_DrvWhlData();
     if (getNAV_CL_TgtRqstActv() == true) {
       Robot.PID.setPID_Deg_PstnTgt(true, 0.0);

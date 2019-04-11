@@ -108,6 +108,7 @@ public class OI {
     AuxStick.bButton.whenPressed(new CC_ClawHatchCntrl(true));
     //When Right Bumper is pressed, push claw out, when Left bumper is pressed, pull claw in
     AuxStick.rightBumper.toggleWhenPressed(new CC_ClawBallCntrl());
+    AuxStick.leftBumper.whenPressed(new CC_ClawRtct());
   }
 
 }
