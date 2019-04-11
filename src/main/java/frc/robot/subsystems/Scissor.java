@@ -63,6 +63,11 @@ public class Scissor extends Subsystem {
     robotLiftR.set(!up);
   }
 
+  public boolean getLiftRobotPnumatic() {
+    return(robotLiftL.get());
+  }
+    
+
   public boolean getFloorSensor() {
     return edgeSensor.get();
   }

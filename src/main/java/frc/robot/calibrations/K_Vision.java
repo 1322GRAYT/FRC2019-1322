@@ -37,10 +37,10 @@ public class K_Vision {
     * Columns: (X,Y) */
    public static final int KaVSN_Pxl_RefImgCoord[][] = 
      {/*  X ,  Y */ 
-       { 59,  31}, /* RtUpper Corner */
-       { 51,  34}, /* RtLower Corner */
-       { 48,  24}, /* LtLower Corner */
-       { 58,  20}  /* LtUpper Corner */
+       { 176,  96}, /* RtUpper Corner */
+       { 193, 118}, /* RtLower Corner */
+       { 100, 149}, /* LtLower Corner */
+       { 107, 118}  /* LtUpper Corner */
      };
 
 
@@ -63,8 +63,14 @@ public class K_Vision {
  	/** KeVSN_l_RefTgtToCamDist: Length of the distance between the
    * target and the camera at the camera calibration reference
    * distance in measured inches. */
-   public static final double KeVSN_l_RefTgtToCamDist = 30.75; // inches
- 
+   public static final double KeVSN_l_RefTgtToCamDist = 38.5; // inches
+
+ 	/** KeVSN_l_RbtFrameAllwnc: Robot Frame Buffer Allowance to subtract
+   * off of Camera to Target Distance when determining where to place
+   * target to drive robot in front of target. */
+  public static final double KeVSN_l_RbtFrameAllwnc = 10.0; // inches
+
+
 
   /**************************************************/
 	/*  Vision Target Closed-Loop Error Calibrations  */

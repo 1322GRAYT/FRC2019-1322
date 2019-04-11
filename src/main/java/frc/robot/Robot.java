@@ -15,10 +15,10 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 import frc.robot.subsystems.*;
 import frc.robot.calibrations.K_System;
 import frc.robot.commands.*;
-import frc.robot.models.*;
 
 
 /**
@@ -29,6 +29,7 @@ import frc.robot.models.*;
  * project.
  */
 public class Robot extends TimedRobot {
+
   public static OI m_oi;
 
   public final static TblLib          TBLLIB    = new TblLib();
@@ -71,6 +72,8 @@ public class Robot extends TimedRobot {
     PID.mngPID_InitCntrl();
     NAV.mngNAV_InitCntrl();
     LIFT.mngLFT_InitCntrl();
+    //setLFT_b_JackLckApply(**Off**); //todo rfs
+
 
     m_chooser.setDefaultOption("Driver Control Only", new CA_RevertToTele());
 		m_chooser.addOption("Auto Drive Forward", new CA_DrvPstnTgt(0, 140000));

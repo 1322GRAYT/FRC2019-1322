@@ -24,16 +24,16 @@ public class CT_LiftInpVert extends Command {
   protected void initialize() {
   
     if (InpRqst == 1) {
-      Robot.LIFT.setLFT_JackExtdRqst(true);
-      Robot.LIFT.setLFT_JackRtctRqst(false);
+      Robot.LIFT.setLFT_b_JackExtdRqst(true);
+      Robot.LIFT.setLFT_b_JackRtctRqst(false);
     }
     else if (InpRqst == -1) {
-      Robot.LIFT.setLFT_JackExtdRqst(false);
-      Robot.LIFT.setLFT_JackRtctRqst(true);
+      Robot.LIFT.setLFT_b_JackExtdRqst(false);
+      Robot.LIFT.setLFT_b_JackRtctRqst(true);
     }
     else {
-      Robot.LIFT.setLFT_JackExtdRqst(false);
-      Robot.LIFT.setLFT_JackRtctRqst(false);
+      Robot.LIFT.setLFT_b_JackExtdRqst(false);
+      Robot.LIFT.setLFT_b_JackRtctRqst(false);
     }
   }
 
@@ -57,8 +57,8 @@ public class CT_LiftInpVert extends Command {
   // subsystems is scheduled to run
   @Override
   protected void interrupted() {
-    Robot.LIFT.setLFT_JackExtdRqst(false);
-    Robot.LIFT.setLFT_JackRtctRqst(false);
+    Robot.LIFT.setLFT_b_JackExtdRqst(false);
+    Robot.LIFT.setLFT_b_JackRtctRqst(false);
   }
 
 }

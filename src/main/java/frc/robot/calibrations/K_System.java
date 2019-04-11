@@ -16,15 +16,16 @@ import frc.robot.subsystems.Dashboard;
  */
 public class K_System {
 
+
     /****************************************/
 	/*   General System Configuration   */
 	/****************************************/	 	
 
 	/** KeSYS_b_CL_DrvTgtEnbl: Enable Closed-Loop Vision Targeting Drive Control. */
-    public static final boolean KeSYS_b_CL_DrvTgtEnbl = false;
+    public static final boolean KeSYS_b_CL_DrvTgtEnbl = true;
 
 	/** KeSYS_b_NewLiftEnbl: Enable the use of the new Lift Control strategy. */
-    public static final boolean KeSYS_b_NewLiftEnbl = false;
+    public static final boolean KeSYS_b_NewLiftEnbl = true;
 
 	/** KeSYS_t_LoopRt: Execution Loop Rate Period for the Autonomous
 	 * Command Group Controls (sec). */
@@ -45,12 +46,17 @@ public class K_System {
 	 * Are Broadcast and Updated, if False they are turned off to maximize
 	 * thru-put for controls. For the Closed-Loop Tracking System. */
     public static final boolean KeSYS_b_DebugEnblCL = false;
-//	public static final Robot.Dashboard.DebugSlct KeSYS_e_DebugEnblCL = DebugEnblBoth;
+	// public static final Robot.DASHBOARD.DebugSlct KeSYS_e_DebugEnblCL = DebugEnblBoth;
 
 	/** KeSYS_b_DebugEnblDrv: If True the Debug Smart Dash Display Variables
 	 * Are Broadcast and Updated, if False they are turned off to maximize
 	 * thru-put for controls.  For the Drive System.  */
     public static final boolean KeSYS_b_DebugEnblDrv = false;
+
+	/** KeSYS_b_DebugEnblLft: If True the Debug Smart Dash Display Variables
+	 * Are Broadcast and Updated, if False they are turned off to maximize
+	 * thru-put for controls.  For the Lift System.  */
+    public static final boolean KeSYS_b_DebugEnblLft = false;
 
 	    
 }

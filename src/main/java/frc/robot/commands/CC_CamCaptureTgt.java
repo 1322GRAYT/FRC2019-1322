@@ -56,16 +56,18 @@ public class CC_CamCaptureTgt extends Command {
   // Called once after isFinished returns true
   @Override
   protected void end() {
-    Robot.DASHBOARD.updateSmartDashCamCLData();
-    Robot.DASHBOARD.updateSmartDashTgtCLData();
-
+    Robot.DASHBOARD.updINS_SDB_PID_CL_Err();
+    Robot.DASHBOARD.updINS_RRL_PID_CL_Err();
+    Robot.DASHBOARD.updINS_SDB_PID_CorrCalc();
+    Robot.DASHBOARD.updINS_RRL_PID_CorrCalc();
     System.out.println("Cam Capture Target Begin Processing. ");
     
     if (K_System.KeSYS_b_DebugEnblVsn == true) {
       Robot.VISION.MngVSN_CamImgProc();
     }
     if (K_System.KeSYS_b_DebugEnblVsn == true) {
-      Robot.DASHBOARD.updateSmartDashCamImgData();
+      Robot.DASHBOARD.updINS_SDB_VSN_CamImgCalc();
+      Robot.DASHBOARD.updINS_RRL_VSN_CamImgCalc();
     }
   }
 

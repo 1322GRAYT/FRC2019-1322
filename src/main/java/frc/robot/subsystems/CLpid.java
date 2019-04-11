@@ -50,6 +50,11 @@ public class CLpid extends Subsystem {
 	double VePID_Pct_IntglCorrMax;      // (percent)
 	double VePID_t_PstnTgtSyncMetThrsh; // (seconds)
 
+
+  public CLpid() {
+	  /* Empty Constructor */
+	}
+
     
   /**********************************************/
   /* Public Interface Definitions               */

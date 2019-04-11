@@ -21,8 +21,8 @@ public class Dashboard extends Subsystem {
   }
 
 
-  /* Called to Update SmartDash Data for Display of Drive Data */
-  public void updateSmartDashDrvData() {
+  /* Called to Update Smart Dashboard Data for Display of Drive Navigation Drive Data */
+  public void updINS_SDB_NAV_Drv() { 
     SmartDashboard.putNumber("Encoder Cnts FL : ", Robot.NAV.getNAV_cnt_EncdrCnt(0));
     SmartDashboard.putNumber("Encoder Cnts FR : ", Robot.NAV.getNAV_cnt_EncdrCnt(1));
     SmartDashboard.putNumber("Encoder Cnts RL : ", Robot.NAV.getNAV_cnt_EncdrCnt(2));
@@ -43,8 +43,10 @@ public class Dashboard extends Subsystem {
     SmartDashboard.putNumber("Wheel Vel FR : ", Robot.NAV.getNAV_v_WhlVel(1));
     SmartDashboard.putNumber("Wheel Vel RL : ", Robot.NAV.getNAV_v_WhlVel(2));
     SmartDashboard.putNumber("Wheel Vel RR : ", Robot.NAV.getNAV_v_WhlVel(3));
+  }
 
-/*    
+  /* Called to Update RoboRIO Logfile for Display of Drive Navigation Drive Data */
+  public void updINS_RRL_NAV_Drv() { 
     System.out.println("Encoder Cnts FL : " + Robot.NAV.getNAV_cnt_EncdrCnt(0));
     System.out.println("Encoder Cnts FR : " + Robot.NAV.getNAV_cnt_EncdrCnt(1));
     System.out.println("Encoder Cnts RL : " + Robot.NAV.getNAV_cnt_EncdrCnt(2));
@@ -65,20 +67,23 @@ public class Dashboard extends Subsystem {
     System.out.println("Wheel Vel FR : " + Robot.NAV.getNAV_v_WhlVel(1));
     System.out.println("Wheel Vel RL : " + Robot.NAV.getNAV_v_WhlVel(2));
     System.out.println("Wheel Vel RR : " + Robot.NAV.getNAV_v_WhlVel(3));
-*/
   }
+  
 
 
   /* Called to Update SmartDash Data for Display of Vision Camera Calibration Data */
-  public void updateSmartDashCamCalData() {
+  public void updINS_SDB_CamCal() {
     SmartDashboard.putNumber("Cam Focal Length (pixels) : ", Robot.VISION.getVSN_Pxl_CamFocalPt());
-
+  }
+  
+  /* Called to Update SmartDash Data for Display of Vision Camera Calibration Data */
+  public void updINS_RRL_CamCal() {
     System.out.println("Cam Focal Length (pixels) :  " + Robot.VISION.getVSN_Pxl_CamFocalPt());
   }
 
 
-  /* Called to Update SmartDash Data for Display of Camera Lime Light Data */
-  public void updateSmartDashCamLLData() {
+  /* Called to Update Smart Dashboard Data for Display of Vision raw Camera Limelight Data */
+    public void updINS_SDB_RawLL_Data() {
     SmartDashboard.putNumber("LL Tgt Vld : ", Robot.VISION.getVSN_b_LL_TgtVld());
     SmartDashboard.putNumber("LL Tgt Ang-X : ", Robot.VISION.getVSN_Deg_LL_TgtAngX());
     SmartDashboard.putNumber("LL Tgt Ang-Y : ", Robot.VISION.getVSN_Deg_LL_TgtAngY());
@@ -96,7 +101,10 @@ public class Dashboard extends Subsystem {
     SmartDashboard.putNumber("LL Corner LtL Y : ", Robot.VISION.getVSN_Pxl_LL_TgtCornY(2));
     SmartDashboard.putNumber("LL Corner LtR X : ", Robot.VISION.getVSN_Pxl_LL_TgtCornX(3));
     SmartDashboard.putNumber("LL Corner LtR Y : ", Robot.VISION.getVSN_Pxl_LL_TgtCornY(3));
+  }
 
+/* Called to Update RoboRIO Logfile for Display of Vision raw Camera Limelight Data */
+public void updINS_RRL_RawLL_Data() {
     System.out.println("LL Tgt Vld : " + Robot.VISION.getVSN_b_LL_TgtVld());
     System.out.println("LL Tgt Ang-X : " + Robot.VISION.getVSN_Deg_LL_TgtAngX());
     System.out.println("LL Tgt Ang-Y : " + Robot.VISION.getVSN_Deg_LL_TgtAngY());
@@ -117,20 +125,24 @@ public class Dashboard extends Subsystem {
   }
 
 
-  /* Called to Update SmartDash Data for Display of Camera Closed-Loop Data */
-  public void updateSmartDashCamCLData() { 
+
+  /* Called to Update SmartDash Data for Display of Closed-Loop Error Data. */
+  public void updINS_SDB_PID_CL_Err() { 
     SmartDashboard.putNumber("VePID_Deg_PstnErr :        ", Robot.PID.getPID_Deg_PstnErr());
     SmartDashboard.putBoolean("VePID_b_PstnErrWithInDB : ", Robot.PID.getPID_b_PstnErrWithInDB());
     SmartDashboard.putNumber("VePID_Deg_PstnErrAccum :   ", Robot.PID.getPID_Deg_ErrAccum());
+  }
 
+  /* Called to Update RoboRIO Logfile for Display of Closed=Loop Error Data. */
+  public void updINS_RRL_PID_CL_Err() { 
     System.out.println("VePID_Deg_PstnErr :       " + Robot.PID.getPID_Deg_PstnErr());
     System.out.println("VePID_b_PstnErrWithInDB : " + Robot.PID.getPID_b_PstnErrWithInDB());
     System.out.println("VePID_Deg_PstnErrAccum :  " + Robot.PID.getPID_Deg_ErrAccum());
   }
 
 
-  /* Called to Update SmartDash Data for Display of Vision Camera Image Data */
-  public void updateSmartDashCamImgData() {
+  /* Called to Update SmartDash Data for Display of Navigation System Image Calculations. */
+  public void updINS_SDB_VSN_CamImgCalc() {
     SmartDashboard.putNumber("Cam Img Width Btm (pixels) : ", Robot.VISION.getVSN_Pxl_ImgWidthBtm());
     SmartDashboard.putNumber("Cam Img Width Top (pixels) : ", Robot.VISION.getVSN_Pxl_ImgWidthTop());
     SmartDashboard.putNumber("Cam Img Height Lt (pixels) : ", Robot.VISION.getVSN_Pxl_ImgHeightLt());
@@ -140,7 +152,10 @@ public class Dashboard extends Subsystem {
     SmartDashboard.putNumber("Tgt Rbt Dist :    ", Robot.VISION.getVSN_l_Rbt2Tgt());
     SmartDashboard.putNumber("Tgt Rbt2Tgt Ang : ", Robot.VISION.getVSN_Deg_Rbt2Tgt());
     SmartDashboard.putNumber("Tgt Rbt2Tgt Rot : ", Robot.VISION.getVSN_Deg_RbtRot());
+  }
 
+  /* Called to Update RoboRIO Logfile for Display of Navigation System Image Calculations. */
+  public void updINS_RRL_VSN_CamImgCalc() {
     System.out.println("Cam Img Width Btm (pixels) : " + Robot.VISION.getVSN_Pxl_ImgWidthBtm());
     System.out.println("Cam Img Width Top (pixels) : " + Robot.VISION.getVSN_Pxl_ImgWidthTop());
     System.out.println("Cam Img Height Lt (pixels) : " + Robot.VISION.getVSN_Pxl_ImgHeightLt());
@@ -152,9 +167,10 @@ public class Dashboard extends Subsystem {
     System.out.println("Tgt Rbt2Tgt Rot : " + Robot.VISION.getVSN_Deg_RbtRot());
   }
 
-
-  /* Called to Update SmartDash Data for Display of Target Closed-Loop Data */
-  public void updateSmartDashTgtCLData() { 
+  
+  
+  /* Called to Update Smart Dashboard Data for Display of Target Closed-Loop Calculations  */
+  public void updINS_SDB_PID_CorrCalc() { 
     SmartDashboard.putNumber("VePID_Deg_PstnAct :        ", Robot.PID.getPID_Deg_PstnAct());
     SmartDashboard.putNumber("VePID_Deg_PstnErr :        ", Robot.PID.getPID_Deg_PstnErr());
     SmartDashboard.putBoolean("VePID_b_PstnErrWithInDB : ", Robot.PID.getPID_b_PstnErrWithInDB());
@@ -163,7 +179,10 @@ public class Dashboard extends Subsystem {
     SmartDashboard.putNumber("VePID_Pct_PropCorr :       ", Robot.PID.getPID_Pct_PropTerm());
     SmartDashboard.putNumber("VePID_Pct_IntglCorr :      ", Robot.PID.getPID_Pct_IntglTerm());
     SmartDashboard.putNumber("VePID_Pct_PwrCmnd :        ", Robot.PID.getPID_Pct_PIDCmndPct());
+  }
 
+  /* Called to Update RoboRIO Logfile for Display of Target Closed-Loop Calculations */
+  public void updINS_RRL_PID_CorrCalc() { 
     System.out.println("VePID_Deg_PstnAct :       " + Robot.PID.getPID_Deg_PstnAct());
     System.out.println("VePID_Deg_PstnErr :       " + Robot.PID.getPID_Deg_PstnErr());
     System.out.println("VePID_b_PstnErrWithInDB : " + Robot.PID.getPID_b_PstnErrWithInDB());
@@ -173,10 +192,11 @@ public class Dashboard extends Subsystem {
     System.out.println("VePID_Pct_IntglCorr :     " + Robot.PID.getPID_Pct_IntglTerm());
     System.out.println("VePID_Pct_PwrCmnd :       " + Robot.PID.getPID_Pct_PIDCmndPct());
   }
-    
+   
 
-  /* Called to Update SmartDash Data for Display of Drive Periodic System Data */
-  public void updateSmartDashDrvSysData() { 
+
+  /* Called to Update Smart Dashboard Data for Display of Drive Navigation System Data */
+  public void updINS_SDB_NAV_Sys() { 
     SmartDashboard.putBoolean("VeNAV_b_CL_TgtRqstActv : ", Robot.NAV.getNAV_CL_TgtRqstActv());
     SmartDashboard.putBoolean("VeNAV_b_CL_DrvRqstActv : ", Robot.NAV.getNAV_CL_DrvRqstActv());
     SmartDashboard.putBoolean("VeNAV_b_DrvAutoCmdActv : ", Robot.NAV.getNAV_b_DrvAutoCmdActv());
@@ -187,7 +207,10 @@ public class Dashboard extends Subsystem {
     SmartDashboard.putNumber("VeNAV_r_NormPwrDrvrLtY :  ", Robot.NAV.getNAV_r_NormPwrDrvrLtY());
     SmartDashboard.putNumber("VeNAV_r_NormPwrDrvrLtX :  ", Robot.NAV.getNAV_r_NormPwrDrvrLtX());
     SmartDashboard.putNumber("VeNAV_r_NormPwrDrvrRtX :  ", Robot.NAV.getNAV_r_NormPwrDrvrRtX());
-    
+  }
+
+  /* Called to Update RoboRIO Logfile for Display of Drive Navigation System Data */
+  public void updINS_RRL_NAV_Sys() { 
     System.out.println("VeNAV_b_CL_TgtRqstActv : " + Robot.NAV.getNAV_CL_TgtRqstActv());
     System.out.println("VeNAV_b_CL_DrvRqstActv : " + Robot.NAV.getNAV_CL_DrvRqstActv());
     System.out.println("VeNAV_b_DrvAutoCmdActv : " + Robot.NAV.getNAV_b_DrvAutoCmdActv());
@@ -198,6 +221,31 @@ public class Dashboard extends Subsystem {
     System.out.println("VeNAV_r_NormPwrDrvrLtY : " + Robot.NAV.getNAV_r_NormPwrDrvrLtY());
     System.out.println("VeNAV_r_NormPwrDrvrLtX : " + Robot.NAV.getNAV_r_NormPwrDrvrLtX());
     System.out.println("VeNAV_r_NormPwrDrvrRtX : " + Robot.NAV.getNAV_r_NormPwrDrvrRtX());
+  }
+
+
+  /* Called to Update Smart Dashboard Data for Display of Lift System Data */
+  public void updINS_SDB_Lift_Sys() { 
+    SmartDashboard.putBoolean("VeLFT_b_JackExtdRqst :   ", Robot.LIFT.getLFT_b_JackExtdRqst());
+    SmartDashboard.putBoolean("VeLFT_b_JackRtctRqst :   ", Robot.LIFT.getLFT_b_JackRtctRqst());
+    SmartDashboard.putBoolean("VeLFT_b_DrwrExtdRqst :   ", Robot.LIFT.getLFT_b_DrwrExtdRqst());
+    SmartDashboard.putBoolean("VeLFT_b_DrwrRtctRqst :   ", Robot.LIFT.getLFT_b_DrwrRtctRqst());
+    SmartDashboard.putBoolean("VeLFT_b_StblzrExtdRqst : ", Robot.LIFT.getLFT_b_StblzrExtdRqst());
+    SmartDashboard.putBoolean("VeLFT_b_StblzrRtctRqst : ", Robot.LIFT.getLFT_b_StblzrRtctRqst());
+    SmartDashboard.putBoolean("VeLFT_b_StblzrExtdCmnd : ", Robot.LIFT.getLFT_b_StblzrExtdCmnd());
+    SmartDashboard.putString("VeLFT_b_JackLckApply :    ", Robot.LIFT.getLFT_b_JackLckApply());
+  }
+
+  /* Called to Update RoboRIO Logfile for Display of Lift System Data */
+  public void updINS_RRL_Lift_Sys() { 
+    System.out.println("VeLFT_b_JackExtdRqst :   " + Robot.LIFT.getLFT_b_JackExtdRqst());
+    System.out.println("VeLFT_b_JackRtctRqst :   " + Robot.LIFT.getLFT_b_JackRtctRqst());
+    System.out.println("VeLFT_b_DrwrExtdRqst :   " + Robot.LIFT.getLFT_b_DrwrExtdRqst());
+    System.out.println("VeLFT_b_DrwrRtctRqst :   " + Robot.LIFT.getLFT_b_DrwrRtctRqst());
+    System.out.println("VeLFT_b_StblzrExtdRqst : " + Robot.LIFT.getLFT_b_StblzrExtdRqst());
+    System.out.println("VeLFT_b_StblzrRtctRqst : " + Robot.LIFT.getLFT_b_StblzrRtctRqst());
+    System.out.println("VeLFT_b_StblzrExtdCmnd : " + Robot.LIFT.getLFT_b_StblzrExtdCmnd());
+    System.out.println("VeLFT_b_JackLckApply :    " + Robot.LIFT.getLFT_b_JackLckApply());
   }
 
 

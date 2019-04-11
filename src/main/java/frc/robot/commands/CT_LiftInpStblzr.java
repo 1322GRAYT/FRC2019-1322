@@ -14,24 +14,24 @@ import frc.robot.Robot;
 public class CT_LiftInpStblzr extends Command {
   double InpRqst;
   public CT_LiftInpStblzr(double InpRqst) {
-  /* InpRqst: 0 = Disabled, 1 = Extend, -1 = Retract */
+  /* InpRqst: 0 = Disabled, 1 = Retract, -1 = Extend */
   this.InpRqst = InpRqst;
   }
 
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {  
-    if (InpRqst == 1) {
-      Robot.LIFT.setLFT_StblzrExtdRqst(true);
-      Robot.LIFT.setLFT_StblzrRtctRqst(false);
+    if (InpRqst == 1) {        /* Retract */
+      Robot.LIFT.setLFT_b_StblzrExtdRqst(false);
+      Robot.LIFT.setLFT_b_StblzrRtctRqst(true);
     }
-    else if (InpRqst == -1) {
-      Robot.LIFT.setLFT_StblzrExtdRqst(false);
-      Robot.LIFT.setLFT_StblzrRtctRqst(true);
+    else if (InpRqst == -1) {  /* Extend */
+      Robot.LIFT.setLFT_b_StblzrExtdRqst(true);
+      Robot.LIFT.setLFT_b_StblzrRtctRqst(false);
     }
     else {
-      Robot.LIFT.setLFT_StblzrExtdRqst(false);
-      Robot.LIFT.setLFT_StblzrRtctRqst(false);
+      Robot.LIFT.setLFT_b_StblzrExtdRqst(false);
+      Robot.LIFT.setLFT_b_StblzrRtctRqst(false);
     }
   }
 
@@ -55,8 +55,8 @@ public class CT_LiftInpStblzr extends Command {
   // subsystems is scheduled to run
   @Override
   protected void interrupted() {
-    Robot.LIFT.setLFT_StblzrExtdRqst(false);
-    Robot.LIFT.setLFT_StblzrRtctRqst(false);
+    Robot.LIFT.setLFT_b_StblzrExtdRqst(false);
+    Robot.LIFT.setLFT_b_StblzrRtctRqst(false);
   }
 
 }
