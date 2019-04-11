@@ -42,9 +42,9 @@ public class OI {
   public OI() {
   
     if (K_System.KeSYS_b_NewLiftEnbl == true) {
-      //When A Button is pressed, extend Lift drawer slide
+      //When A Button is pressed, retract Lift drawer slide
       DriverStick.aButton.whileHeld(new CT_LiftInpHorz(1));
-      //When B Button is pressed, retract lift drawer slide
+      //When B Button is pressed, extend lift drawer slide
       DriverStick.bButton.whileHeld(new CT_LiftInpHorz(-1));
 
       //When Right Trigger is pressed, lift bot

@@ -12,6 +12,7 @@ import java.util.*;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+
 import org.opencv.core.*;
 import org.opencv.calib3d.*;
 import frc.robot.Robot;
@@ -83,6 +84,9 @@ public class Vision extends Subsystem {
   private static final int NumPts = 4;  // Total Number of Data Points;
 
 
+  public Vision() {
+    /* Empty Constructor */
+  }
 
   /**********************************************/
   /* Matricies for Object Dimensions and Images */
@@ -347,7 +351,8 @@ public double getVSN_Pxl_LL_TgtSideShort() {
       RstVSN_ImgVects();
       System.out.println("Init Cam Calibration Complete. ");
       if (K_System.KeSYS_b_DebugEnblVsn == true) {
-        Robot.DASHBOARD.updateSmartDashCamCalData();
+        Robot.DASHBOARD.updINS_SDB_CamCal();
+        Robot.DASHBOARD.updINS_RRL_CamCal();
       } 
     }
 
@@ -379,7 +384,8 @@ public double getVSN_Pxl_LL_TgtSideShort() {
 
         System.out.println("VeVSN_Cnt_TgtCornAqrd : " + VeVSN_Cnt_TgtCornAqrd);
         if (K_System.KeSYS_b_DebugEnblVsn == true) {
-          Robot.DASHBOARD.updateSmartDashCamLLData();
+          Robot.DASHBOARD.updINS_SDB_RawLL_Data();
+          Robot.DASHBOARD.updINS_RRL_RawLL_Data();
         }    
       }
       else { /* (LeVSN_b_TgtAcqVld == false) */

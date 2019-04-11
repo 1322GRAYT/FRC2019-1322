@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.SerialPort;
+
 import com.kauailabs.navx.frc.AHRS;
 
 import frc.robot.Robot;
@@ -12,7 +13,7 @@ import frc.robot.calibrations.K_System;
 
 
 public class Nav extends Subsystem {
-  private AHRS ahrs = new AHRS(SerialPort.Port.kMXP);
+  private AHRS ahrs;
   private double VeNAV_Deg_GyroAngle;      // double: degree heading
 
 	// Drive System Encoders/Wheels
@@ -40,7 +41,7 @@ public class Nav extends Subsystem {
 
 
   public Nav() {
-    /* Empty Constructor */
+    ahrs = new AHRS(SerialPort.Port.kMXP);
     }
 
 
@@ -330,7 +331,8 @@ public class Nav extends Subsystem {
     }
 
     if (K_System.KeSYS_b_DebugEnblDrv == true) {
-      Robot.DASHBOARD.updateSmartDashDrvData();
+      Robot.DASHBOARD.updINS_SDB_NAV_Drv();
+      Robot.DASHBOARD.updINS_RRL_NAV_Drv();
     }
   }
 
@@ -386,8 +388,10 @@ public class Nav extends Subsystem {
         Robot.DRIVES.setSafety(LeNAV_b_SetSafe);
       }
       if ((K_System.KeSYS_b_DebugEnblCL == true) && (getNAV_CL_TgtRqstActv() == true)) {
-        Robot.DASHBOARD.updateSmartDashTgtCLData();
-        Robot.DASHBOARD.updateSmartDashDrvSysData();
+        Robot.DASHBOARD.updINS_SDB_PID_CorrCalc();
+        Robot.DASHBOARD.updINS_RRL_PID_CorrCalc();
+        Robot.DASHBOARD.updINS_SDB_NAV_Sys();
+        Robot.DASHBOARD.updINS_RRL_NAV_Sys();
       }
 
     }

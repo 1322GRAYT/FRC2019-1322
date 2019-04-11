@@ -14,7 +14,7 @@ import frc.robot.Robot;
 public class CT_LiftInpHorz extends Command {
   double InpRqst;
   public CT_LiftInpHorz(double InpRqst) {
-  /* InpRqst: 0 = Disabled, 1 = Extend, -1 = Retract */
+  /* InpRqst: 0 = Disabled, 1 = Retract, -1 = Extend */
   this.InpRqst = InpRqst;
 
   }
@@ -23,17 +23,17 @@ public class CT_LiftInpHorz extends Command {
   @Override
   protected void initialize() {
   
-    if (InpRqst == 1) {
-      Robot.LIFT.setLFT_DrwrExtdRqst(true);
-      Robot.LIFT.setLFT_DrwrRtctRqst(false);
+    if (InpRqst == 1) {         /* Retract */
+      Robot.LIFT.setLFT_b_DrwrExtdRqst(false);
+      Robot.LIFT.setLFT_b_DrwrRtctRqst(true);
     }
-    else if (InpRqst == -1) {
-      Robot.LIFT.setLFT_DrwrExtdRqst(false);
-      Robot.LIFT.setLFT_DrwrRtctRqst(true);
+    else if (InpRqst == -1) {   /* Extend */
+      Robot.LIFT.setLFT_b_DrwrExtdRqst(true);
+      Robot.LIFT.setLFT_b_DrwrRtctRqst(false);
     }
     else {
-      Robot.LIFT.setLFT_DrwrExtdRqst(false);
-      Robot.LIFT.setLFT_DrwrRtctRqst(false);
+      Robot.LIFT.setLFT_b_DrwrExtdRqst(false);
+      Robot.LIFT.setLFT_b_DrwrRtctRqst(false);
     }
   }
 
@@ -57,8 +57,8 @@ public class CT_LiftInpHorz extends Command {
   // subsystems is scheduled to run
   @Override
   protected void interrupted() {
-    Robot.LIFT.setLFT_DrwrExtdRqst(false);
-    Robot.LIFT.setLFT_DrwrRtctRqst(false);
+    Robot.LIFT.setLFT_b_DrwrExtdRqst(false);
+    Robot.LIFT.setLFT_b_DrwrRtctRqst(false);
   }
 
 }

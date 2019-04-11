@@ -28,7 +28,7 @@ public class Claw extends Subsystem {
   private Compressor comp;
   private DigitalInput clawDis, diskPress;
   WPI_TalonSRX BallIntake;
-  private Relay testBotCompressor, scissorLock;
+  private Relay testBotCompressor;
 
   public Claw() { 
     comp = new Compressor(0);
@@ -42,8 +42,6 @@ public class Claw extends Subsystem {
     BallIntake = new WPI_TalonSRX(RobotMap.BallIntakeAddress);
     clawIn.set(false);
     clawOut.set(true);
-
-    scissorLock = new Relay(RobotMap.RobotScissorLock);
     
     if(K_System.KeSYS_b_PracticeBot) {
       testBotCompressor = new Relay(RobotMap.PracticeBotCompressor);
@@ -97,10 +95,6 @@ public class Claw extends Subsystem {
 
   public boolean getPressureSwitch() {
     return comp.getPressureSwitchValue();
-  }
-
-  public void toggleScissorLock(boolean enable) {
-    scissorLock.set((enable) ? Relay.Value.kForward : Relay.Value.kOff);
   }
 
   public void controlCompressor(boolean enable) {
