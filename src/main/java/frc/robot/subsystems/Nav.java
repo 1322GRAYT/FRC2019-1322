@@ -7,13 +7,14 @@ import edu.wpi.first.wpilibj.SerialPort;
 import com.kauailabs.navx.frc.AHRS;
 
 import frc.robot.Robot;
+import frc.robot.subsystems.Dashboard.*;
 import frc.robot.calibrations.K_Nav;
 import frc.robot.calibrations.K_Drive;
 import frc.robot.calibrations.K_System;
 
 
 public class Nav extends Subsystem {
-  private AHRS ahrs;
+//  private AHRS ahrs;   // todo rfs
   private double VeNAV_Deg_GyroAngle;      // double: degree heading
 
 	// Drive System Encoders/Wheels
@@ -40,8 +41,9 @@ public class Nav extends Subsystem {
   private double VeNAV_r_NormPwrCmdRot;    // double: normalized power - rotational
 
 
+
   public Nav() {
-    ahrs = new AHRS(SerialPort.Port.kMXP);
+//    ahrs = new AHRS(SerialPort.Port.kMXP);   // todo rfs
     }
 
 
@@ -218,7 +220,7 @@ public class Nav extends Subsystem {
   * Gyrometer as the 0 degree mark.
   */	
   public void rstNAV_GyroAngle() {
-    ahrs.reset();
+ //   ahrs.reset();   // todo rfs
   }
 
 
@@ -226,7 +228,8 @@ public class Nav extends Subsystem {
   * of the Gyrometer Angle reading (Positive is Clockwise: [0 to 360) )
   */	
   public double getNAV_GyroAngle() {
-    return(VeNAV_Deg_GyroAngle);
+    return(0.0);
+//    return(VeNAV_Deg_GyroAngle);   // todo rfs
   }
   
 
@@ -292,7 +295,8 @@ public class Nav extends Subsystem {
   * Gyrometer to set the proper home / oridinal positions.
   */
   private boolean chkNAV_GyroCal() {
-    return(ahrs.isCalibrating());
+    return(false);  
+//    return(ahrs.isCalibrating());   // todo rfs
   }
 
 
@@ -301,7 +305,7 @@ public class Nav extends Subsystem {
   * (Positive is Clockwise: [0 to 360) )
   */	
   private void updNAV_GyroAngle() {
-    VeNAV_Deg_GyroAngle = ahrs.getAngle();
+//    VeNAV_Deg_GyroAngle = ahrs.getAngle();   // todo rfs
   }
 
 
@@ -330,10 +334,15 @@ public class Nav extends Subsystem {
       VaNAV_v_WhlVel[idx]      = (VaNAV_n_WhlRPM[idx]*K_Nav.KeNAV_l_DistPerRevWhl)/60;        // inches/sec
     }
 
-    if (K_System.KeSYS_b_DebugEnblDrv == true) {
+    if ((K_System.KeSYS_e_DebugEnblDrv == DebugSlct.DebugEnblBoth) ||
+        (K_System.KeSYS_e_DebugEnblDrv == DebugSlct.DebugEnblSDB)) {
       Robot.DASHBOARD.updINS_SDB_NAV_Drv();
+    }
+    if ((K_System.KeSYS_e_DebugEnblDrv == DebugSlct.DebugEnblBoth) ||
+        (K_System.KeSYS_e_DebugEnblDrv == DebugSlct.DebugEnblRRL)) {
       Robot.DASHBOARD.updINS_RRL_NAV_Drv();
     }
+
   }
 
   
@@ -387,10 +396,15 @@ public class Nav extends Subsystem {
         Robot.DRIVES.DriveInVoltage(LeNAV_r_NormPwrCmdLong, LeNAV_r_NormPwrCmdLat, LeNAV_r_NormPwrCmdRot);
         Robot.DRIVES.setSafety(LeNAV_b_SetSafe);
       }
-      if ((K_System.KeSYS_b_DebugEnblCL == true) && (getNAV_CL_TgtRqstActv() == true)) {
+
+      if ((K_System.KeSYS_e_DebugEnblCL == DebugSlct.DebugEnblBoth) ||
+          (K_System.KeSYS_e_DebugEnblCL == DebugSlct.DebugEnblSDB)) {
         Robot.DASHBOARD.updINS_SDB_PID_CorrCalc();
-        Robot.DASHBOARD.updINS_RRL_PID_CorrCalc();
         Robot.DASHBOARD.updINS_SDB_NAV_Sys();
+      }
+      if ((K_System.KeSYS_e_DebugEnblCL == DebugSlct.DebugEnblBoth) ||
+          (K_System.KeSYS_e_DebugEnblCL == DebugSlct.DebugEnblRRL)) {
+        Robot.DASHBOARD.updINS_RRL_PID_CorrCalc();
         Robot.DASHBOARD.updINS_RRL_NAV_Sys();
       }
 

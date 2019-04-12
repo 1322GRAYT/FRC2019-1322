@@ -8,7 +8,7 @@
 package frc.robot.calibrations;
 
 import frc.robot.Robot;
-import frc.robot.subsystems.Dashboard;
+import frc.robot.subsystems.Dashboard.*;
 
 
 /**
@@ -37,26 +37,32 @@ public class K_System {
 	 * functionality in software should be disabled. */
     public static final boolean KeSYS_b_PracticeBot = false;	
 
-	/** KeSYS_b_DebugEnblVsn: If True the Debug Smart Dash Display Variables
-	 * Are Broadcast and Updated, if False they are turned off to maximize
-	 * thru-put for controls. For the Vision System. */
-    public static final boolean KeSYS_b_DebugEnblVsn = false;
+	/** KeSYS_e_DebugEnblVsn: Used to enable the broadcast, update, and display
+	 * of data variables for instrumentation view, this can be via Smart
+	 * Dashboard, the RoboRio Log, or Both, or Disabled completely to free
+	 * up through=put for competition play.  This configuration is for the
+	 * Vision System variables.  */
+	public static final DebugSlct KeSYS_e_DebugEnblVsn = DebugSlct.DebugDsbl;
 
-	/** KeSYS_b_DebugEnblCL: If True the Debug Smart Dash Display Variables
-	 * Are Broadcast and Updated, if False they are turned off to maximize
-	 * thru-put for controls. For the Closed-Loop Tracking System. */
-    public static final boolean KeSYS_b_DebugEnblCL = false;
-	// public static final Robot.DASHBOARD.DebugSlct KeSYS_e_DebugEnblCL = DebugEnblBoth;
+	/** KeSYS_e_DebugEnblCL: Used to enable the broadcast, update, and display
+	 * of data variables for instrumentation view, this can be via Smart
+	 * Dashboard, the RoboRio Log, or Both, or Disabled completely to free
+	 * up through=put for competition play.  This configuration is for the
+	 * Closed-Loop Nav System variables.  */
+	public static final DebugSlct KeSYS_e_DebugEnblCL = DebugSlct.DebugDsbl;
 
-	/** KeSYS_b_DebugEnblDrv: If True the Debug Smart Dash Display Variables
-	 * Are Broadcast and Updated, if False they are turned off to maximize
-	 * thru-put for controls.  For the Drive System.  */
-    public static final boolean KeSYS_b_DebugEnblDrv = false;
+	/** KeSYS_e_DebugEnblDrv: Used to enable the broadcast, update, and display
+	 * of data variables for instrumentation view, this can be via Smart
+	 * Dashboard, the RoboRio Log, or Both, or Disabled completely to free
+	 * up through=put for competition play.  This configuration is for the
+	 * Drive System variables.  */
+	public static final DebugSlct KeSYS_e_DebugEnblDrv = DebugSlct.DebugDsbl;
 
-	/** KeSYS_b_DebugEnblLft: If True the Debug Smart Dash Display Variables
-	 * Are Broadcast and Updated, if False they are turned off to maximize
-	 * thru-put for controls.  For the Lift System.  */
-    public static final boolean KeSYS_b_DebugEnblLft = false;
-
-	    
+	/** KeSYS_e_DebugEnblLft: Used to enable the broadcast, update, and display
+	 * of data variables for instrumentation view, this can be via Smart
+	 * Dashboard, the RoboRio Log, or Both, or Disabled completely to free
+	 * up through=put for competition play.  This configuration is for the
+	 * Lift System variables.  */
+	public static final DebugSlct KeSYS_e_DebugEnblLft = DebugSlct.DebugDsbl;
+   
 }

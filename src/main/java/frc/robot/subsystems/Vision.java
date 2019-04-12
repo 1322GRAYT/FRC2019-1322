@@ -16,8 +16,10 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import org.opencv.core.*;
 import org.opencv.calib3d.*;
 import frc.robot.Robot;
+import frc.robot.subsystems.Dashboard.*;
 import frc.robot.calibrations.K_System;
 import frc.robot.calibrations.K_Vision;
+
 
 /**
  * Class - Vision: Contains the Processing and Methods to Calculate
@@ -349,11 +351,18 @@ public double getVSN_Pxl_LL_TgtSideShort() {
       calcVSN_CamFocalPt();
       calcVSN_CamMat();
       RstVSN_ImgVects();
+
       System.out.println("Init Cam Calibration Complete. ");
-      if (K_System.KeSYS_b_DebugEnblVsn == true) {
+
+      if ((K_System.KeSYS_e_DebugEnblVsn == DebugSlct.DebugEnblBoth) ||
+      (K_System.KeSYS_e_DebugEnblVsn == DebugSlct.DebugEnblSDB)) {
         Robot.DASHBOARD.updINS_SDB_CamCal();
+      }
+      if ((K_System.KeSYS_e_DebugEnblVsn == DebugSlct.DebugEnblBoth) ||
+          (K_System.KeSYS_e_DebugEnblVsn == DebugSlct.DebugEnblRRL)) {
         Robot.DASHBOARD.updINS_RRL_CamCal();
-      } 
+      }
+
     }
 
 
@@ -383,10 +392,16 @@ public double getVSN_Pxl_LL_TgtSideShort() {
         VeVSN_Cnt_TgtCornAqrd = LL_TgtCornX.length;
 
         System.out.println("VeVSN_Cnt_TgtCornAqrd : " + VeVSN_Cnt_TgtCornAqrd);
-        if (K_System.KeSYS_b_DebugEnblVsn == true) {
+        
+        if ((K_System.KeSYS_e_DebugEnblVsn == DebugSlct.DebugEnblBoth) ||
+        (K_System.KeSYS_e_DebugEnblVsn == DebugSlct.DebugEnblSDB)) {
           Robot.DASHBOARD.updINS_SDB_RawLL_Data();
+        }
+        if ((K_System.KeSYS_e_DebugEnblVsn == DebugSlct.DebugEnblBoth) ||
+            (K_System.KeSYS_e_DebugEnblVsn == DebugSlct.DebugEnblRRL)) {
           Robot.DASHBOARD.updINS_RRL_RawLL_Data();
-        }    
+        }          
+
       }
       else { /* (LeVSN_b_TgtAcqVld == false) */
         System.out.println("Waiting for Valid 3+ Corner data-image ... ");

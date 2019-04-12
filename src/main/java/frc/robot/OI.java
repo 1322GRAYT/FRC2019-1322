@@ -10,6 +10,7 @@ package frc.robot;
 import frc.robot.commands.*;
 import frc.robot.models.CustomXbox;
 import frc.robot.models.EncoderConversions;
+import frc.robot.subsystems.Lift.*;
 import frc.robot.calibrations.K_System;
 
 
@@ -43,20 +44,20 @@ public class OI {
   
     if (K_System.KeSYS_b_NewLiftEnbl == true) {
       //When A Button is pressed, retract Lift drawer slide
-      DriverStick.aButton.whileHeld(new CT_LiftInpHorz(1));
+      DriverStick.aButton.whileHeld(new CT_LiftInpHorz(ActuatorSt.Retract));  //1
       //When B Button is pressed, extend lift drawer slide
-      DriverStick.bButton.whileHeld(new CT_LiftInpHorz(-1));
+      DriverStick.bButton.whileHeld(new CT_LiftInpHorz(ActuatorSt.Extend));   //-1
 
       //When Right Trigger is pressed, lift bot
-      DriverStick.rightTriggerButton.whileHeld(new CT_LiftInpVert(1));
+      DriverStick.rightTriggerButton.whileHeld(new CT_LiftInpVert(ActuatorSt.Extend)); // 1
 
       //When Left Trigger is pressed, lower bot
-      DriverStick.leftTriggerButton.whileHeld(new CT_LiftInpVert(-1));
+      DriverStick.leftTriggerButton.whileHeld(new CT_LiftInpVert(ActuatorSt.Retract)); // -1
 
       //When Right Bumper is pressed, retract lift pnumatics    
-      DriverStick.rightBumper.whileHeld(new CT_LiftInpStblzr(1));
+      DriverStick.rightBumper.whileHeld(new CT_LiftInpStblzr(ActuatorSt.Retract)); // 1
       //When Left Bumper is pressed, extend lift pnumatics
-      DriverStick.leftBumper.whileHeld(new CT_LiftInpStblzr(-1));
+      DriverStick.leftBumper.whileHeld(new CT_LiftInpStblzr(ActuatorSt.Extend)); // -1
     }
     else { /* Original Lift Method, commands using same subsystem do not allow simultaneous commands - not good */
       //When A Button is pressed, extend Lift
@@ -106,7 +107,7 @@ public class OI {
     //When "A" Button is pressed, eject Hatch Panel, When Released, Retract pnuematics
     AuxStick.aButton.whenPressed(new CC_ClawHatchCntrl(false));
     AuxStick.bButton.whenPressed(new CC_ClawHatchCntrl(true));
-    //When Right Bumper is pressed, push claw out, when Left bumper is pressed, pull claw in
+    //When Right Bumper is pressed, toggle between push claw out/in; when Left bumper is pressed, pull claw in
     AuxStick.rightBumper.toggleWhenPressed(new CC_ClawBallCntrl());
     AuxStick.leftBumper.whenPressed(new CC_ClawRtct());
   }

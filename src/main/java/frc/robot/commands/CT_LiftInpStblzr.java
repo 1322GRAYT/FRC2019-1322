@@ -8,12 +8,14 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
+
 import frc.robot.Robot;
+import frc.robot.subsystems.Lift.*;
 
 
 public class CT_LiftInpStblzr extends Command {
-  double InpRqst;
-  public CT_LiftInpStblzr(double InpRqst) {
+  ActuatorSt InpRqst;
+  public CT_LiftInpStblzr(ActuatorSt InpRqst) {
   /* InpRqst: 0 = Disabled, 1 = Retract, -1 = Extend */
   this.InpRqst = InpRqst;
   }
@@ -21,15 +23,15 @@ public class CT_LiftInpStblzr extends Command {
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {  
-    if (InpRqst == 1) {        /* Retract */
+    if (InpRqst == ActuatorSt.Retract) {        /* Retract */
       Robot.LIFT.setLFT_b_StblzrExtdRqst(false);
       Robot.LIFT.setLFT_b_StblzrRtctRqst(true);
     }
-    else if (InpRqst == -1) {  /* Extend */
+    else if (InpRqst == ActuatorSt.Extend) {  /* Extend */
       Robot.LIFT.setLFT_b_StblzrExtdRqst(true);
       Robot.LIFT.setLFT_b_StblzrRtctRqst(false);
     }
-    else {
+    else {  /* (InpRqst == ActuatorSt.Hold) */
       Robot.LIFT.setLFT_b_StblzrExtdRqst(false);
       Robot.LIFT.setLFT_b_StblzrRtctRqst(false);
     }

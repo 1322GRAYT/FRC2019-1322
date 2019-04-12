@@ -16,8 +16,8 @@ import frc.robot.Robot;
  */
 public class Dashboard extends Subsystem {
 
-  enum DebugSlct {
-    DebugDsbl, DebugEnblDash, DebugEnblSmartDash, DebugEnblBoth
+  public enum DebugSlct {
+    DebugDsbl, DebugEnblSDB, DebugEnblRRL, DebugEnblBoth
   }
 
 

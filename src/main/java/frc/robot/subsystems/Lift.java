@@ -9,16 +9,23 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.Relay;
 import edu.wpi.first.wpilibj.command.Subsystem;
-import frc.robot.calibrations.K_System;
-import frc.robot.calibrations.K_Lift;
+
 import frc.robot.Robot;
 import frc.robot.RobotMap;
+import frc.robot.subsystems.Dashboard.*;
+import frc.robot.calibrations.K_System;
+import frc.robot.calibrations.K_Lift;
+
 
 /**
  * Subsystem for the Lift system which controls the Scissor Lift Mechanism, the
  * Drawer-Slide translate mechanism, and the Hydraulic Stabilizer wheels.
  */
 public class Lift extends Subsystem {
+
+  public enum ActuatorSt {
+    Hold, Extend, Retract
+  }
 
   /* Driver or Autonomous Request */  
   private boolean VeLFT_b_JackExtdRqst;
@@ -248,12 +255,15 @@ public class Lift extends Subsystem {
     setLFT_b_StblzrRtctCmnd(StblzrRtct);
     Robot.SCISSOR.liftRobotPnumatic(getLFT_b_StblzrRtctCmnd());
 
-
     /* Update Instrumentation */
-    if (K_System.KeSYS_b_DebugEnblLft) {
+    if ((K_System.KeSYS_e_DebugEnblLft == DebugSlct.DebugEnblBoth) ||
+        (K_System.KeSYS_e_DebugEnblLft == DebugSlct.DebugEnblSDB)) {
       Robot.DASHBOARD.updINS_SDB_Lift_Sys();
+    }
+    if ((K_System.KeSYS_e_DebugEnblLft == DebugSlct.DebugEnblBoth) ||
+        (K_System.KeSYS_e_DebugEnblLft == DebugSlct.DebugEnblRRL)) {
       Robot.DASHBOARD.updINS_RRL_Lift_Sys();
-    } 
+    }
 
   }
 
