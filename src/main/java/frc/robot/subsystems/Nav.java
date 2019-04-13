@@ -13,7 +13,7 @@ import frc.robot.calibrations.K_System;
 
 
 public class Nav extends Subsystem {
-  private AHRS ahrs;
+//  private AHRS ahrs;  // todo rfs
   private double VeNAV_Deg_GyroAngle;      // double: degree heading
 
 	// Drive System Encoders/Wheels
@@ -41,7 +41,7 @@ public class Nav extends Subsystem {
 
 
   public Nav() {
-    ahrs = new AHRS(SerialPort.Port.kMXP);
+  //  ahrs = new AHRS(SerialPort.Port.kMXP);  // todo rfs
     }
 
 
@@ -218,7 +218,7 @@ public class Nav extends Subsystem {
   * Gyrometer as the 0 degree mark.
   */	
   public void rstNAV_GyroAngle() {
-    ahrs.reset();
+ //   ahrs.reset();  // todo rfs
   }
 
 
@@ -292,7 +292,8 @@ public class Nav extends Subsystem {
   * Gyrometer to set the proper home / oridinal positions.
   */
   private boolean chkNAV_GyroCal() {
-    return(ahrs.isCalibrating());
+    return (false);
+//    return(ahrs.isCalibrating());  // todo rfs
   }
 
 
@@ -301,7 +302,7 @@ public class Nav extends Subsystem {
   * (Positive is Clockwise: [0 to 360) )
   */	
   private void updNAV_GyroAngle() {
-    VeNAV_Deg_GyroAngle = ahrs.getAngle();
+//    VeNAV_Deg_GyroAngle = ahrs.getAngle();  // todo rfs
   }
 
 
