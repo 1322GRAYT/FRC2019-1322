@@ -11,13 +11,16 @@ import edu.wpi.cscore.UsbCamera;
 import edu.wpi.cscore.VideoSource.ConnectionStrategy;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.Relay;
+import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import frc.robot.subsystems.*;
+import frc.robot.subsystems.Dashboard.DebugSlct;
 import frc.robot.calibrations.K_System;
 import frc.robot.commands.*;
 
@@ -52,6 +55,10 @@ public class Robot extends TimedRobot {
   Command m_autonomousCommand;
   SendableChooser<Command> m_chooser = new SendableChooser<>();
 
+  // System Variables
+  public Timer RbtSysTmr = new Timer();
+
+
   /**
    * This function is run when the robot is first started up and should be
    * used for any initialization code.
@@ -59,6 +66,9 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     m_oi = new OI();
+
+    RbtSysTmr.reset();
+    RbtSysTmr.start();
 
     // Camera Server
     camera0 = CameraServer.getInstance().startAutomaticCapture(0);
@@ -69,11 +79,14 @@ public class Robot extends TimedRobot {
 
     VISION.mngVSN_InitLimeLightNetTbl(); 
     VISION.mngVSN_InitCamCalibr();
+
     PID.setPID_Deg_PstnTgt(false, 0.0);
     PID.mngPID_InitCntrl();
     NAV.mngNAV_InitCntrl();
     LIFT.mngLFT_InitCntrl();
     LIFT.setLFT_e_JackLckCmnd(Relay.Value.kForward);
+
+    System.out.println("End of RobotInit :   " + RbtSysTmr.get());
 
     m_chooser.setDefaultOption("Driver Control Only", new CA_RevertToTele());
 		m_chooser.addOption("Auto Drive Forward", new CA_DrvPstnTgt(0, 140000));
@@ -90,13 +103,21 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
+    RbtSysTmr.reset();
+    RbtSysTmr.start();
+
     VISION.mngVSN_CamImgPeriodic();
     NAV.mngNAV_CmndSysTsk1();
     PID.mngPID_Cntrl(); 
     NAV.mngNAV_CmndSysTsk2();
     if (K_System.KeSYS_b_NewLiftEnbl == true) {
-      LIFT.mngLFT_CntrlSys();
+       LIFT.mngLFT_CntrlSys();
     }
+
+    if (K_System.KeSYS_e_DebugEnblWtchDog != DebugSlct.DebugDsbl) {   
+      System.out.println("End of RobotPeriodic :   " + RbtSysTmr.get());
+    }
+  
   }
 
 
@@ -176,6 +197,21 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void testPeriodic() {
+    RbtSysTmr.reset();
+    RbtSysTmr.start();
+
+    VISION.mngVSN_CamImgPeriodic();
+    NAV.mngNAV_CmndSysTsk1();
+    PID.mngPID_Cntrl(); 
+    NAV.mngNAV_CmndSysTsk2();
+    if (K_System.KeSYS_b_NewLiftEnbl == true) {
+      LIFT.mngLFT_CntrlSys();
+    }
+
+    if (K_System.KeSYS_e_DebugEnblWtchDog != DebugSlct.DebugDsbl) {   
+      System.out.println("End of RobotPeriodic :   " + RbtSysTmr.get());
+    }
+
   }
 
 

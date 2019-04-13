@@ -9,10 +9,12 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 import frc.robot.Robot;
 import frc.robot.calibrations.K_PID;
-
 
 
 /**
@@ -189,27 +191,8 @@ public class CLpid extends Subsystem {
 				VePID_Deg_PstnAct = -(Robot.NAV.getNAV_GyroAngle());
 			}
 
-
-   	  if (VePID_b_CL_Enbl == true) {
-				if (Robot.NAV.getNAV_CL_TgtRqstActv() == true) {
-					VePID_Deg_PosErrDB = K_PID.KePID_Deg_VSN_PosErrDB;
-					VePID_Deg_IntglErrDsblMin = K_PID.KePID_Deg_VSN_IntglErrDsblMin;
-					VePID_K_PropGx = K_PID.KePID_K_VSN_PropGx;
-					VePID_Pct_PropCorrMax = K_PID.KePID_Pct_VSN_PropCorrMax;
-					VePID_K_IntglGx = K_PID.KePID_K_VSN_IntglGx;
-					VePID_Pct_IntglCorrMax = K_PID.KePID_Pct_VSN_IntglCorrMax;
-					VePID_t_PstnTgtSyncMetThrsh = K_PID.KePID_t_VSN_PstnTgtSyncMetThrsh;
-				}
-				else {
-					VePID_Deg_PosErrDB = K_PID.KePID_Deg_NAV_PosErrDB;
-					VePID_Deg_IntglErrDsblMin = K_PID.KePID_Deg_NAV_IntglErrDsblMin;
-					VePID_K_PropGx = K_PID.KePID_K_NAV_PropGx;
-					VePID_Pct_PropCorrMax = K_PID.KePID_Pct_NAV_PropCorrMax;
-					VePID_K_IntglGx = K_PID.KePID_K_NAV_IntglGx;
-					VePID_Pct_IntglCorrMax = K_PID.KePID_Pct_NAV_IntglCorrMax;
-					VePID_t_PstnTgtSyncMetThrsh = K_PID.KePID_t_NAV_PstnTgtSyncMetThrsh;
-				}
-
+   	  if (VePID_b_CL_Enbl == true) {				 
+        slctPID_CalData();
 	      VePID_Deg_PstnErr = calcPID_ErrSig(VePID_Deg_PstnDsrd, VePID_Deg_PstnAct, VePID_Deg_PosErrDB);
         VePID_b_PstnErrWithInDB = dtrmnPID_ErrInDB(VePID_Deg_PstnErr, VePID_Deg_PosErrDB); 
 		    VePID_Deg_PstnErrAccum = calcPID_ErrAccum(VePID_Deg_PstnErrAccum, VePID_Deg_PstnErr, VePID_Deg_IntglErrDsblMin);
@@ -234,7 +217,43 @@ public class CLpid extends Subsystem {
   /**********************************************/
   /* Internal Class Methods                     */
   /**********************************************/
-   
+
+	
+		/** Method: slctPID_CalData - slct Proper PID Calibration Data between
+		 *  calibrations for Vision based CL, Gyro based CL, or Smart Dashboard
+		 *  feed CL.
+		 */
+		private void slctPID_CalData() {
+			if (Robot.NAV.getNAV_CL_TgtRqstActv() == true) {
+				VePID_Deg_PosErrDB = K_PID.KePID_Deg_VSN_PosErrDB;
+				VePID_Deg_IntglErrDsblMin = K_PID.KePID_Deg_VSN_IntglErrDsblMin;
+				VePID_K_PropGx = K_PID.KePID_K_VSN_PropGx;
+				VePID_Pct_PropCorrMax = K_PID.KePID_Pct_VSN_PropCorrMax;
+				VePID_K_IntglGx = K_PID.KePID_K_VSN_IntglGx;
+				VePID_Pct_IntglCorrMax = K_PID.KePID_Pct_VSN_IntglCorrMax;
+				VePID_t_PstnTgtSyncMetThrsh = K_PID.KePID_t_VSN_PstnTgtSyncMetThrsh;
+			}
+			else {
+				VePID_Deg_PosErrDB = K_PID.KePID_Deg_NAV_PosErrDB;
+				VePID_Deg_IntglErrDsblMin = K_PID.KePID_Deg_NAV_IntglErrDsblMin;
+				VePID_K_PropGx = K_PID.KePID_K_NAV_PropGx;
+				VePID_Pct_PropCorrMax = K_PID.KePID_Pct_NAV_PropCorrMax;
+				VePID_K_IntglGx = K_PID.KePID_K_NAV_IntglGx;
+				VePID_Pct_IntglCorrMax = K_PID.KePID_Pct_NAV_IntglCorrMax;
+				VePID_t_PstnTgtSyncMetThrsh = K_PID.KePID_t_NAV_PstnTgtSyncMetThrsh;
+			}
+/*
+		if (RobotState.isTest() == true) {
+			VePID_Deg_PosErrDB = SmartDashboard.getNumber(SDB_KG, VePID_Deg_PosErrDB);
+			VePID_K_PropGx = SmartDashboard.getNumber(SDB_KG, VePID_K_PropGx);
+			VePID_Pct_PropCorrMax = SmartDashboard.getNumber(SDB_KG, VePID_Pct_PropCorrMax);
+			VePID_K_IntglGx = SmartDashboard.getNumber(SDB_IG, VePID_K_IntglGx);
+			VePID_Pct_IntglCorrMax = SmartDashboard.getNumber(SDB_KG, VePID_Pct_IntglCorrMax);
+			}
+*/				
+    } 
+
+
 	/** Method: calcPID_ErrSig - Calculates Vision X-Axis Error in units of
 	  * angular degrees, taking into account a symmetrical error dead-band
 	  * around the zero-error point.

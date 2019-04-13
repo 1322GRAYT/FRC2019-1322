@@ -37,6 +37,14 @@ public class K_System {
 	 * functionality in software should be disabled. */
     public static final boolean KeSYS_b_PracticeBot = false;	
 
+
+	/** KeSYS_e_DebugEnblWtchDog: Used to enable the broadcast, update, and
+	 * display of data variables for instrumentation view, this can be via Smart
+	 * Dashboard, the RoboRio Log, or Both, or Disabled completely to free
+	 * up through=put for competition play.  This configuration is for the
+	 * Analysis of Watch Dog Time Out / Loop Overrun issues.  */
+	public static final DebugSlct KeSYS_e_DebugEnblWtchDog = DebugSlct.DebugDsbl;
+
 	/** KeSYS_e_DebugEnblVsn: Used to enable the broadcast, update, and display
 	 * of data variables for instrumentation view, this can be via Smart
 	 * Dashboard, the RoboRio Log, or Both, or Disabled completely to free

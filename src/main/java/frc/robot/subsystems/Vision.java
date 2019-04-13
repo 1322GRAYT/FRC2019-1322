@@ -101,8 +101,8 @@ public class Vision extends Subsystem {
   private Mat VmVSN_Pxl_Cam     = new Mat(3,3,CvType.CV_64F);
   private Mat VmVSM_k_RotVect   = new Mat(3,1,CvType.CV_64F);
   private Mat VmVSM_k_TransVect = new Mat(3,1,CvType.CV_64F);
-  private Mat VmVSM_k_Rot       = new Mat(3,3,CvType.CV_64F);
-  private Mat VmVSM_k_ImgPlaneZeroWorld = new Mat(3,1,CvType.CV_64F);
+  private Mat VmVSM_k_Rot       = new Mat();
+  private Mat VmVSM_k_ImgPlaneZeroWorld = new Mat();
 
   /* Arrays of the Matrix Data for viewing via Instrumentation */
   private int VaVSN_Pxl_RefImgCoord[][] = new int[4][2];
@@ -739,9 +739,7 @@ public double getVSN_Pxl_LL_TgtSideShort() {
     private boolean calcVSN_TgtPose() {
       boolean PnP_Vld;
       double x[], z[];
-      Mat LmVSM_k_RotInv       = new Mat(3,3,CvType.CV_64F);
-      Mat LmVSM_k_TransVectNeg = new Mat(3,1,CvType.CV_64F);
-      Mat LmVSM_k_ZerosVect    = new Mat(3,1,CvType.CV_64F);
+      Mat LmVSM_k_RotInv       = new Mat();
 
       /* Calculate the Rotation Matrix and Translation Vector */
       PnP_Vld = Calib3d.solvePnP(VmVSN_l_RefObj, VmVSN_Pxl_RefImg, VmVSN_Pxl_Cam,
@@ -759,32 +757,21 @@ public double getVSN_Pxl_LL_TgtSideShort() {
         VeVSN_Deg_Rbt2Tgt = Math.atan2(x[0], z[0]);
 
         
-        /* Initialize Local Matricies for prior to Angle2 calculation */
-        LmVSM_k_RotInv.zeros(3,3,CvType.CV_64F);
-        LmVSM_k_TransVectNeg.zeros(1,3,CvType.CV_64F);
-        LmVSM_k_ZerosVect.zeros(3,1,CvType.CV_64F);
-
         /* Angle2: Calculate horiz angle between the target perpendicular and the robot-target line */
         Calib3d.Rodrigues(VmVSM_k_RotVect, VmVSM_k_Rot);
         Core.transpose(VmVSM_k_Rot,LmVSM_k_RotInv);
-        Core.scaleAdd(VmVSM_k_TransVect, -1.0, LmVSM_k_ZerosVect, LmVSM_k_TransVectNeg);
-        System.out.println("LmVSM_k_RotInv :            " + LmVSM_k_RotInv.dump());
-        System.out.println("LmVSM_k_TransVectNeg :      " + LmVSM_k_TransVectNeg.dump());
-        System.out.println("VmVSM_k_ImgPlaneZeroWorld : " + VmVSM_k_ImgPlaneZeroWorld.dump());
-        Core.multiply(LmVSM_k_RotInv, LmVSM_k_TransVectNeg, VmVSM_k_ImgPlaneZeroWorld);
+        Core.gemm(LmVSM_k_RotInv, VmVSM_k_TransVect, -1, new Mat(), 0, VmVSM_k_ImgPlaneZeroWorld);
         x = VmVSM_k_ImgPlaneZeroWorld.get(0,0);
         z = VmVSM_k_ImgPlaneZeroWorld.get(2,0);
         VeVSN_Deg_RbtRot = (double)Math.atan2(x[0], z[0]);
       }
       else /* (PnP_Vld == false) */ {
         /* Failed to calculated proper PnP values - Clear out Peristant Matrices and Variables */
-        RstVSN_ImgVects();
+        // RstVSN_ImgVects();
       }
 
       /* free-up memory from the locally matricies */
       LmVSM_k_RotInv.release();
-      LmVSM_k_TransVectNeg.release();
-      LmVSM_k_ZerosVect.release();
 
       return(PnP_Vld);
     }

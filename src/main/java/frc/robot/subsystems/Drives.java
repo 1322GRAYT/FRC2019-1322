@@ -44,6 +44,7 @@ public class Drives extends Subsystem {
       EncodedDrives[i].config_kD(0, K_Drive.KeDRV_k_VelDerivGx);
       EncodedDrives[i].setInverted(dInv[i]);
       FollowerDrives[i].set(ControlMode.Follower, EncodedDrives[i].getDeviceID());
+      FollowerDrives[i].setSafetyEnabled(false);
       FollowerDrives[i].setInverted(dInv[i]);
       EncodedDrives[i].setSensorPhase(sInv[i]);
     }
