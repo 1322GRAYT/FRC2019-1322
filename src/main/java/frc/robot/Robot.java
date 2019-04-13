@@ -72,18 +72,28 @@ public class Robot extends TimedRobot {
 
     // Camera Server
     camera0 = CameraServer.getInstance().startAutomaticCapture(0);
+    System.out.println("End of startAutomaticCapture0 :  " + RbtSysTmr.get());
     camera1 = CameraServer.getInstance().startAutomaticCapture(1);
+    System.out.println("End of startAutomaticCapture1 :  " + RbtSysTmr.get());
     // Set Keep Connections Open to Keep Switching Speed Fast!
     camera0.setConnectionStrategy(ConnectionStrategy.kKeepOpen);
+    System.out.println("End of setConnectionStrategy0 :  " + RbtSysTmr.get());
     camera1.setConnectionStrategy(ConnectionStrategy.kKeepOpen);
+    System.out.println("End of setConnectionStrategy1 :  " + RbtSysTmr.get());
 
-    VISION.mngVSN_InitLimeLightNetTbl(); 
+    VISION.mngVSN_InitLimeLightNetTbl();
+    System.out.println("End of mngVSN_InitLimeLightNetTbl :  " + RbtSysTmr.get());
     VISION.mngVSN_InitCamCalibr();
+    System.out.println("End of mngVSN_InitCamCalibr :  " + RbtSysTmr.get());
 
     PID.setPID_Deg_PstnTgt(false, 0.0);
+    System.out.println("End of setPID_Deg_PstnTgt :  " + RbtSysTmr.get());
     PID.mngPID_InitCntrl();
+    System.out.println("End of mngPID_InitCntrl :  " + RbtSysTmr.get());
     NAV.mngNAV_InitCntrl();
+    System.out.println("End of mngNAV_InitCntrl :  " + RbtSysTmr.get());
     LIFT.mngLFT_InitCntrl();
+    System.out.println("End of mngLFT_InitCntrl :  " + RbtSysTmr.get());
     LIFT.setLFT_e_JackLckCmnd(Relay.Value.kForward);
 
     System.out.println("End of RobotInit :   " + RbtSysTmr.get());
@@ -107,15 +117,20 @@ public class Robot extends TimedRobot {
     RbtSysTmr.start();
 
     VISION.mngVSN_CamImgPeriodic();
+    System.out.println("End of mngVSN_CamImgPeriodic :  " + RbtSysTmr.get() + "\n");
     NAV.mngNAV_CmndSysTsk1();
+    System.out.println("End of mngNAV_CmndSysTsk1 :     " + RbtSysTmr.get() + "\n");
     PID.mngPID_Cntrl(); 
+    System.out.println("End of mngPID_Cntrl :           " + RbtSysTmr.get() + "\n");
     NAV.mngNAV_CmndSysTsk2();
+    System.out.println("End of mngNAV_CmndSysTsk2 :     " + RbtSysTmr.get() + "\n");
     if (K_System.KeSYS_b_NewLiftEnbl == true) {
-       LIFT.mngLFT_CntrlSys();
-    }
+       LIFT.mngLFT_CntrlSys(RbtSysTmr);
+       System.out.println("End of mngLFT_CntrlSys :     " + RbtSysTmr.get() + "\n");
+      }
 
     if (K_System.KeSYS_e_DebugEnblWtchDog != DebugSlct.DebugDsbl) {   
-      System.out.println("End of RobotPeriodic :   " + RbtSysTmr.get());
+      System.out.println("End of RobotPeriodic :        " + RbtSysTmr.get() + "\n");
     }
   
   }
@@ -205,7 +220,7 @@ public class Robot extends TimedRobot {
     PID.mngPID_Cntrl(); 
     NAV.mngNAV_CmndSysTsk2();
     if (K_System.KeSYS_b_NewLiftEnbl == true) {
-      LIFT.mngLFT_CntrlSys();
+      LIFT.mngLFT_CntrlSys(RbtSysTmr);
     }
 
     if (K_System.KeSYS_e_DebugEnblWtchDog != DebugSlct.DebugDsbl) {   
