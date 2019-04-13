@@ -21,12 +21,6 @@ public class K_System {
 	/*   General System Configuration   */
 	/****************************************/	 	
 
-	/** KeSYS_b_CL_DrvTgtEnbl: Enable Closed-Loop Vision Targeting Drive Control. */
-    public static final boolean KeSYS_b_CL_DrvTgtEnbl = true;
-
-	/** KeSYS_b_NewLiftEnbl: Enable the use of the new Lift Control strategy. */
-    public static final boolean KeSYS_b_NewLiftEnbl = true;
-
 	/** KeSYS_t_LoopRt: Execution Loop Rate Period for the Autonomous
 	 * Command Group Controls (sec). */
 	public static final float KeSYS_t_LoopRt = (float)0.020; // sec 

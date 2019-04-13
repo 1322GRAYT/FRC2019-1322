@@ -188,7 +188,7 @@ public class Lift extends Subsystem {
     Relay.Value JackLck;
     boolean DrwrMvmtFwd = false;
 
-    System.out.println("Start Lift Sys :: " + SysTmr.get() + "\n");
+    System.out.println("Start Lift Sys :: " + SysTmr.get());
 
     /* Lift Scissor Vertical Control */
     if (VeLFT_b_JackExtdRqst == true) {
@@ -209,12 +209,12 @@ public class Lift extends Subsystem {
       NormPwrVert = 0.0;
       JackLck = Relay.Value.kForward;
     }
-    System.out.println("Set Jack :: " + SysTmr.get() + "\n");
+    System.out.println("Set Jack ::       " + SysTmr.get());
     setLFT_b_JackExtdCmnd(JackExtd);
     setLFT_b_JackRtctCmnd(JackRtct);
     Robot.SCISSOR.liftRobot(NormPwrVert);       
     setLFT_e_JackLckCmnd(JackLck);
-    System.out.println("End Set Jack :: " + SysTmr.get() + "\n");
+    System.out.println("End Set Jack ::   " + SysTmr.get());
 
 
     /* Lift Slide Horizontal Control */
@@ -232,11 +232,11 @@ public class Lift extends Subsystem {
       DrwrRtct = false;
       NormPwrHorz = 0.0;
     }
-    System.out.println("Set Drawer :: " + SysTmr.get() + "\n");
+    System.out.println("Set Drawer ::     " + SysTmr.get());
     setLFT_b_DrwrExtdCmnd(DrwrExtd);
     setLFT_b_DrwrRtctCmnd(DrwrRtct);
     Robot.SCISSOR.extendLift(NormPwrHorz);
-    System.out.println("End Set Drawer :: " + SysTmr.get() + "\n");
+    System.out.println("End Set Drawer :: " + SysTmr.get());
 
     /* Lift Stabalizer Wheel Control */
     if ((DrwrMvmtFwd == true) && (Robot.SCISSOR.getFloorSensor() == false)) {
@@ -257,11 +257,11 @@ public class Lift extends Subsystem {
       StblzrExtd = getLFT_b_StblzrExtdCmnd();
       StblzrRtct = getLFT_b_StblzrRtctCmnd();
     }
-    System.out.println("Set Stblzr ::     " + SysTmr.get() + "\n");
+    System.out.println("Set Stblzr ::     " + SysTmr.get());
     setLFT_b_StblzrExtdCmnd(StblzrExtd);
     setLFT_b_StblzrRtctCmnd(StblzrRtct);
     Robot.SCISSOR.liftRobotPnumatic(getLFT_b_StblzrRtctCmnd());
-    System.out.println("EndSet Stblzr ::     " + SysTmr.get() + "\n");
+    System.out.println("EndSet Stblzr ::  " + SysTmr.get());
 
 
 
@@ -275,7 +275,8 @@ public class Lift extends Subsystem {
       Robot.DASHBOARD.updINS_RRL_Lift_Sys();
     }
 
-    System.out.println("Complete Lift Sys :: " + SysTmr.get() + "\n");
+    
+    System.out.println("Comp Lift Sys ::  " + SysTmr.get());
 
   }
 

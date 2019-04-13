@@ -71,17 +71,6 @@ public class Dashboard extends Subsystem {
   
 
 
-  /* Called to Update SmartDash Data for Display of Vision Camera Calibration Data */
-  public void updINS_SDB_CamCal() {
-    SmartDashboard.putNumber("Cam Focal Length (pixels) : ", Robot.VISION.getVSN_Pxl_CamFocalPt());
-  }
-  
-  /* Called to Update SmartDash Data for Display of Vision Camera Calibration Data */
-  public void updINS_RRL_CamCal() {
-    System.out.println("Cam Focal Length (pixels) :  " + Robot.VISION.getVSN_Pxl_CamFocalPt());
-  }
-
-
   /* Called to Update Smart Dashboard Data for Display of Vision raw Camera Limelight Data */
     public void updINS_SDB_RawLL_Data() {
     SmartDashboard.putNumber("LL Tgt Vld : ", Robot.VISION.getVSN_b_LL_TgtVld());
@@ -139,35 +128,8 @@ public void updINS_RRL_RawLL_Data() {
     System.out.println("VePID_b_PstnErrWithInDB : " + Robot.PID.getPID_b_PstnErrWithInDB());
     System.out.println("VePID_Deg_PstnErrAccum :  " + Robot.PID.getPID_Deg_ErrAccum());
   }
-
-
-  /* Called to Update SmartDash Data for Display of Navigation System Image Calculations. */
-  public void updINS_SDB_VSN_CamImgCalc() {
-    SmartDashboard.putNumber("Cam Img Width Btm (pixels) : ", Robot.VISION.getVSN_Pxl_ImgWidthBtm());
-    SmartDashboard.putNumber("Cam Img Width Top (pixels) : ", Robot.VISION.getVSN_Pxl_ImgWidthTop());
-    SmartDashboard.putNumber("Cam Img Height Lt (pixels) : ", Robot.VISION.getVSN_Pxl_ImgHeightLt());
-    SmartDashboard.putNumber("Cam Img Height Rt (pixels) : ", Robot.VISION.getVSN_Pxl_ImgHeightRt());
-    SmartDashboard.putNumber("Tgt Cam Dist :    ", Robot.VISION.getVSN_l_Cam2Tgt());
-    SmartDashboard.putNumber("Tgt Cam Dist2 :   ", Robot.VISION.getVSN_l_Cam2Tgt2ndry());
-    SmartDashboard.putNumber("Tgt Rbt Dist :    ", Robot.VISION.getVSN_l_Rbt2Tgt());
-    SmartDashboard.putNumber("Tgt Rbt2Tgt Ang : ", Robot.VISION.getVSN_Deg_Rbt2Tgt());
-    SmartDashboard.putNumber("Tgt Rbt2Tgt Rot : ", Robot.VISION.getVSN_Deg_RbtRot());
-  }
-
-  /* Called to Update RoboRIO Logfile for Display of Navigation System Image Calculations. */
-  public void updINS_RRL_VSN_CamImgCalc() {
-    System.out.println("Cam Img Width Btm (pixels) : " + Robot.VISION.getVSN_Pxl_ImgWidthBtm());
-    System.out.println("Cam Img Width Top (pixels) : " + Robot.VISION.getVSN_Pxl_ImgWidthTop());
-    System.out.println("Cam Img Height Lt (pixels) : " + Robot.VISION.getVSN_Pxl_ImgHeightLt());
-    System.out.println("Cam Img Height Rt (pixels) : " + Robot.VISION.getVSN_Pxl_ImgHeightRt());
-    System.out.println("Tgt Cam Dist :    " + Robot.VISION.getVSN_l_Cam2Tgt());
-    System.out.println("Tgt Cam Dist2 :   " + Robot.VISION.getVSN_l_Cam2Tgt2ndry());
-    System.out.println("Tgt Rbt Dist :    " + Robot.VISION.getVSN_l_Rbt2Tgt());
-    System.out.println("Tgt Rbt2Tgt Ang : " + Robot.VISION.getVSN_Deg_Rbt2Tgt());
-    System.out.println("Tgt Rbt2Tgt Rot : " + Robot.VISION.getVSN_Deg_RbtRot());
-  }
-
   
+
   
   /* Called to Update Smart Dashboard Data for Display of Target Closed-Loop Calculations  */
   public void updINS_SDB_PID_CorrCalc() { 

@@ -54,26 +54,6 @@ public class Vision extends Subsystem {
   private double LL_TgtCornX[] = new double[4];  // Target Corner Coord-X: RH, RL, LL, LH
   private double LL_TgtCornY[] = new double[4];  // Target Corner Coord-Y: RH, RL, LL, LH
 
-
-  private double VeVSN_Pxl_RefWidthTop;
-  private double VeVSN_Pxl_RefWidthBtm;
-  private double VeVSN_Pxl_RefHeightLt;
-  private double VeVSN_Pxl_RefHeightRt;
-
-  private int    VeVSN_Cnt_TgtCornAqrd;
-  private double VeVSN_Pxl_ImgWidthBtm;
-  private double VeVSN_Pxl_ImgWidthTop;
-  private double VeVSN_Pxl_ImgHeightLt;
-  private double VeVSN_Pxl_ImgHeightRt;
-
-  private int VeVSN_Pxl_CamFocalPt;
-  private double VeVSN_l_Cam2Tgt2ndry;
-  private double VeVSN_l_Cam2Tgt;
-  private double VeVSN_l_Rbt2Tgt;
-  private double VeVSN_Deg_Rbt2Tgt;
-  private double VeVSN_Deg_RbtRot;
-
-
   /* Array Indexes for building Matricies for Vision Pose Calculations */
   private static final int Xcell  = 0; // X-Cell for array Indexing;
   private static final int Ycell  = 1; // Y-Cell for array Indexing;
@@ -85,6 +65,12 @@ public class Vision extends Subsystem {
   private static final int LtUpr  = 3;  // Top Left Cell for array Indexing;
   private static final int NumPts = 4;  // Total Number of Data Points;
 
+  /* Array of the Matrix Data for viewing via Instrumentation */
+  private int VaVSN_Pxl_CamImgCoord[][] = new int[4][2];
+
+  private int VeVSN_Cnt_TgtCornAqrd;
+
+
 
   public Vision() {
     /* Empty Constructor */
@@ -93,22 +79,6 @@ public class Vision extends Subsystem {
   /**********************************************/
   /* Matricies for Object Dimensions and Images */
   /**********************************************/
-
-
-  /* Matricies of Camera and Image Data */
-  private MatOfPoint3f VmVSN_l_RefObj   = new MatOfPoint3f();
-  private MatOfPoint2f VmVSN_Pxl_RefImg = new MatOfPoint2f();
-  private Mat VmVSN_Pxl_Cam     = new Mat(3,3,CvType.CV_64F);
-  private Mat VmVSM_k_RotVect   = new Mat(3,1,CvType.CV_64F);
-  private Mat VmVSM_k_TransVect = new Mat(3,1,CvType.CV_64F);
-  private Mat VmVSM_k_Rot       = new Mat();
-  private Mat VmVSM_k_ImgPlaneZeroWorld = new Mat();
-
-  /* Arrays of the Matrix Data for viewing via Instrumentation */
-  private int VaVSN_Pxl_RefImgCoord[][] = new int[4][2];
-  private double VaVSN_l_RefObjCoord[][] = new double[4][3];
-  private int VaVSN_Pxl_CamMatrix[][] = new int[3][3];
-  private int VaVSN_Pxl_CamImgCoord[][] = new int[4][2];
 
   /* Active CameraServer Camera */
   private int Active_Camera = 0; // Default to camera 0
@@ -218,98 +188,6 @@ public double getVSN_Pxl_LL_TgtSideShort() {
     return(LL_TgtCornY[LeVSN_i_CellIdx]);
   }
 
-   /**
-   * Method: getVSN_Pxl_ImgWidthBtm - Target image width of
-   * bottom horizontal of target rectangle in pixels.  
-   * @return: double - pixels
-   */
-  public double getVSN_Pxl_ImgWidthBtm() {
-     return(VeVSN_Pxl_ImgWidthBtm); 
-  }
-
-   /**
-   * Method: getVSN_Pxl_ImgWidthTop - Target image width of
-   * top horizontal of target rectangle in pixels.  
-   * @return: double - pixels
-   */
-  public double getVSN_Pxl_ImgWidthTop() {
-    return(VeVSN_Pxl_ImgWidthTop); 
-  }
-
-   /**
-   * Method: getVSN_Pxl_ImgHeightLt - Target image height of
-   * left vertical of target rectangle in pixels.  
-   * @return: double - pixels
-   */
-  public double getVSN_Pxl_ImgHeightLt() {
-    return(VeVSN_Pxl_ImgHeightLt); 
-  }
-
-   /**
-   * Method: getVSN_Pxl_ImgHeightRt - Target image height of
-   * right vertical of target rectangle in pixels.  
-   * @return: double - pixels
-   */
-  public double getVSN_Pxl_ImgHeightRt() {
-    return(VeVSN_Pxl_ImgHeightRt); 
-  }
-
-   /**
-   * Method: getVSN_Pxl_CamFocalPt - Camera Focal Point/Length
-   * in Pixels (from Camera Calibration Measurements).  
-   * @return: double - pixels
-   */
-  public int getVSN_Pxl_CamFocalPt() {
-    return(VeVSN_Pxl_CamFocalPt); 
-  }
-
-  /**
-   * Method: getVSN_l_Cam2Tgt2ndry - Calculated Camera to Target
-   * Distance (Secondary Calculation).  
-   * @return: double - pixels
-   */
-  public double getVSN_l_Cam2Tgt2ndry() {
-    return(VeVSN_l_Cam2Tgt2ndry); 
-  }
-
-  /**
-   * Method: getVSN_l_Cam2Tgt - Calculated Camera to Target
-   * Distance (Primary Calculation).  
-   * @return: double - pixels
-   */
-  public double getVSN_l_Cam2Tgt() {
-    return(VeVSN_l_Cam2Tgt); 
-  }
-
-  /**
-   * Method: VeVSN_l_Rbt2Tgt - Calculated Robot to Target Distance.  
-   * @return: double - inches
-   */
-  public double getVSN_l_Rbt2Tgt() {
-    return(VeVSN_l_Rbt2Tgt); 
-  }
-
-  /**
-   * Method: VeVSN_Deg_Rbt2Tgt - Calculated Angle between the line
-   * perpendicular from the target center and the line from the target
-   * center to the robot.
-   * @return: double - degrees
-   */
-  public double getVSN_Deg_Rbt2Tgt() {
-    return(VeVSN_Deg_Rbt2Tgt); 
-  }
-
-  /**
-   * Method: getVSN_Deg_RbtRot - Calculated Angle of Rotation of the
-   * Robot wrt to the line perpendicular to the camera lens and the and
-   * the line between the robot and center of target.
-   * @return: double - degrees
-   * */
-  public double getVSN_Deg_RbtRot() {
-    return(VeVSN_Deg_RbtRot); 
-  }
-
-
 
   /*******************************/
   /* Public Class Methods        */
@@ -334,36 +212,6 @@ public double getVSN_Pxl_LL_TgtSideShort() {
       tcornx = LimeLightTbl.getEntry("tcornx");
       tcorny = LimeLightTbl.getEntry("tcorny");
     }  
-
-
-  /**
-    * Method: mngVSN_InitCamCalibr - Processes the Camera
-    * Calibration Calculations from the Camera Reference
-    * Calibration Data.  Creates the Object Geometry Matrix
-    * and the Reference Image Matrix, and calculates the
-    * Camera Focal Length, etc..  Done during Robot Initialization
-    * at the beginning of the Match.
-    */
-    public void mngVSN_InitCamCalibr() {
-      calcVSN_RefTgtObjMat();
-      calcVSN_RefTgtImgMat();
-      calcVSN_RefTgtImgGeometry();
-      calcVSN_CamFocalPt();
-      calcVSN_CamMat();
-      RstVSN_ImgVects();
-
-      System.out.println("Init Cam Calibration Complete. ");
-
-      if ((K_System.KeSYS_e_DebugEnblVsn == DebugSlct.DebugEnblBoth) ||
-      (K_System.KeSYS_e_DebugEnblVsn == DebugSlct.DebugEnblSDB)) {
-        Robot.DASHBOARD.updINS_SDB_CamCal();
-      }
-      if ((K_System.KeSYS_e_DebugEnblVsn == DebugSlct.DebugEnblBoth) ||
-          (K_System.KeSYS_e_DebugEnblVsn == DebugSlct.DebugEnblRRL)) {
-        Robot.DASHBOARD.updINS_RRL_CamCal();
-      }
-
-    }
 
 
   /**
@@ -416,15 +264,7 @@ public double getVSN_Pxl_LL_TgtSideShort() {
     * of the vision target in pixels, i.e. the length of all the sides.
     */
     public void MngVSN_CamImgProc() {
-      System.out.println("start parseVSN_CamImgData(). ");
       parseVSN_CamImgData();
-      System.out.println("start calcVSN_CamTgtImgGeometry(). ");
-      calcVSN_CamTgtImgGeometry();
-      System.out.println("start calcVSN_TgtDist(). ");
-      calcVSN_TgtDist();
-      System.out.println("start calcVSN_TgtPose(). ");
-      calcVSN_TgtPose();
-      System.out.println("Calculate Target Data Complete. ");
     }
 
 
@@ -447,203 +287,7 @@ public double getVSN_Pxl_LL_TgtSideShort() {
   /*******************************/
   /* Internal Class Methods      */
   /*******************************/   
-
-   /**
-    * Method: calcVSN_RefTgtObjMat - Calculate the coordinates of
-    * the target object in object space in physical units and build
-    * the Reference Target Object Matrix.
-    */
-    private void calcVSN_RefTgtObjMat() {
-      double triBase, triHeight;
-      int i;
-      float x, y, z;
-      List<Point3> LaVSN_l_RefImgDim = new ArrayList<Point3>();
-
-      /* Calculate the Equal-Angular Rhombas End-Triangle Base Lengths */ 
-      triBase = (Math.abs(K_Vision.KeVSN_l_RefTgtBtm - K_Vision.KeVSN_l_RefTgtTop))/2;
-  
-      /* Calculate the Rhombas Height via calculating the Height of the Eng-Triangles. */
-      triHeight = Math.sqrt(Math.pow(K_Vision.KeVSN_l_RefTgtSides,2) - Math.pow(triBase,2));
-
-      /*  Determine Point Coordinates: RtUpr Point */
-      VaVSN_l_RefObjCoord[RtUpr][Xcell] = K_Vision.KeVSN_l_RefTgtTop;
-      VaVSN_l_RefObjCoord[RtUpr][Ycell] = triHeight;
-      VaVSN_l_RefObjCoord[RtUpr][Zcell] = 0.0;
-
-      /*  Determine Point Coordinates: RtLwr Point */
-      VaVSN_l_RefObjCoord[RtLwr][Xcell] = K_Vision.KeVSN_l_RefTgtBtm;
-      VaVSN_l_RefObjCoord[RtLwr][Ycell] = 0.0;
-      VaVSN_l_RefObjCoord[RtLwr][Zcell] = 0.0;
     
-      /*  Determine Point Coordinates: LtLwr Point */
-      VaVSN_l_RefObjCoord[LtLwr][Xcell] = 0.0;
-      VaVSN_l_RefObjCoord[LtLwr][Ycell] = 0.0;
-      VaVSN_l_RefObjCoord[LtLwr][Zcell] = 0.0;
-
-      /*  Determine Point Coordinates: LtUpr Point */
-      VaVSN_l_RefObjCoord[LtUpr][Xcell] = triBase;
-      VaVSN_l_RefObjCoord[LtUpr][Ycell] = triHeight;
-      VaVSN_l_RefObjCoord[LtUpr][Zcell] = 0.0;
-
-      /* Build Object Matrix from Array */
-      for (i=0;i<NumPts;i++) {
-        x = (float) VaVSN_l_RefObjCoord[i][Xcell];
-        y = (float) VaVSN_l_RefObjCoord[i][Ycell];
-        z = (float) VaVSN_l_RefObjCoord[i][Zcell];
-        LaVSN_l_RefImgDim.add(new Point3(x, y, z));
-      }
-
-      VmVSN_l_RefObj.fromList(LaVSN_l_RefImgDim);
-    }
-
-
-   /**
-    * Method: calcVSN_RefTgtImgMat - Load the coordinates of the target
-    * image in the image plane in pixel units from calibrations and build
-    * the Reference Target Image Matrix.
-    */
-    private void calcVSN_RefTgtImgMat() {
-      int i;
-      float x, y;
-      List<Point> LaVSN_Pxl_RefImgCoord = new ArrayList<Point>();
-
-      /* Build Object Matrix from Array */
-      for (i=0;i<NumPts;i++) {
-        x = (float) K_Vision.KaVSN_Pxl_RefImgCoord[i][Xcell];
-        y = (float) K_Vision.KaVSN_Pxl_RefImgCoord[i][Ycell];
-        LaVSN_Pxl_RefImgCoord.add(new Point(x, y));
-      }
-
-	  VmVSN_Pxl_RefImg.fromList(LaVSN_Pxl_RefImgCoord);
-    }
-
-
-  /**
-    * Method: calcVSN_RegTgtImgGeometry - Calculate the dimensions
-    * of the vision reference in pixels, i.e. the length of all the sides.
-    */
-    private void calcVSN_RefTgtImgGeometry() {
-      VeVSN_Pxl_RefWidthTop = calcVSN_PxlLengthLineSeg(K_Vision.KaVSN_Pxl_RefImgCoord[RtUpr], K_Vision.KaVSN_Pxl_RefImgCoord[LtUpr]);
-      VeVSN_Pxl_RefWidthBtm = calcVSN_PxlLengthLineSeg(K_Vision.KaVSN_Pxl_RefImgCoord[RtLwr], K_Vision.KaVSN_Pxl_RefImgCoord[LtLwr]);
-      VeVSN_Pxl_RefHeightLt = calcVSN_PxlLengthLineSeg(K_Vision.KaVSN_Pxl_RefImgCoord[LtLwr], K_Vision.KaVSN_Pxl_RefImgCoord[LtUpr]);
-      VeVSN_Pxl_RefHeightRt = calcVSN_PxlLengthLineSeg(K_Vision.KaVSN_Pxl_RefImgCoord[RtLwr], K_Vision.KaVSN_Pxl_RefImgCoord[RtUpr]);
-    }
-
-
-  /**
-    * Method: calcVSN_PxlLengthLineSeg - Calculate the length of a
-    * line segment given the X-Y coordinates of the two end-points
-    * of the line.  Uses the Pythagorean Theorem.
-    * @param1: Array of Cartesian Coordinates of Line Segment PointA (int)
-    * @param2: Array of Cartesian Coordinates of Line Segment PointB (int)
-    * @return: Length of Line Segment in Camera Pixels (double)
-    */
-    private double calcVSN_PxlLengthLineSeg(int LeVSN_Pxl_PntA[], int LeVSN_Pxl_PntB[]) {
-      double diffX, diffY, hyp2;
-      double length;
-  
-      /* Calculate the delta between the points in the X-dimension. */
-      diffX = (double)(LeVSN_Pxl_PntA[Xcell] - LeVSN_Pxl_PntB[Xcell]);
-  
-      /* Calculate the delta between the points in the Y-dimension. */
-      diffY = (double)(LeVSN_Pxl_PntA[Ycell] - LeVSN_Pxl_PntB[Ycell]);
-  
-      /* calculate the hypoteneuse */
-      hyp2 = (Math.pow(diffX,2)) + (Math.pow(diffY,2));
-      length = Math.sqrt((double)hyp2);
-
-      return (length);
-    }
-
-
-/*****************************************************/
-/*  Calculate Camera Focal Point                     */
-/*  F = (P x D) / W                                  */
-/*    F = Camera Focal Point (pixel)                 */
-/*    P = Reference Target Dimension (pixel)         */
-/*    W = Reference Target Dimension (inch)          */
-/*    D = Reference Camera to Target Distance (inch) */
-/*****************************************************/	 	
-/**
-  * Method: calcVSN_CamFocalPt - Calculate the Camera Focal Point
-  * in Pixels from the reference calibration measurments of Target
-  * Width in both inches and pixels and the distance from camera and
-  * target based on empirical reference measurements.
-  */
-  private void calcVSN_CamFocalPt() {
-    double LeVSN_l_FocalPt, LeVSN_l_RefTgtBtm;
-
-    /* To protect against a divide by zero error */
-    LeVSN_l_RefTgtBtm = K_Vision.KeVSN_l_RefTgtBtm;
-    if (LeVSN_l_RefTgtBtm <= 1) {
-      LeVSN_l_RefTgtBtm = 1;
-    }
-  
-    LeVSN_l_FocalPt = ((VeVSN_Pxl_RefWidthBtm * K_Vision.KeVSN_l_RefTgtToCamDist)/
-                       LeVSN_l_RefTgtBtm);
-
-    VeVSN_Pxl_CamFocalPt = (int)LeVSN_l_FocalPt;
-  }
-
-
-  /**
-    * Method: calcVSN_CamMat - Calculate the Camera Matrix from the
-    * camera Focal Point Fx and Fy and the camera optical center
-    * Cx and Cy.
-    *                 | Fx,  0, Cx |
-    *  Cam Matrix =   |  0, Fy, Cy |
-    *                 |  0,  0,  1 |
-    */
-    private void calcVSN_CamMat() {
-      double triBase, triHeight;
-      int i;
-
-      /* Calculate the Equal-Angular Rhombas End-Triangle Base Lengths */ 
-      triBase = (Math.abs(K_Vision.KeVSN_l_RefTgtBtm - K_Vision.KeVSN_l_RefTgtTop))/2;
-  
-      /* Calculate the Rhombas Height via calculating the Height of the Eng-Triangles. */
-      triHeight = Math.sqrt(Math.pow(K_Vision.KeVSN_l_RefTgtSides,2) - Math.pow(triBase,2));
-    
-
-      /*  Construct Row0 of Camera Matrix */
-      VaVSN_Pxl_CamMatrix[0][0] = VeVSN_Pxl_CamFocalPt;
-      VaVSN_Pxl_CamMatrix[0][1] = 0;
-      VaVSN_Pxl_CamMatrix[0][2] = K_Vision.KaVSN_Pxl_CamDim[Xcell]/2;
-
-      /*  Construct Row1 of Camera Matrix */
-      VaVSN_Pxl_CamMatrix[1][0] = 0;
-      VaVSN_Pxl_CamMatrix[1][1] = VeVSN_Pxl_CamFocalPt;
-      VaVSN_Pxl_CamMatrix[1][2] = K_Vision.KaVSN_Pxl_CamDim[Ycell]/2;
-
-      /*  Construct Row2 of Camera Matrix */
-      VaVSN_Pxl_CamMatrix[2][0] = 0;
-      VaVSN_Pxl_CamMatrix[2][1] = 0;
-      VaVSN_Pxl_CamMatrix[2][2] = 1;
-
-
-      /* Build Object Matrix from Array */
-      for (i=0;i<3;i++) {
-        VmVSN_Pxl_Cam.put(i,0,(float) VaVSN_Pxl_CamMatrix[i][0]);
-        VmVSN_Pxl_Cam.put(i,1,(float) VaVSN_Pxl_CamMatrix[i][1]);
-        VmVSN_Pxl_Cam.put(i,2,(float) VaVSN_Pxl_CamMatrix[i][2]);
-      }
-
-    }  
-    
-
-  /**
-    * Method: RstVSN_ImgVects - Resets the persistent Camera Matricies
-    * by loading them as zero matricies..
-    */
-    private void RstVSN_ImgVects() {
-      VmVSM_k_RotVect.zeros(3,1,CvType.CV_64F);
-      VmVSM_k_TransVect.zeros(3,1,CvType.CV_64F);
-      VmVSM_k_Rot.zeros(3,3,CvType.CV_64F);
-      VmVSM_k_ImgPlaneZeroWorld.zeros(3,1,CvType.CV_64F);
-    }
-
-
-
   /**
     * Method: captureVSN_CamImgData - Capture the Raw Image Data from
     * the Camera.  Receives the data from the
@@ -679,103 +323,6 @@ public double getVSN_Pxl_LL_TgtSideShort() {
         VaVSN_Pxl_CamImgCoord[i][Ycell] = (int)LL_TgtCornY[i];
       }
     }
-
-
-  /**
-    * Method: calcVSN_CamTgtImgGeometry - Calculate the dimensions
-    * of the vision target in pixels, i.e. the length of all the sides.
-    */
-    private void calcVSN_CamTgtImgGeometry() {
-      VeVSN_Pxl_ImgWidthTop = calcVSN_PxlLengthLineSeg(VaVSN_Pxl_CamImgCoord[RtUpr], VaVSN_Pxl_CamImgCoord[LtUpr]);
-      VeVSN_Pxl_ImgWidthBtm = calcVSN_PxlLengthLineSeg(VaVSN_Pxl_CamImgCoord[RtLwr], VaVSN_Pxl_CamImgCoord[LtLwr]);
-      VeVSN_Pxl_ImgHeightLt = calcVSN_PxlLengthLineSeg(VaVSN_Pxl_CamImgCoord[LtLwr], VaVSN_Pxl_CamImgCoord[LtUpr]);
-      VeVSN_Pxl_ImgHeightRt = calcVSN_PxlLengthLineSeg(VaVSN_Pxl_CamImgCoord[RtLwr], VaVSN_Pxl_CamImgCoord[RtUpr]);  
-    }
-
-
-  /****************************************************/
-  /*  Calculate Current Camera to Target Distance     */
-  /*  D' = (W x F) / P'                               */
-  /*    F = Camera Focal Point (pixel)                */
-  /*    P' = Current Target Dimension (pixel)         */
-  /*    W = Reference Target Dimension (inch)         */
-  /*    D' = Current Camera to Target Distance (inch) */
-  /****************************************************/	 	
-  /**
-    * Method: calcVSN_TgtDist - Calculates the current distance the
-    * target is from the robot based on the camera focal length in
-    * pixels, the Reference Target Dimension of the target and the
-    * present reading of target width in pixels.
-    */
-    private void calcVSN_TgtDist() {
-      double LeVSN_Pxl_In;
-      double LeVSN_Pxl_Cam2Tgt;
-
-      if (VeVSN_Cnt_TgtCornAqrd == 4) {
-        LeVSN_Pxl_In = VeVSN_Pxl_ImgWidthBtm;
-      }
-      else {
-        LeVSN_Pxl_In = LL_TgtLngthHorz;
-      }
-
-      /* To protect against a divide by zero error */
-      if (LeVSN_Pxl_In < 1) { 
-        LeVSN_Pxl_In = 1;
-      }
-   
-      LeVSN_Pxl_Cam2Tgt = (K_Vision.KeVSN_l_RefTgtBtm * VeVSN_Pxl_CamFocalPt)/
-                           LeVSN_Pxl_In;
-
-      VeVSN_l_Cam2Tgt2ndry = LeVSN_Pxl_Cam2Tgt;
-    }
-
-
-  /**
-    * Method: calcVSN_TgtPose - Calculate the target image pose
-    * data, i.e. Target to Camera distance, Camera to Target Angle,
-    * and Robot Rotation Angle wrt the Target.
-    *  @return:  Indication that the PnP Calculation is has failed.
-    */
-    private boolean calcVSN_TgtPose() {
-      boolean PnP_Vld;
-      double x[], z[];
-      Mat LmVSM_k_RotInv       = new Mat();
-
-      /* Calculate the Rotation Matrix and Translation Vector */
-      PnP_Vld = Calib3d.solvePnP(VmVSN_l_RefObj, VmVSN_Pxl_RefImg, VmVSN_Pxl_Cam,
-                                 new MatOfDouble(), VmVSM_k_RotVect, VmVSM_k_TransVect);
-  
-      if (PnP_Vld == true) {
-        /* Calculate Distance between Target and Camera/Robot */
-        x = VmVSM_k_TransVect.get(Xcell,0);
-        z = VmVSM_k_TransVect.get(Zcell,0);
-        VeVSN_l_Cam2Tgt = Math.sqrt(Math.pow(x[0],2) + Math.pow(z[0],2));
-        VeVSN_l_Rbt2Tgt = VeVSN_l_Cam2Tgt - 0; // todo: Subtract Robot Front to Cam Distance
-
-
-        /* Angle1: Calculate horiz angle from robot/camera forward and the robot-target line */
-        VeVSN_Deg_Rbt2Tgt = Math.atan2(x[0], z[0]);
-
-        
-        /* Angle2: Calculate horiz angle between the target perpendicular and the robot-target line */
-        Calib3d.Rodrigues(VmVSM_k_RotVect, VmVSM_k_Rot);
-        Core.transpose(VmVSM_k_Rot,LmVSM_k_RotInv);
-        Core.gemm(LmVSM_k_RotInv, VmVSM_k_TransVect, -1, new Mat(), 0, VmVSM_k_ImgPlaneZeroWorld);
-        x = VmVSM_k_ImgPlaneZeroWorld.get(0,0);
-        z = VmVSM_k_ImgPlaneZeroWorld.get(2,0);
-        VeVSN_Deg_RbtRot = (double)Math.atan2(x[0], z[0]);
-      }
-      else /* (PnP_Vld == false) */ {
-        /* Failed to calculated proper PnP values - Clear out Peristant Matrices and Variables */
-        // RstVSN_ImgVects();
-      }
-
-      /* free-up memory from the locally matricies */
-      LmVSM_k_RotInv.release();
-
-      return(PnP_Vld);
-    }
-
 
 
   @Override

@@ -392,7 +392,7 @@ public class Nav extends Subsystem {
       VeNAV_r_NormPwrCmdLat =  LeNAV_r_NormPwrCmdLat;
       VeNAV_r_NormPwrCmdRot =  LeNAV_r_NormPwrCmdRot;
 
-      if ((K_System.KeSYS_b_CL_DrvTgtEnbl == true) && (getNAV_b_DrvAutoCmdActv() == false)) {
+      if (getNAV_b_DrvAutoCmdActv() == false) {
         Robot.DRIVES.DriveInVoltage(LeNAV_r_NormPwrCmdLong, LeNAV_r_NormPwrCmdLat, LeNAV_r_NormPwrCmdRot);
         Robot.DRIVES.setSafety(LeNAV_b_SetSafe);
       }

@@ -28,51 +28,6 @@ public class K_Vision {
 
 
   /**************************************************/
-	/*  Target Reference Pixel Coordinates            */
-	/**************************************************/	 	
-
-  /** KaVSN_Pxl_RefImgCoord: Array of X,Y Coordinates of the reference
-    * target camera image. 
-    * Rows:    (RtUpper, RtLower, LtLower, LtUpper)
-    * Columns: (X,Y) */
-   public static final int KaVSN_Pxl_RefImgCoord[][] = 
-     {/*  X ,  Y */ 
-       { 176,  96}, /* RtUpper Corner */
-       { 193, 118}, /* RtLower Corner */
-       { 100, 149}, /* LtLower Corner */
-       { 107, 118}  /* LtUpper Corner */
-     };
-
-
-  /**************************************************/
-	/*  Target Reference Physical Measurements        */
-	/**************************************************/	 	
-	
-	/** KeVSN_l_RefTgtTop: Width of the top of the target image in
-   * measured inches. */
-   public static final double KeVSN_l_RefTgtTop = 12.0;  // inches
-
-  /** KeVSN_l_RefTgtBtm: Width of the bottom of the target image in
-   * measured inches. */
-   public static final double KeVSN_l_RefTgtBtm = 14.75; // inches
-
-	/** KeVSN_l_RefTgtLt: Length of the equal left and right sides of
-   * the target image in measured inches. */
-   public static final double KeVSN_l_RefTgtSides = 5.5; // inches
-
- 	/** KeVSN_l_RefTgtToCamDist: Length of the distance between the
-   * target and the camera at the camera calibration reference
-   * distance in measured inches. */
-   public static final double KeVSN_l_RefTgtToCamDist = 38.5; // inches
-
- 	/** KeVSN_l_RbtFrameAllwnc: Robot Frame Buffer Allowance to subtract
-   * off of Camera to Target Distance when determining where to place
-   * target to drive robot in front of target. */
-  public static final double KeVSN_l_RbtFrameAllwnc = 10.0; // inches
-
-
-
-  /**************************************************/
 	/*  Vision Target Closed-Loop Error Calibrations  */
 	/**************************************************/	 	
 	
