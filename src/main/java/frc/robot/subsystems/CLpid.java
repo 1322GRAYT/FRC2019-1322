@@ -9,6 +9,7 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -24,7 +25,8 @@ import frc.robot.calibrations.K_PID;
  * Current Target Image CrossHair.
  */
 public class CLpid extends Subsystem {
-	private Timer VePID_t_TgtCondTmr = new Timer();
+	private Timer VePID_t_TgtCondTmr;
+	private Preferences IePID_CL_Cals;
 	
 	// Variable Declarations
 	boolean VePID_b_CL_Enbl;           // (boolean)
@@ -54,7 +56,7 @@ public class CLpid extends Subsystem {
 
 
   public CLpid() {
-	  /* Empty Constructor */
+		VePID_t_TgtCondTmr = new Timer();
 	}
 
     
@@ -217,7 +219,6 @@ public class CLpid extends Subsystem {
   /**********************************************/
   /* Internal Class Methods                     */
   /**********************************************/
-
 	
 		/** Method: slctPID_CalData - slct Proper PID Calibration Data between
 		 *  calibrations for Vision based CL, Gyro based CL, or Smart Dashboard
@@ -242,15 +243,17 @@ public class CLpid extends Subsystem {
 				VePID_Pct_IntglCorrMax = K_PID.KePID_Pct_NAV_IntglCorrMax;
 				VePID_t_PstnTgtSyncMetThrsh = K_PID.KePID_t_NAV_PstnTgtSyncMetThrsh;
 			}
-/*
+
 		if (RobotState.isTest() == true) {
-			VePID_Deg_PosErrDB = SmartDashboard.getNumber(SDB_KG, VePID_Deg_PosErrDB);
-			VePID_K_PropGx = SmartDashboard.getNumber(SDB_KG, VePID_K_PropGx);
-			VePID_Pct_PropCorrMax = SmartDashboard.getNumber(SDB_KG, VePID_Pct_PropCorrMax);
-			VePID_K_IntglGx = SmartDashboard.getNumber(SDB_IG, VePID_K_IntglGx);
-			VePID_Pct_IntglCorrMax = SmartDashboard.getNumber(SDB_KG, VePID_Pct_IntglCorrMax);
+			IePID_CL_Cals = Preferences.getInstance();
+
+			VePID_Deg_PosErrDB =     IePID_CL_Cals.getDouble("Err DB:", VePID_Deg_PosErrDB);
+			VePID_K_PropGx =         IePID_CL_Cals.getDouble("KP:    ", VePID_K_PropGx);
+			VePID_Pct_PropCorrMax =  IePID_CL_Cals.getDouble("P-Corr Max:", VePID_Pct_PropCorrMax);
+			VePID_K_IntglGx =        IePID_CL_Cals.getDouble("KI:    ", VePID_K_IntglGx);
+			VePID_Pct_IntglCorrMax = IePID_CL_Cals.getDouble("I-Corr Max:", VePID_Pct_IntglCorrMax);
 			}
-*/				
+
     } 
 
 
