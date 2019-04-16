@@ -101,20 +101,6 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
-    RbtSysTmr.reset();
-    RbtSysTmr.start();
-
-    VISION.mngVSN_CamImgPeriodic();
-    NAV.mngNAV_CmndSysTsk1();
-    PID.mngPID_Cntrl(); 
-    NAV.mngNAV_CmndSysTsk2();
-    System.out.println("Start of mngLFT_CntrlSys :      " + RbtSysTmr.get());
-    LIFT.mngLFT_CntrlSys(RbtSysTmr);
-    System.out.println("End of mngLFT_CntrlSys :        " + RbtSysTmr.get());
-
-    if (K_System.KeSYS_e_DebugEnblWtchDog != DebugSlct.DebugDsbl) {   
-      System.out.println("End of RobotPeriodic :         " + RbtSysTmr.get() + "\n\n");
-    }
   
   }
 
@@ -168,6 +154,20 @@ public class Robot extends TimedRobot {
   @Override
   public void autonomousPeriodic() {
     Scheduler.getInstance().run();
+
+    RbtSysTmr.reset();
+    RbtSysTmr.start();
+
+    VISION.mngVSN_CamImgPeriodic();
+    NAV.mngNAV_CmndSysTsk1();
+    PID.mngPID_Cntrl(); 
+    NAV.mngNAV_CmndSysTsk2();
+    LIFT.mngLFT_CntrlSys(RbtSysTmr);
+
+    if (K_System.KeSYS_e_DebugEnblWtchDog != DebugSlct.DebugDsbl) {   
+      System.out.println("End of AutoPeriodic :           " + RbtSysTmr.get() + "\n\n");
+    }
+
   }
 
   @Override
@@ -187,6 +187,26 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     Scheduler.getInstance().run();
+  
+    RbtSysTmr.reset();
+    RbtSysTmr.start();
+
+    System.out.println("Reset RbtSysTmr :              " + RbtSysTmr.get());
+    VISION.mngVSN_CamImgPeriodic();
+    System.out.println("End of mngVSN_CamImgPeriodic : " + RbtSysTmr.get());
+    NAV.mngNAV_CmndSysTsk1();
+    System.out.println("End of mngNAV_CmndSysTsk1 :    " + RbtSysTmr.get());
+    PID.mngPID_Cntrl(); 
+    System.out.println("End of mngPID_Cntrl :          " + RbtSysTmr.get());
+    NAV.mngNAV_CmndSysTsk2();
+    System.out.println("End of mngNAV_CmndSysTsk2 :    " + RbtSysTmr.get());
+    LIFT.mngLFT_CntrlSys(RbtSysTmr);
+    System.out.println("End of mngLFT_CntrlSys :       " + RbtSysTmr.get());
+
+    if (K_System.KeSYS_e_DebugEnblWtchDog != DebugSlct.DebugDsbl) {   
+      System.out.println("End of TelePeriodic :          " + RbtSysTmr.get() + "\n\n");
+    }
+
   } 
 
 
@@ -198,14 +218,20 @@ public class Robot extends TimedRobot {
     RbtSysTmr.reset();
     RbtSysTmr.start();
 
+    System.out.println("Reset RbtSysTmr :              " + RbtSysTmr.get());
     VISION.mngVSN_CamImgPeriodic();
+    System.out.println("End of mngVSN_CamImgPeriodic : " + RbtSysTmr.get());
     NAV.mngNAV_CmndSysTsk1();
+    System.out.println("End of mngNAV_CmndSysTsk1 :    " + RbtSysTmr.get());
     PID.mngPID_Cntrl(); 
+    System.out.println("End of mngPID_Cntrl :          " + RbtSysTmr.get());
     NAV.mngNAV_CmndSysTsk2();
+    System.out.println("End of mngNAV_CmndSysTsk2 :    " + RbtSysTmr.get());
     LIFT.mngLFT_CntrlSys(RbtSysTmr);
+    System.out.println("End of mngLFT_CntrlSys :       " + RbtSysTmr.get());
 
     if (K_System.KeSYS_e_DebugEnblWtchDog != DebugSlct.DebugDsbl) {   
-      System.out.println("End of RobotPeriodic :   " + RbtSysTmr.get());
+      System.out.println("End of TestPeriodic :          " + RbtSysTmr.get());
     }
 
   }

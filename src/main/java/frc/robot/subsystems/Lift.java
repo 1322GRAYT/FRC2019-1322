@@ -212,7 +212,8 @@ public class Lift extends Subsystem {
     System.out.println("Set Jack ::       " + SysTmr.get());
     setLFT_b_JackExtdCmnd(JackExtd);
     setLFT_b_JackRtctCmnd(JackRtct);
-    Robot.SCISSOR.liftRobot(NormPwrVert);       
+    System.out.println("Cmnd Jack ::      " + SysTmr.get());
+    Robot.SCISSOR.liftRobot(NormPwrVert, SysTmr);       
     setLFT_e_JackLckCmnd(JackLck);
     System.out.println("End Set Jack ::   " + SysTmr.get());
 
@@ -235,7 +236,8 @@ public class Lift extends Subsystem {
     System.out.println("Set Drawer ::     " + SysTmr.get());
     setLFT_b_DrwrExtdCmnd(DrwrExtd);
     setLFT_b_DrwrRtctCmnd(DrwrRtct);
-    Robot.SCISSOR.extendLift(NormPwrHorz);
+    System.out.println("Cmnd Drawer ::    " + SysTmr.get());
+    Robot.SCISSOR.extendLift(NormPwrHorz, SysTmr);
     System.out.println("End Set Drawer :: " + SysTmr.get());
 
     /* Lift Stabalizer Wheel Control */
@@ -260,7 +262,8 @@ public class Lift extends Subsystem {
     System.out.println("Set Stblzr ::     " + SysTmr.get());
     setLFT_b_StblzrExtdCmnd(StblzrExtd);
     setLFT_b_StblzrRtctCmnd(StblzrRtct);
-    Robot.SCISSOR.liftRobotPnumatic(getLFT_b_StblzrRtctCmnd());
+    System.out.println("Cmnd Stblzr ::    " + SysTmr.get());  
+    Robot.SCISSOR.liftRobotPnumatic(getLFT_b_StblzrRtctCmnd(), SysTmr);
     System.out.println("EndSet Stblzr ::  " + SysTmr.get());
 
 
