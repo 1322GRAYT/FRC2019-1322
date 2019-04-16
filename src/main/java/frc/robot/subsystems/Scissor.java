@@ -13,9 +13,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Solenoid;
-import edu.wpi.first.wpilibj.Timer;
 
-import frc.robot.Robot;
 import frc.robot.RobotMap;
 
 /**
@@ -41,18 +39,12 @@ public class Scissor extends Subsystem {
     robotLiftR = new Solenoid(RobotMap.RobotLift[1]);
   }
 
-  public void liftRobot(double speed, Timer SysTmr) {
-    Robot.LEDS.setMode(Robot.LEDS.ledRed, Robot.LEDS.ledModeChase);
-    System.out.println("Finish SetLEDs Lift ::: " + SysTmr.get());      
+  public void liftRobot(double speed) {
     scissorL.set(ControlMode.PercentOutput, speed);
-    System.out.println("Finish Set Lift :::     " + SysTmr.get());      
   }
 
-  public void extendLift(double speed, Timer SysTmr) {
-    Robot.LEDS.setMode(Robot.LEDS.ledYellow, Robot.LEDS.ledModeChase);
-    System.out.println("Finish SetLEDs Drwr ::: " + SysTmr.get());      
+  public void extendLift(double speed) {
     scissorOut.set(ControlMode.PercentOutput, speed);
-    System.out.println("Finish Set Drwr :::     " + SysTmr.get());      
   }
 
   public boolean getFwdLimit() {
@@ -63,13 +55,9 @@ public class Scissor extends Subsystem {
     return scissorR.getSensorCollection().isRevLimitSwitchClosed();
   }
 
-  public void liftRobotPnumatic(boolean up, Timer SysTmr) {
-    Robot.LEDS.setLEDs(Robot.LEDS.ledRainbow);
-    System.out.println("Finish SetLEDs Pneu ::: " + SysTmr.get());      
-    robotLiftL.set(up);
-    System.out.println("Finish SetLft Pneu :::  " + SysTmr.get());      
-    robotLiftR.set(!up);
-    System.out.println("Finish SetRgt Pneu :::  " + SysTmr.get());      
+  public void liftRobotPnumatic(boolean up) {
+    robotLiftL.set(up);   
+    robotLiftR.set(!up);   
   }
 
   public boolean getLiftRobotPnumatic() {

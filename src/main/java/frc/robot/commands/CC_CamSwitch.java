@@ -8,11 +8,14 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
+
 import frc.robot.Robot;
+
+
 
 public class CC_CamSwitch extends Command {
   public CC_CamSwitch() {
-    requires(Robot.VISION);
+    requires(Robot.CAMERA);
   }
 
   private boolean finished = false;
@@ -20,7 +23,7 @@ public class CC_CamSwitch extends Command {
   // Called just before this Command runs the first time
   @Override
   protected void initialize() {
-    Robot.VISION.SlctVSN_DrvrCam();
+    Robot.CAMERA.SlctCAM_DrvrCam();
     finished = true;
   }
 

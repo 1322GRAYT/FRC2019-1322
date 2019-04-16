@@ -35,11 +35,9 @@ public class Robot extends TimedRobot {
 
   public static OI m_oi;
 
-  public final static TblLib          TBLLIB    = new TblLib();
-  public final static Vision          VISION    = new Vision();
-  public final static CLpid           PID       = new CLpid();
   public final static Drives          DRIVES    = new Drives();
   public final static Nav             NAV       = new Nav();
+  public final static Camera          CAMERA    = new Camera();
   public final static Claw            CLAW      = new Claw();
   public final static LEDController   LEDS      = new LEDController();
   public final static Dashboard       DASHBOARD = new Dashboard();
@@ -51,11 +49,13 @@ public class Robot extends TimedRobot {
   public static UsbCamera camera0;
   public static UsbCamera camera1;
 
+   // System Variables
+   public Timer RbtSysTmr = new Timer();
+
+
   Command m_autonomousCommand;
   SendableChooser<Command> m_chooser = new SendableChooser<>();
 
-  // System Variables
-  public Timer RbtSysTmr = new Timer();
 
 
   /**
@@ -76,10 +76,6 @@ public class Robot extends TimedRobot {
     camera0.setConnectionStrategy(ConnectionStrategy.kKeepOpen);
     camera1.setConnectionStrategy(ConnectionStrategy.kKeepOpen);
 
-    VISION.mngVSN_InitLimeLightNetTbl();
-
-    PID.setPID_Deg_PstnTgt(false, 0.0);
-    PID.mngPID_InitCntrl();
     NAV.mngNAV_InitCntrl();
     LIFT.mngLFT_InitCntrl();
     LIFT.setLFT_e_JackLckCmnd(Relay.Value.kForward);
@@ -158,11 +154,8 @@ public class Robot extends TimedRobot {
     RbtSysTmr.reset();
     RbtSysTmr.start();
 
-    VISION.mngVSN_CamImgPeriodic();
-    NAV.mngNAV_CmndSysTsk1();
-    PID.mngPID_Cntrl(); 
-    NAV.mngNAV_CmndSysTsk2();
-    LIFT.mngLFT_CntrlSys(RbtSysTmr);
+    NAV.mngNAV_CmndSysTsk();
+    LIFT.mngLFT_CntrlSys();
 
     if (K_System.KeSYS_e_DebugEnblWtchDog != DebugSlct.DebugDsbl) {   
       System.out.println("End of AutoPeriodic :           " + RbtSysTmr.get() + "\n\n");
@@ -191,17 +184,8 @@ public class Robot extends TimedRobot {
     RbtSysTmr.reset();
     RbtSysTmr.start();
 
-    System.out.println("Reset RbtSysTmr :              " + RbtSysTmr.get());
-    VISION.mngVSN_CamImgPeriodic();
-    System.out.println("End of mngVSN_CamImgPeriodic : " + RbtSysTmr.get());
-    NAV.mngNAV_CmndSysTsk1();
-    System.out.println("End of mngNAV_CmndSysTsk1 :    " + RbtSysTmr.get());
-    PID.mngPID_Cntrl(); 
-    System.out.println("End of mngPID_Cntrl :          " + RbtSysTmr.get());
-    NAV.mngNAV_CmndSysTsk2();
-    System.out.println("End of mngNAV_CmndSysTsk2 :    " + RbtSysTmr.get());
-    LIFT.mngLFT_CntrlSys(RbtSysTmr);
-    System.out.println("End of mngLFT_CntrlSys :       " + RbtSysTmr.get());
+    NAV.mngNAV_CmndSysTsk();
+    LIFT.mngLFT_CntrlSys();
 
     if (K_System.KeSYS_e_DebugEnblWtchDog != DebugSlct.DebugDsbl) {   
       System.out.println("End of TelePeriodic :          " + RbtSysTmr.get() + "\n\n");
@@ -218,17 +202,8 @@ public class Robot extends TimedRobot {
     RbtSysTmr.reset();
     RbtSysTmr.start();
 
-    System.out.println("Reset RbtSysTmr :              " + RbtSysTmr.get());
-    VISION.mngVSN_CamImgPeriodic();
-    System.out.println("End of mngVSN_CamImgPeriodic : " + RbtSysTmr.get());
-    NAV.mngNAV_CmndSysTsk1();
-    System.out.println("End of mngNAV_CmndSysTsk1 :    " + RbtSysTmr.get());
-    PID.mngPID_Cntrl(); 
-    System.out.println("End of mngPID_Cntrl :          " + RbtSysTmr.get());
-    NAV.mngNAV_CmndSysTsk2();
-    System.out.println("End of mngNAV_CmndSysTsk2 :    " + RbtSysTmr.get());
-    LIFT.mngLFT_CntrlSys(RbtSysTmr);
-    System.out.println("End of mngLFT_CntrlSys :       " + RbtSysTmr.get());
+    NAV.mngNAV_CmndSysTsk();
+    LIFT.mngLFT_CntrlSys();
 
     if (K_System.KeSYS_e_DebugEnblWtchDog != DebugSlct.DebugDsbl) {   
       System.out.println("End of TestPeriodic :          " + RbtSysTmr.get());

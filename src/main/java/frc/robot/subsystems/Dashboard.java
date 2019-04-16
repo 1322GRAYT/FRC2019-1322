@@ -68,99 +68,10 @@ public class Dashboard extends Subsystem {
     System.out.println("Wheel Vel RL : " + Robot.NAV.getNAV_v_WhlVel(2));
     System.out.println("Wheel Vel RR : " + Robot.NAV.getNAV_v_WhlVel(3));
   }
-  
-
-
-  /* Called to Update Smart Dashboard Data for Display of Vision raw Camera Limelight Data */
-    public void updINS_SDB_RawLL_Data() {
-    SmartDashboard.putNumber("LL Tgt Vld : ", Robot.VISION.getVSN_b_LL_TgtVld());
-    SmartDashboard.putNumber("LL Tgt Ang-X : ", Robot.VISION.getVSN_Deg_LL_TgtAngX());
-    SmartDashboard.putNumber("LL Tgt Ang-Y : ", Robot.VISION.getVSN_Deg_LL_TgtAngY());
-    SmartDashboard.putNumber("LL Tgt Area : ", Robot.VISION.getVSN_Pct_LL_TgtArea());
-    SmartDashboard.putNumber("LL Tgt Skew : ", Robot.VISION.getVSN_Deg_LL_TgtSkew());
-    SmartDashboard.putNumber("LL Tgt Side Short : ", Robot.VISION.getVSN_Pxl_LL_TgtSideShort());
-    SmartDashboard.putNumber("LL Tgt Side Long : ", Robot.VISION.getVSN_Pxl_LL_TgtSideLong());
-    SmartDashboard.putNumber("LL Tgt Lngth Horz : ", Robot.VISION.getVSN_Pxl_LL_TgtLngthHorz());
-    SmartDashboard.putNumber("LL Tgt Lngth Vert : ", Robot.VISION.getVSN_Pxl_LL_TgtLngthVert());
-    SmartDashboard.putNumber("LL Corner RtU X : ", Robot.VISION.getVSN_Pxl_LL_TgtCornX(0));
-    SmartDashboard.putNumber("LL Corner RtU Y : ", Robot.VISION.getVSN_Pxl_LL_TgtCornY(0));
-    SmartDashboard.putNumber("LL Corner RtL X : ", Robot.VISION.getVSN_Pxl_LL_TgtCornX(1));
-    SmartDashboard.putNumber("LL Corner RtL Y : ", Robot.VISION.getVSN_Pxl_LL_TgtCornY(1));
-    SmartDashboard.putNumber("LL Corner LtL X : ", Robot.VISION.getVSN_Pxl_LL_TgtCornX(2));
-    SmartDashboard.putNumber("LL Corner LtL Y : ", Robot.VISION.getVSN_Pxl_LL_TgtCornY(2));
-    SmartDashboard.putNumber("LL Corner LtR X : ", Robot.VISION.getVSN_Pxl_LL_TgtCornX(3));
-    SmartDashboard.putNumber("LL Corner LtR Y : ", Robot.VISION.getVSN_Pxl_LL_TgtCornY(3));
-  }
-
-/* Called to Update RoboRIO Logfile for Display of Vision raw Camera Limelight Data */
-public void updINS_RRL_RawLL_Data() {
-    System.out.println("LL Tgt Vld : " + Robot.VISION.getVSN_b_LL_TgtVld());
-    System.out.println("LL Tgt Ang-X : " + Robot.VISION.getVSN_Deg_LL_TgtAngX());
-    System.out.println("LL Tgt Ang-Y : " + Robot.VISION.getVSN_Deg_LL_TgtAngY());
-    System.out.println("LL Tgt Area : " + Robot.VISION.getVSN_Pct_LL_TgtArea());
-    System.out.println("LL Tgt Skew : " + Robot.VISION.getVSN_Deg_LL_TgtSkew());
-    System.out.println("LL Tgt Side Short : " + Robot.VISION.getVSN_Pxl_LL_TgtSideShort());
-    System.out.println("LL Tgt Side Long : " + Robot.VISION.getVSN_Pxl_LL_TgtSideLong());
-    System.out.println("LL Tgt Lngth Horz : " + Robot.VISION.getVSN_Pxl_LL_TgtLngthHorz());
-    System.out.println("LL Tgt Lngth Vert : " + Robot.VISION.getVSN_Pxl_LL_TgtLngthVert());
-    System.out.println("LL Corner RtU X : " + Robot.VISION.getVSN_Pxl_LL_TgtCornX(0));
-    System.out.println("LL Corner RtU Y : " + Robot.VISION.getVSN_Pxl_LL_TgtCornY(0));
-    System.out.println("LL Corner RtL X : " + Robot.VISION.getVSN_Pxl_LL_TgtCornX(1));
-    System.out.println("LL Corner RtL Y : " + Robot.VISION.getVSN_Pxl_LL_TgtCornY(1));
-    System.out.println("LL Corner LtL X : " + Robot.VISION.getVSN_Pxl_LL_TgtCornX(2));
-    System.out.println("LL Corner LtL Y : " + Robot.VISION.getVSN_Pxl_LL_TgtCornY(2));
-    System.out.println("LL Corner LtU X : " + Robot.VISION.getVSN_Pxl_LL_TgtCornX(3));
-    System.out.println("LL Corner LtU Y : " + Robot.VISION.getVSN_Pxl_LL_TgtCornY(3));
-  }
-
-
-
-  /* Called to Update SmartDash Data for Display of Closed-Loop Error Data. */
-  public void updINS_SDB_PID_CL_Err() { 
-    SmartDashboard.putNumber("VePID_Deg_PstnErr :        ", Robot.PID.getPID_Deg_PstnErr());
-    SmartDashboard.putBoolean("VePID_b_PstnErrWithInDB : ", Robot.PID.getPID_b_PstnErrWithInDB());
-    SmartDashboard.putNumber("VePID_Deg_PstnErrAccum :   ", Robot.PID.getPID_Deg_ErrAccum());
-  }
-
-  /* Called to Update RoboRIO Logfile for Display of Closed=Loop Error Data. */
-  public void updINS_RRL_PID_CL_Err() { 
-    System.out.println("VePID_Deg_PstnErr :       " + Robot.PID.getPID_Deg_PstnErr());
-    System.out.println("VePID_b_PstnErrWithInDB : " + Robot.PID.getPID_b_PstnErrWithInDB());
-    System.out.println("VePID_Deg_PstnErrAccum :  " + Robot.PID.getPID_Deg_ErrAccum());
-  }
-  
-
-  
-  /* Called to Update Smart Dashboard Data for Display of Target Closed-Loop Calculations  */
-  public void updINS_SDB_PID_CorrCalc() { 
-    SmartDashboard.putNumber("VePID_Deg_PstnAct :        ", Robot.PID.getPID_Deg_PstnAct());
-    SmartDashboard.putNumber("VePID_Deg_PstnErr :        ", Robot.PID.getPID_Deg_PstnErr());
-    SmartDashboard.putBoolean("VePID_b_PstnErrWithInDB : ", Robot.PID.getPID_b_PstnErrWithInDB());
-    SmartDashboard.putNumber("VePID_Deg_PstnErrAccum :   ", Robot.PID.getPID_Deg_ErrAccum());
-    SmartDashboard.putNumber("VePID_Pct_FdFwdCorr :      ", Robot.PID.getPIDRot_Pct_FdFwdTerm());
-    SmartDashboard.putNumber("VePID_Pct_PropCorr :       ", Robot.PID.getPID_Pct_PropTerm());
-    SmartDashboard.putNumber("VePID_Pct_IntglCorr :      ", Robot.PID.getPID_Pct_IntglTerm());
-    SmartDashboard.putNumber("VePID_Pct_PwrCmnd :        ", Robot.PID.getPID_Pct_PIDCmndPct());
-  }
-
-  /* Called to Update RoboRIO Logfile for Display of Target Closed-Loop Calculations */
-  public void updINS_RRL_PID_CorrCalc() { 
-    System.out.println("VePID_Deg_PstnAct :       " + Robot.PID.getPID_Deg_PstnAct());
-    System.out.println("VePID_Deg_PstnErr :       " + Robot.PID.getPID_Deg_PstnErr());
-    System.out.println("VePID_b_PstnErrWithInDB : " + Robot.PID.getPID_b_PstnErrWithInDB());
-    System.out.println("VePID_Deg_PstnErrAccum :  " + Robot.PID.getPID_Deg_ErrAccum());
-    System.out.println("VePID_Pct_FdFwdCorr :     " + Robot.PID.getPIDRot_Pct_FdFwdTerm());
-    System.out.println("VePID_Pct_PropCorr :      " + Robot.PID.getPID_Pct_PropTerm());
-    System.out.println("VePID_Pct_IntglCorr :     " + Robot.PID.getPID_Pct_IntglTerm());
-    System.out.println("VePID_Pct_PwrCmnd :       " + Robot.PID.getPID_Pct_PIDCmndPct());
-  }
-   
 
 
   /* Called to Update Smart Dashboard Data for Display of Drive Navigation System Data */
   public void updINS_SDB_NAV_Sys() { 
-    SmartDashboard.putBoolean("VeNAV_b_CL_TgtRqstActv : ", Robot.NAV.getNAV_CL_TgtRqstActv());
-    SmartDashboard.putBoolean("VeNAV_b_CL_DrvRqstActv : ", Robot.NAV.getNAV_CL_DrvRqstActv());
     SmartDashboard.putBoolean("VeNAV_b_DrvAutoCmdActv : ", Robot.NAV.getNAV_b_DrvAutoCmdActv());
     SmartDashboard.putBoolean("VeNAV_b_DrvStkRqstActv : ", Robot.NAV.getNAV_b_DrvStkRqstActv());
     SmartDashboard.putNumber("VeNAV_r_NormPwrCmdLong :  ", Robot.NAV.getNAV_r_NormPwrCmdLong());
@@ -173,8 +84,6 @@ public void updINS_RRL_RawLL_Data() {
 
   /* Called to Update RoboRIO Logfile for Display of Drive Navigation System Data */
   public void updINS_RRL_NAV_Sys() { 
-    System.out.println("VeNAV_b_CL_TgtRqstActv : " + Robot.NAV.getNAV_CL_TgtRqstActv());
-    System.out.println("VeNAV_b_CL_DrvRqstActv : " + Robot.NAV.getNAV_CL_DrvRqstActv());
     System.out.println("VeNAV_b_DrvAutoCmdActv : " + Robot.NAV.getNAV_b_DrvAutoCmdActv());
     System.out.println("VeNAV_b_DrvStkRqstActv : " + Robot.NAV.getNAV_b_DrvStkRqstActv());
     System.out.println("VeNAV_r_NormPwrCmdLong : " + Robot.NAV.getNAV_r_NormPwrCmdLong());

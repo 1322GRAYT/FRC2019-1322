@@ -2,9 +2,6 @@ package frc.robot.subsystems;
 
 
 import edu.wpi.first.wpilibj.command.Subsystem;
-import edu.wpi.first.wpilibj.SerialPort;
-
-import com.kauailabs.navx.frc.AHRS;
 
 import frc.robot.Robot;
 import frc.robot.subsystems.Dashboard.*;
@@ -14,9 +11,6 @@ import frc.robot.calibrations.K_System;
 
 
 public class Nav extends Subsystem {
-//  private AHRS ahrs;  // todo rfs
-  private double VeNAV_Deg_GyroAngle;      // double: degree heading
-
 	// Drive System Encoders/Wheels
 	// Idx [0] - FL: Front Left		
 	// Idx [1] - FR: Front Right	
@@ -29,8 +23,6 @@ public class Nav extends Subsystem {
 	private double VaNAV_n_WhlRPM[]   = new double[4];     // (rpm)
 	private double VaNAV_v_WhlVel[]   = new double[4];     // (feet/sec)
 
-  private boolean VeNAV_b_CL_TgtRqstActv;  // boolean
-  private boolean VeNAV_b_CL_DrvRqstActv;  // boolean
   private boolean VeNAV_b_DrvAutoCmdActv;  // boolean
   private boolean VeNAV_b_DrvStkRqstActv;  // boolean
   private double VeNAV_r_NormPwrDrvrLtY;   // double: normalized power - Drivers Stick Left - Y Axis
@@ -112,22 +104,6 @@ public class Nav extends Subsystem {
    **                                              **
    **************************************************/
 
-  public boolean getNAV_CL_TgtRqstActv() {
-    return(VeNAV_b_CL_TgtRqstActv);  
-  }
-
-  public void setNAV_CL_TgtRqstActv(boolean RqstSt) {
-    VeNAV_b_CL_TgtRqstActv = RqstSt;
-  }
-
-  public boolean getNAV_CL_DrvRqstActv() {
-    return(VeNAV_b_CL_DrvRqstActv);  
-  }
-
-  public void setNAV_CL_DrvRqstActv(boolean RqstSt) {
-    VeNAV_b_CL_DrvRqstActv = RqstSt;
-  }
-
   public boolean getNAV_b_DrvAutoCmdActv() {
     return(VeNAV_b_DrvAutoCmdActv);  
   }
@@ -194,44 +170,14 @@ public class Nav extends Subsystem {
     rstNAV_DrvCmndArb();
   }
 
-/** Method: mngNAV_CmndSysTsk1 - Manages the Navigation Control
-  * Command System Periodic Task 1 (runs First).
+/** Method: mngNAV_CmndSysTsk - Manages the Navigation Control
+  * Command System Periodic Task.
   */	
-  public void mngNAV_CmndSysTsk1() {
-    updNAV_GyroAngle();
+  public void mngNAV_CmndSysTsk() {
     updNAV_DrvWhlData();
-    if (getNAV_CL_TgtRqstActv() == true) {
-      Robot.PID.setPID_Deg_PstnTgt(true, 0.0);
-    }
-    else {
-      Robot.PID.setPID_Deg_PstnTgt(false, 0.0);
-    }
-  }
-
-/** Method: mngNAV_CmndSysTsk2 - Manages the Navigation Control
-  * Command System Periodic Task 2 (runs Second).
-  */	
-  public void mngNAV_CmndSysTsk2() {
     cntrlNAV_DrvCmndArb();
   }
 
-
-/** Method: rstNAV_GyroAngle - Resets the current heading of the
-  * Gyrometer as the 0 degree mark.
-  */	
-  public void rstNAV_GyroAngle() {
- //   ahrs.reset();  // todo rfs
-  }
-
-
-/** Method: getNAV_GyroAngle - Provides access to the current value
-  * of the Gyrometer Angle reading (Positive is Clockwise: [0 to 360) )
-  */	
-  public double getNAV_GyroAngle() {
-    return(0.0);
-//    return(VeNAV_Deg_GyroAngle);   // todo rfs
-  }
-  
 
   /** Method: cvrtNAV_AngToLinSpd - Calculates the Linear 
     *  Speed of the Robot from the Angular Wheel Speed
@@ -291,24 +237,6 @@ public class Nav extends Subsystem {
    **                                      **
    ******************************************/
 
-/** Method: perfmNAV_GyroCal - Performs the Calibration of the
-  * Gyrometer to set the proper home / oridinal positions.
-  */
-  private boolean chkNAV_GyroCal() {
-    return (false);
-//    return(ahrs.isCalibrating());  // todo rfs
-  }
-
-
-/** Method: updNAV_GyroAngle - Updates Local Gyro Angle value the with the
-  * current value of the Gyrometer Angle reading from the sensor.
-  * (Positive is Clockwise: [0 to 360) )
-  */	
-  private void updNAV_GyroAngle() {
-//    VeNAV_Deg_GyroAngle = ahrs.getAngle();  // todo rfs
-  }
-
-
   /** Method: updNAV_DrvWhlData - Updates the derived Drive Motor Encoder and 
    *  wheel data at a periodic rate so that only one set of Talon Calls for Sensor
    *  Positions and Velocity per loop is done to minimize throughput.  Each Call to
@@ -362,20 +290,7 @@ public class Nav extends Subsystem {
       }
       setNAV_b_DrvStkRqstActv(LeNAV_b_DrvrStkCntrl);
 
-      /* Drive Control Arbitration */
-      if ((getNAV_CL_TgtRqstActv() == true) &&
-          (getNAV_CL_DrvRqstActv() == true)) {
-        LeNAV_r_NormPwrCmdLong = K_Nav.KeNAV_r_CL_NormPwrLong;
-        LeNAV_r_NormPwrCmdLat =  Robot.PID.getPID_r_PwrCmndNorm() * K_Nav.KeNAV_r_CL_ScalarRotToLat;
-        LeNAV_r_NormPwrCmdRot =  0.0;
-          }
-      else if ((getNAV_CL_TgtRqstActv() == true) &&
-               (getNAV_CL_DrvRqstActv() == false)) {        
-        LeNAV_r_NormPwrCmdLong = 0.0;
-        LeNAV_r_NormPwrCmdLat =  0.0;
-        LeNAV_r_NormPwrCmdRot =  Robot.PID.getPID_r_PwrCmndNorm();        
-      }
-      else if (getNAV_b_DrvStkRqstActv()) {
+      if (getNAV_b_DrvStkRqstActv()) {
         LeNAV_r_NormPwrCmdLong = getNAV_r_NormPwrDrvrLtY();
         LeNAV_r_NormPwrCmdLat =  getNAV_r_NormPwrDrvrLtX();
         LeNAV_r_NormPwrCmdRot =  getNAV_r_NormPwrDrvrRtX();
@@ -397,14 +312,12 @@ public class Nav extends Subsystem {
         Robot.DRIVES.setSafety(LeNAV_b_SetSafe);
       }
 
-      if ((K_System.KeSYS_e_DebugEnblCL == DebugSlct.DebugEnblBoth) ||
-          (K_System.KeSYS_e_DebugEnblCL == DebugSlct.DebugEnblSDB)) {
-        Robot.DASHBOARD.updINS_SDB_PID_CorrCalc();
+      if ((K_System.KeSYS_e_DebugEnblNav == DebugSlct.DebugEnblBoth) ||
+          (K_System.KeSYS_e_DebugEnblNav == DebugSlct.DebugEnblSDB)) {
         Robot.DASHBOARD.updINS_SDB_NAV_Sys();
       }
-      if ((K_System.KeSYS_e_DebugEnblCL == DebugSlct.DebugEnblBoth) ||
-          (K_System.KeSYS_e_DebugEnblCL == DebugSlct.DebugEnblRRL)) {
-        Robot.DASHBOARD.updINS_RRL_PID_CorrCalc();
+      if ((K_System.KeSYS_e_DebugEnblNav == DebugSlct.DebugEnblBoth) ||
+          (K_System.KeSYS_e_DebugEnblNav == DebugSlct.DebugEnblRRL)) {
         Robot.DASHBOARD.updINS_RRL_NAV_Sys();
       }
 
@@ -415,8 +328,6 @@ public class Nav extends Subsystem {
     * Arbitration of the Commands of the Drive System Motor Commands.
     */
     private void rstNAV_DrvCmndArb() {
-      VeNAV_b_CL_TgtRqstActv = false;
-      VeNAV_b_CL_DrvRqstActv = false;
       VeNAV_b_DrvAutoCmdActv = false;
       VeNAV_b_DrvStkRqstActv = false;
       VeNAV_r_NormPwrDrvrLtY = 0.0;
@@ -426,7 +337,6 @@ public class Nav extends Subsystem {
       VeNAV_r_NormPwrCmdLat =  0.0;
       VeNAV_r_NormPwrCmdRot =  0.0;
     }
-
 
 
 

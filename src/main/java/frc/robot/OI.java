@@ -43,33 +43,24 @@ public class OI {
   public OI() {
   
     //When A Button is pressed, retract Lift drawer slide
-    DriverStick.aButton.whileHeld(new CT_LiftInpHorz(ActuatorSt.Retract));  //1
+    DriverStick.aButton.whileHeld(new CT_LiftInpHorz(ActuatorSt.Retract));
     //When B Button is pressed, extend lift drawer slide
-    DriverStick.bButton.whileHeld(new CT_LiftInpHorz(ActuatorSt.Extend));   //-1
+    DriverStick.bButton.whileHeld(new CT_LiftInpHorz(ActuatorSt.Extend));
 
     //When Right Trigger is pressed, lift bot
-    DriverStick.rightTriggerButton.whileHeld(new CT_LiftInpVert(ActuatorSt.Extend)); // 1
+    DriverStick.rightTriggerButton.whileHeld(new CT_LiftInpVert(ActuatorSt.Extend));
 
     //When Left Trigger is pressed, lower bot
-    DriverStick.leftTriggerButton.whileHeld(new CT_LiftInpVert(ActuatorSt.Retract)); // -1
+    DriverStick.leftTriggerButton.whileHeld(new CT_LiftInpVert(ActuatorSt.Retract));
 
     //When Right Bumper is pressed, retract lift pnumatics    
-    DriverStick.rightBumper.whileHeld(new CT_LiftInpStblzr(ActuatorSt.Retract)); // 1
+    DriverStick.rightBumper.whileHeld(new CT_LiftInpStblzr(ActuatorSt.Retract));
     //When Left Bumper is pressed, extend lift pnumatics
-    DriverStick.leftBumper.whileHeld(new CT_LiftInpStblzr(ActuatorSt.Extend)); // -1
+    DriverStick.leftBumper.whileHeld(new CT_LiftInpStblzr(ActuatorSt.Extend));
   
 
     //When X Button is pressed, switch Cameras
     DriverStick.xButton.whenPressed(new CC_CamSwitch());
-
-
-    /* Drive Target System Robot Tracking */ 
-    DriverStick.startButton.whileHeld(new CC_AutoTgtTrkEnbl());    
-    DriverStick.startButton.whenReleased(new CC_AutoTgtTrkDsbl());    
-
-    /* Drive Target System Robot Drive Forward */ 
-    DriverStick.selectButton.whileHeld(new CC_AutoTgtDrvEnbl());
-    DriverStick.selectButton.whenReleased(new CC_AutoTgtDrvDsbl());
 
 
     // Arm Controls
