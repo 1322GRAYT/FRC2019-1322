@@ -10,8 +10,9 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 import frc.robot.Robot;
-import frc.robot.calibrations.K_System;
+
 
 public class CT_DrvCntrl extends Command {
 
@@ -28,14 +29,13 @@ public class CT_DrvCntrl extends Command {
   // Called repeatedly when this Command is scheduled to run
   @Override
   protected void execute() {
-    Robot.NAV.setNAV_r_NormPwrDrvrLtY(Robot.m_oi.DriverStick.getLeftStickY());
-    Robot.NAV.setNAV_r_NormPwrDrvrLtX(Robot.m_oi.DriverStick.getLeftStickX());
-    Robot.NAV.setNAV_r_NormPwrDrvrRtX(Robot.m_oi.DriverStick.getRightStickX());  
+    Robot.DRIVES.DriveInVoltage(Robot.m_oi.DriverStick.getLeftStickY(),
+                                Robot.m_oi.DriverStick.getLeftStickX(),
+                                Robot.m_oi.DriverStick.getRightStickX());
 
     SmartDashboard.putNumber("Joystick", Robot.m_oi.DriverStick.getY(Hand.kLeft));
     SmartDashboard.putNumberArray("Velocity", Robot.DRIVES.rawVelocities());
     SmartDashboard.putNumberArray("Position", Robot.DRIVES.rawPosition());
-
   }
 
   // Make this return true when this Command no longer needs to run execute()
@@ -47,9 +47,7 @@ public class CT_DrvCntrl extends Command {
   // Called once after isFinished returns true
   @Override
   protected void end() {
-    Robot.NAV.setNAV_r_NormPwrDrvrLtY(0.0);
-    Robot.NAV.setNAV_r_NormPwrDrvrLtX(0.0);
-    Robot.NAV.setNAV_r_NormPwrDrvrRtX(0.0);  
+    Robot.DRIVES.DriveInVoltage(0, 0, 0);
   }
 
   // Called when another command which requires one or more of the same

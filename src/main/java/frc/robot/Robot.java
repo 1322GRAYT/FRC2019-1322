@@ -36,7 +36,6 @@ public class Robot extends TimedRobot {
   public static OI m_oi;
 
   public final static Drives          DRIVES    = new Drives();
-  public final static Nav             NAV       = new Nav();
   public final static Camera          CAMERA    = new Camera();
   public final static Claw            CLAW      = new Claw();
   public final static LEDController   LEDS      = new LEDController();
@@ -76,7 +75,6 @@ public class Robot extends TimedRobot {
     camera0.setConnectionStrategy(ConnectionStrategy.kKeepOpen);
     camera1.setConnectionStrategy(ConnectionStrategy.kKeepOpen);
 
-    NAV.mngNAV_InitCntrl();
     LIFT.mngLFT_InitCntrl();
     LIFT.setLFT_e_JackLckCmnd(Relay.Value.kForward);
 
@@ -154,7 +152,6 @@ public class Robot extends TimedRobot {
     RbtSysTmr.reset();
     RbtSysTmr.start();
 
-    NAV.mngNAV_CmndSysTsk();
     LIFT.mngLFT_CntrlSys();
 
     if (K_System.KeSYS_e_DebugEnblWtchDog != DebugSlct.DebugDsbl) {   
@@ -184,7 +181,6 @@ public class Robot extends TimedRobot {
     RbtSysTmr.reset();
     RbtSysTmr.start();
 
-    NAV.mngNAV_CmndSysTsk();
     LIFT.mngLFT_CntrlSys();
 
     if (K_System.KeSYS_e_DebugEnblWtchDog != DebugSlct.DebugDsbl) {   
@@ -202,7 +198,6 @@ public class Robot extends TimedRobot {
     RbtSysTmr.reset();
     RbtSysTmr.start();
 
-    NAV.mngNAV_CmndSysTsk();
     LIFT.mngLFT_CntrlSys();
 
     if (K_System.KeSYS_e_DebugEnblWtchDog != DebugSlct.DebugDsbl) {   

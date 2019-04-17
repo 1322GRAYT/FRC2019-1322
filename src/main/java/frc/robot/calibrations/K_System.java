@@ -36,21 +36,7 @@ public class K_System {
 	 * Dashboard, the RoboRio Log, or Both, or Disabled completely to free
 	 * up through=put for competition play.  This configuration is for the
 	 * Analysis of Watch Dog Time Out / Loop Overrun issues.  */
-	public static final DebugSlct KeSYS_e_DebugEnblWtchDog = DebugSlct.DebugEnblRRL;
-
-	/** KeSYS_e_DebugEnblDrv: Used to enable the broadcast, update, and display
-	 * of data variables for instrumentation view, this can be via Smart
-	 * Dashboard, the RoboRio Log, or Both, or Disabled completely to free
-	 * up through=put for competition play.  This configuration is for the
-	 * Drive System variables.  */
-	public static final DebugSlct KeSYS_e_DebugEnblDrv = DebugSlct.DebugDsbl;
-
-	/** KeSYS_e_DebugEnblNav: Used to enable the broadcast, update, and display
-	 * of data variables for instrumentation view, this can be via Smart
-	 * Dashboard, the RoboRio Log, or Both, or Disabled completely to free
-	 * up through=put for competition play.  This configuration is for the
-	 * Nav System variables.  */
-	public static final DebugSlct KeSYS_e_DebugEnblNav = DebugSlct.DebugDsbl;
+	public static final DebugSlct KeSYS_e_DebugEnblWtchDog = DebugSlct.DebugDsbl;
 
 	/** KeSYS_e_DebugEnblLft: Used to enable the broadcast, update, and display
 	 * of data variables for instrumentation view, this can be via Smart

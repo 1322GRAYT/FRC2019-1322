@@ -9,7 +9,9 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 import frc.robot.Robot;
+
 
 public class CA_DrvPstnTgt extends Command {
 
@@ -48,7 +50,6 @@ public class CA_DrvPstnTgt extends Command {
         
         Robot.DRIVES.setSafety(false);
         Robot.DRIVES.MMControl(motorDistance);
-        Robot.NAV.setNAV_b_DrvAutoCmdActv(true);
     }
 
     // Called repeatedly when this Command is scheduled to run
@@ -78,7 +79,6 @@ public class CA_DrvPstnTgt extends Command {
     protected void end() {
         Robot.DRIVES.DriveInVoltage(0, 0, 0);
         Robot.DRIVES.setSafety(true);
-        Robot.NAV.setNAV_b_DrvAutoCmdActv(false);
         System.out.println("Done");
     }
 
