@@ -8,12 +8,12 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.Relay;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
 import frc.robot.Robot;
 import frc.robot.RobotMap;
 import frc.robot.subsystems.Dashboard.*;
+import frc.robot.subsystems.LEDController.liftLED;
 import frc.robot.calibrations.K_System;
 import frc.robot.calibrations.K_Lift;
 
@@ -260,13 +260,16 @@ public class Lift extends Subsystem {
 
     /* Control LED Array Indicators */
     if(getLFT_b_StblzrExtdCmnd() || getLFT_b_StblzrRtctCmnd()) {
-      Robot.LEDS.setLEDs(Robot.LEDS.ledRainbow);  
+      Robot.LEDS.setLED_ActnLift(liftLED.Stblzr);  
     }
     else if (getLFT_b_DrwrExtdCmnd() || getLFT_b_DrwrRtctCmnd()) {
-      Robot.LEDS.setMode(Robot.LEDS.ledYellow, Robot.LEDS.ledModeChase);
+      Robot.LEDS.setLED_ActnLift(liftLED.Drwr);
     }
     else if (getLFT_b_JackExtdCmnd() || getLFT_b_JackRtctCmnd()) {
-      Robot.LEDS.setMode(Robot.LEDS.ledRed, Robot.LEDS.ledModeChase);
+      Robot.LEDS.setLED_ActnLift(liftLED.Jack);
+    }
+    else {
+      Robot.LEDS.setLED_ActnLift(liftLED.InActv);
     }
 
 

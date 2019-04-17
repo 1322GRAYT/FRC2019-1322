@@ -15,10 +15,14 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Relay;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.command.Subsystem;
+
 import frc.robot.Robot;
 import frc.robot.RobotMap;
 import frc.robot.calibrations.K_System;
 import frc.robot.commands.CC_ClawAutoGrab;
+import frc.robot.subsystems.LEDController;
+import frc.robot.subsystems.LEDController.clawLED;
+
 
 /**
  * Add your docs here.
@@ -55,9 +59,9 @@ public class Claw extends Subsystem {
    */
   public void diskGrabber(boolean eject) {
     if(eject) {
-      Robot.LEDS.setLEDs(Robot.LEDS.ledRed);
+      Robot.LEDS.setLED_ActnClaw(clawLED.PanelEjct);
     } else {
-      Robot.LEDS.setLEDs(Robot.LEDS.ledBlue);
+      Robot.LEDS.setLED_ActnClaw(clawLED.PanelLtch);
     }
     ejectOut.set(eject);
     ejectIn.set(!eject);
@@ -69,9 +73,9 @@ public class Claw extends Subsystem {
  */
   public void controlClaw(boolean out) {
     if(out) {
-      Robot.LEDS.setLEDs(Robot.LEDS.ledRed);
+      Robot.LEDS.setLED_ActnClaw(clawLED.ClawExtd);
     } else {
-      Robot.LEDS.setLEDs(Robot.LEDS.ledGreen);
+      Robot.LEDS.setLED_ActnClaw(clawLED.ClawRtct);
     }
     clawIn.set(out);
     clawOut.set(!out);

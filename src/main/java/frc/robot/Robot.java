@@ -153,7 +153,8 @@ public class Robot extends TimedRobot {
     RbtSysTmr.start();
 
     LIFT.mngLFT_CntrlSys();
-
+    LEDS.mngLED_CntrlSys();
+    
     if (K_System.KeSYS_e_DebugEnblWtchDog != DebugSlct.DebugDsbl) {   
       System.out.println("End of AutoPeriodic :           " + RbtSysTmr.get() + "\n\n");
     }
@@ -182,6 +183,7 @@ public class Robot extends TimedRobot {
     RbtSysTmr.start();
 
     LIFT.mngLFT_CntrlSys();
+    LEDS.mngLED_CntrlSys();
 
     if (K_System.KeSYS_e_DebugEnblWtchDog != DebugSlct.DebugDsbl) {   
       System.out.println("End of TelePeriodic :          " + RbtSysTmr.get() + "\n\n");
@@ -199,6 +201,7 @@ public class Robot extends TimedRobot {
     RbtSysTmr.start();
 
     LIFT.mngLFT_CntrlSys();
+    LEDS.mngLED_CntrlSys();
 
     if (K_System.KeSYS_e_DebugEnblWtchDog != DebugSlct.DebugDsbl) {   
       System.out.println("End of TestPeriodic :          " + RbtSysTmr.get());

@@ -10,6 +10,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 import frc.robot.calibrations.*;
+import frc.robot.subsystems.LEDController.clawLED;
 
 public class CC_ClawAutoGrab extends Command {
   public CC_ClawAutoGrab() {
@@ -44,11 +45,13 @@ public class CC_ClawAutoGrab extends Command {
   // Called once after isFinished returns true
   @Override
   protected void end() {
+    Robot.LEDS.setLED_ActnClaw(clawLED.InActv);
   }
 
   // Called when another command which requires one or more of the same
   // subsystems is scheduled to run
   @Override
   protected void interrupted() {
+    end();
   }
 }
