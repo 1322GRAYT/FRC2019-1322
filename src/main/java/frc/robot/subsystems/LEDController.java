@@ -19,6 +19,10 @@ import javax.lang.model.util.ElementScanner6;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
+import frc.robot.Robot;
+import frc.robot.commands.*;
+
+
 /**
  * Add your docs here.
  */
@@ -105,11 +109,11 @@ public class LEDController extends Subsystem {
 
 
   public void mngLED_InitCntrl(){
-    /* */
+    setLEDs(ledYellow);
   }
 
   public void mngLED_CntrlSys(){
-    CntrlLED_ArbCmnd();
+    cntrlLED_ArbCmnd();
   }
 
 
@@ -118,7 +122,7 @@ public class LEDController extends Subsystem {
   /* Private Class Methods       */
   /*******************************/
 
-  private void CntrlLED_ArbCmnd(){
+  private void cntrlLED_ArbCmnd(){
     colorLED LeLED_e_Color;
     modeLED  LeLED_e_Mode; 
     int LeLED_Cnt_CodeColor;
@@ -258,7 +262,6 @@ public class LEDController extends Subsystem {
     }
 
 
-
   private void setLEDs(int color){
     ledArduino.write(0x08, color);
   }
@@ -270,9 +273,8 @@ public class LEDController extends Subsystem {
 
 
 
-
   @Override
   public void initDefaultCommand() {
-    //setDefaultCommand(new CC_LEDCntrl());
+    setDefaultCommand(new CC_LEDCntrl(colorLED.Yellow));
   }
 }
