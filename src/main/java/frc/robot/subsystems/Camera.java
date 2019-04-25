@@ -37,7 +37,7 @@ public class Camera extends Subsystem {
    */ 
   public void SlctCAM_DrvrCam() {
     if(this.Active_Camera == 0) { // Camera is 0, set to 1
-      this.NetTbl.getTable("").getEntry("CameraSelection").setString(Robot.camera1.getName());
+      //this.NetTbl.getTable("").getEntry("CameraSelection").setString(Robot.camera1.getName());
       this.Active_Camera = 1;
     } else { // Camera is 1, set to 0
       this.NetTbl.getTable("").getEntry("CameraSelection").setString(Robot.camera0.getName());

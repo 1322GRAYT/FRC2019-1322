@@ -275,6 +275,6 @@ public class LEDController extends Subsystem {
 
   @Override
   public void initDefaultCommand() {
-    setDefaultCommand(new CC_LEDCntrl(colorLED.Yellow));
+//    setDefaultCommand(new CC_LEDCntrl(colorLED.Yellow));
   }
 }

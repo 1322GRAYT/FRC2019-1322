@@ -46,7 +46,7 @@ public class Robot extends TimedRobot {
 
   // Cameras
   public static UsbCamera camera0;
-  public static UsbCamera camera1;
+  // public static UsbCamera camera1;
 
    // System Variables
    public Timer RbtSysTmr = new Timer();
@@ -70,10 +70,10 @@ public class Robot extends TimedRobot {
 
     // Camera Server
     camera0 = CameraServer.getInstance().startAutomaticCapture(0);
-    camera1 = CameraServer.getInstance().startAutomaticCapture(1);
+    //camera1 = CameraServer.getInstance().startAutomaticCapture(1);
     // Set Keep Connections Open to Keep Switching Speed Fast!
     camera0.setConnectionStrategy(ConnectionStrategy.kKeepOpen);
-    camera1.setConnectionStrategy(ConnectionStrategy.kKeepOpen);
+    //camera1.setConnectionStrategy(ConnectionStrategy.kKeepOpen);
 
     LIFT.mngLFT_InitCntrl();
     LIFT.setLFT_e_JackLckCmnd(Relay.Value.kForward);
