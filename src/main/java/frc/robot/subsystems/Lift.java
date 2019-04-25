@@ -57,6 +57,7 @@ public class Lift extends Subsystem {
   public void mngLFT_InitCntrl() {
     rstLFT_InpRqstFlgs();
     setLFT_b_StblzrExtdCmnd(false);
+    setLFT_b_StblzrRtctCmnd(true);
   }
 
   public void mngLFT_CntrlSys() {
@@ -259,7 +260,7 @@ public class Lift extends Subsystem {
 
 
     /* Control LED Array Indicators */
-    if(getLFT_b_StblzrExtdCmnd() || getLFT_b_StblzrRtctCmnd()) {
+    if(getLFT_b_StblzrExtdCmnd()) {
       Robot.LEDS.setLED_ActnLift(liftLED.Stblzr);  
     }
     else if (getLFT_b_DrwrExtdCmnd() || getLFT_b_DrwrRtctCmnd()) {

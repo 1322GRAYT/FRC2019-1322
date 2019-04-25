@@ -136,16 +136,16 @@ public class LEDController extends Subsystem {
       LeLED_e_Mode =  VeLED_e_Mode;
     }
     else if (VeLED_e_ActnLift == liftLED.Stblzr)  {
-      LeLED_e_Color = colorLED.Rainbow;
+      LeLED_e_Color = colorLED.Yellow;
       LeLED_e_Mode =  modeLED.Null;
     }
     else if (VeLED_e_ActnLift == liftLED.Drwr)  {
-      LeLED_e_Color = colorLED.Yellow;
-      LeLED_e_Mode =  modeLED.Chase;
+      LeLED_e_Color = colorLED.Green;
+      LeLED_e_Mode =  modeLED.Null;
     }
     else if (VeLED_e_ActnLift == liftLED.Jack)  {
       LeLED_e_Color = colorLED.Red;
-      LeLED_e_Mode =  modeLED.Chase;
+      LeLED_e_Mode =  modeLED.Null;
     }
     else if (VeLED_e_ActnClaw == clawLED.PanelEjct) {
       LeLED_e_Color = colorLED.Red;
@@ -164,8 +164,8 @@ public class LEDController extends Subsystem {
       LeLED_e_Mode =  modeLED.Null;
     }
     else {
-      LeLED_e_Color = colorLED.Off;
-      LeLED_e_Mode =  modeLED.Null;
+      LeLED_e_Color = colorLED.Yellow;
+      LeLED_e_Mode =  modeLED.Breath;
     } 
 
 
