@@ -11,6 +11,7 @@ import java.util.ListIterator;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import edu.wpi.first.wpilibj.command.Subsystem;
@@ -45,6 +46,7 @@ public class Arm extends Subsystem {
     Lift.config_kD(0, K_Arm.KARM_k_VelDerivGx);
     Lift.configForwardSoftLimitThreshold(K_Arm.ALL_POS_DATA.get(K_Arm.ALL_POS_DATA.size() - 1).location);  //ARMLEVELS[ARMLEVELS.length-1]);
     Lift.configForwardSoftLimitEnable(true);
+    Lift.setNeutralMode(NeutralMode.Brake);
   }
 
   /**

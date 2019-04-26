@@ -21,19 +21,20 @@ public class K_Arm {
     /***********************************************************
      * Button timeout used in both the Arm Hold Buttons
      ***********************************************************/
-    public static final double BUTTON_TIMEOUT = 0.5;
+    public static final double BUTTON_TIMEOUT = 0.25; // 0.5;
 
     /***********************************************************
      * This is the tolerance for all the arm position commands
      ***********************************************************/
-    public final static int TOLERANCE = 1000;
+    public final static int TOLERANCE = 500;
 
     /***********************************************************
      * Arm Position Encoder Count Definitions
      ***********************************************************/
     public static final List<PositionData> ALL_POS_DATA = Arrays.asList(
                     new PositionData(0, "Floor Pickup", GamePieces.Cargo),
-                    new PositionData(8307, "Rocket Level 1", GamePieces.HatchPanel),
+                    //new PositionData(8307, "Rocket Level 1", GamePieces.HatchPanel),
+                    new PositionData(13000, "Rocket Level 1", GamePieces.HatchPanel),
                     new PositionData(114800, "Rocket Level 1", GamePieces.Cargo),
                     // new PositionData(173133, "Human Feed", GamePieces.Cargo),
                     new PositionData(172700, "Rocket Level 2", GamePieces.HatchPanel),
@@ -75,7 +76,7 @@ public class K_Arm {
 	/** KARM_k_VelIntglGx: Arm System Velocity Control
      * Integral Gain.
      */
-    public static final double KARM_k_VelIntglGx = 0.00007;
+    public static final double KARM_k_VelIntglGx = 0.0001; // 0.00007;
 
 	/** KARM_k_VelDerivGx: Arm System Velocity Control
      * Derivative Gain.
